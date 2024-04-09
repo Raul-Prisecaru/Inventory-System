@@ -1,2 +1,59 @@
+DROP TABLE IF EXISTS Inventory;
+DROP TABLE IF EXISTS Drivers;
+DROP TABLE IF EXISTS Vehicles;
+DROP TABLE IF EXISTS OutgoingTransportationSchedules;
+DROP TABLE IF EXISTS IncomingTransportationSchedules;
+DROP TABLE IF EXISTS ExternalCompanies;
 
+CREATE TABLE IF NOT EXISTS Inventory(
+    InventoryID INTEGER PRIMARY KEY,
+    InventoryName TEXT,
+    StockLevel INTEGER,
+    LocationBuilding TEXT,
+    IncomingScheduleID INTEGER /* Foreign Key */
+);
+
+
+CREATE TABLE IF NOT EXISTS Drivers(
+    DriverID INTEGER PRIMARY KEY,
+    DriverName TEXT,
+    DriverPhoneNumber INTEGER VARCHAR(11),
+    DriverLicenseRegistrationID TEXT
+);
+
+
+CREATE TABLE IF NOT EXISTS Vehicles(
+    VehicleID INTEGER PRIMARY KEY,
+    VehicleType TEXT,
+    VehicleBrand TEXT,
+    VehicleLicensePlate INTEGER,
+    DriverID INTEGER /* Foreign Key */
+);
+
+
+CREATE TABLE IF NOT EXISTS OutgoingTransportationSchedules(
+    OutgoingScheduleID INTEGER PRIMARY KEY,
+    ExpectedArrivalDate DATE,
+    ExpectedArrivalTime INTEGER,
+    IsItOnTheWay INTEGER,
+    InventoryID INTEGER, /* Foreign Key */
+    DriverID INTEGER /* Foreign Key */
+);
+
+
+CREATE TABLE IF NOT EXISTS IncomingTransportationSchedules(
+    IncomingScheduleID INTEGER PRIMARY KEY,
+    ExpectedArrivalDate DATE,
+    ExpectedArrivalTime INTEGER,
+    IsItOnTheWay INTEGER,
+    InventoryID INTEGER, /* Foreign Key */
+    ExternalCompanyID INTEGER /* Foreign Key */
+);
+
+
+CREATE TABLE IF NOT EXISTS ExternalCompanies(
+    ExternalCompanyID INTEGER PRIMARY KEY,
+    ExternalCompanyName TEXT,
+    ExternalCompanyRelationship DATE
+);
 
