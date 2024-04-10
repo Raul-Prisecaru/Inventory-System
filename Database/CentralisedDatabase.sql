@@ -6,11 +6,11 @@ DROP TABLE IF EXISTS IncomingTransportationSchedules;
 DROP TABLE IF EXISTS ExternalCompanies;
 
 CREATE TABLE IF NOT EXISTS Inventory(
-    InventoryID INTEGER PRIMARY KEY,
+    InventoryID INTEGER PRIMARY KEY AUTOINCREMENT ,
     InventoryName TEXT,
     StockLevel INTEGER,
     LocationBuilding TEXT,
-    IncomingScheduleID INTEGER /* Foreign Key */
+--     IncomingScheduleID INTEGER /* Foreign Key */
 );
 
 
