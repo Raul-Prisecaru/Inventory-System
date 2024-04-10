@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS Inventory(
 CREATE TABLE IF NOT EXISTS Drivers(
     DriverID INTEGER PRIMARY KEY,
     DriverName TEXT,
-    DriverPhoneNumber INTEGER VARCHAR(11),
+    DriverPhoneNumber INTEGER,
     DriverLicenseRegistrationID TEXT
 );
 
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS Vehicles(
     VehicleID INTEGER PRIMARY KEY,
     VehicleType TEXT,
     VehicleBrand TEXT,
-    VehicleLicensePlate INTEGER,
+    VehicleLicensePlate TEXT,
     DriverID INTEGER /* Foreign Key */
 );
 
