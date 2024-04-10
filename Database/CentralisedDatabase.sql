@@ -10,12 +10,12 @@ CREATE TABLE IF NOT EXISTS Inventory(
     InventoryName TEXT,
     StockLevel INTEGER,
     LocationBuilding TEXT,
---     IncomingScheduleID INTEGER /* Foreign Key */
+    IncomingScheduleID INTEGER /* Foreign Key */
 );
 
 
 CREATE TABLE IF NOT EXISTS Drivers(
-    DriverID INTEGER PRIMARY KEY,
+    DriverID INTEGER PRIMARY KEY AUTOINCREMENT,
     DriverName TEXT,
     DriverPhoneNumber INTEGER,
     DriverLicenseRegistrationID TEXT
