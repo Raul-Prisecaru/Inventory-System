@@ -261,18 +261,21 @@ def randomiseExternalCompanies():
         print("Something Else Went Wrong: " + str(e))
 
 def countDatabase(column):
+    numberRows = 0
     try:
         connection = sqlite3.connect('Database/CentralisedDatabase.db')
         cursor = connection.cursor()
 
-        showcase_query = f"SELECT COUNT(*) FROM {column};"
+        showcase_query = f"SELECT * FROM {column};"
         cursor.execute(showcase_query)
 
         connection.commit()
         rows = cursor.fetchall()
-        print(rows)
+        for _ in rows:
+            numberRows += 1
         cursor.close()
         connection.close()
+        return numberRows
 
     except NameError:
         print(f"Error Caught: {column} not found")
