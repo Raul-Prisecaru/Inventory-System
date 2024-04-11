@@ -1,9 +1,12 @@
 import sqlite3
 
 def addNewInventory(column):
+    global row
+    columnList = []
     connection = sqlite3.connect("Database/CentralisedDatabase.db")
     cursor = connection.cursor()
     cursor.execute(f"PRAGMA table_info({column});")
+    selectQuery = cursor.execute(f"SELECT * FROM {column}")
     columns = cursor.fetchall()
     # Count the columns
     numberColumns = len(columns)
@@ -11,13 +14,19 @@ def addNewInventory(column):
 
     totalValues = ", ".join('?' for _ in range(numberColumns))
     print(totalValues)
-    # placeholders = ', '.join(['?'] * len(columns))
-    # select_query = f"INSERT INTO {column}({', '.join(columns)}) VALUES ({placeholders});"
 
-    # cursor.execute(select_query)
+    for row in selectQuery.description:
+        columnList.append(row[0])
+        print(row[0])
+
+
+    print(columnList)
+    select_query = f"INSERT INTO {column} ({', '.join(columnList)}) VALUES ({totalValues})"
+
+    cursor.execute(select_query, ("1", "1", "1", "1", "1"))
 
     connection.commit()
     connection.close()
 
 if __name__ == '__main__':
-    addNewInventory("ExternalCompanies")
+    addNewInventory("Inventory")
