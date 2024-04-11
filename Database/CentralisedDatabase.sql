@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS IncomingTransportationSchedules;
 DROP TABLE IF EXISTS ExternalCompanies;
 
 CREATE TABLE IF NOT EXISTS Inventory(
-    InventoryID INTEGER PRIMARY KEY,
+    InventoryID INTEGER PRIMARY KEY AUTOINCREMENT ,
     InventoryName TEXT,
     StockLevel INTEGER,
     LocationBuilding TEXT,
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS Inventory(
 
 
 CREATE TABLE IF NOT EXISTS Drivers(
-    DriverID INTEGER PRIMARY KEY,
+    DriverID INTEGER PRIMARY KEY AUTOINCREMENT,
     DriverName TEXT,
     DriverPhoneNumber INTEGER,
     DriverLicenseRegistrationID TEXT
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS Drivers(
 
 
 CREATE TABLE IF NOT EXISTS Vehicles(
-    VehicleID INTEGER PRIMARY KEY,
+    VehicleID INTEGER PRIMARY KEY AUTOINCREMENT,
     VehicleType TEXT,
     VehicleBrand TEXT,
     VehicleLicensePlate TEXT,
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS Vehicles(
 
 
 CREATE TABLE IF NOT EXISTS OutgoingTransportationSchedules(
-    OutgoingScheduleID INTEGER PRIMARY KEY,
+    OutgoingScheduleID INTEGER PRIMARY KEY AUTOINCREMENT,
     ExpectedArrivalDate DATE,
     ExpectedArrivalTime INTEGER,
     IsItOnTheWay INTEGER,
