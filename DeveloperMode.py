@@ -260,6 +260,23 @@ def randomiseExternalCompanies():
     except Exception as e:
         print("Something Else Went Wrong: " + str(e))
 
+def countDatabase(column):
+    try:
+        connection = sqlite3.connect('Database/CentralisedDatabase.db')
+        cursor = connection.cursor()
 
+        showcase_query = f"SELECT COUNT(*) FROM {column};"
+        cursor.execute(showcase_query)
+
+        connection.commit()
+        rows = cursor.fetchall()
+        print(rows)
+        cursor.close()
+        connection.close()
+
+    except NameError:
+        print(f"Error Caught: {column} not found")
+    except Exception as e:
+        print("Something Else Went Wrong: " + str(e))
 if __name__ == '__main__':
-    randomiseExternalCompanies()
+    countDatabase("Inventory")
