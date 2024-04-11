@@ -1,5 +1,6 @@
 import sqlite3
 import tkinter as tk
+from DeveloperMode import countDatabase
 
 def run():
     window = create_window()
@@ -15,8 +16,9 @@ def add_componenets(window):
     textTotalRecords(window)
 
 def textTotalRecords(window):
+    test = "ExternalCompanies"
     Records_label = tk.Label(window)
-    Records_label.config(text="Test", bg="#ddf", font=("Arial", 12))
+    Records_label.config(text=f"{countDatabase(test)}", bg="#ddf", font=("Arial", 12))
     Records_label.grid(row=0, column=0, columnspan=2, sticky="EW")
 
 
