@@ -1,11 +1,23 @@
 import sqlite3
 import tkinter as tk
 
+def run():
+    window = create_window()
+    add_componenets(window)
+    window.mainloop()
 def create_window():
     window = tk.Tk()
     window.geometry("600x500")
     window.title("St Mary's Logistic System")
-    window.mainloop()
+    return window
+
+def add_componenets(window):
+    textTotalRecords(window)
+
+def textTotalRecords(window):
+    Records_label = tk.Label(window)
+    Records_label.config(text="Test", bg="#ddf", font=("Arial", 12))
+    Records_label.grid(row=0, column=0, columnspan=2, sticky="EW")
 
 
 def setup_database():
@@ -29,5 +41,4 @@ def setup_database():
 
 
 if __name__ == '__main__':
-        create_window()
-        setup_database()
+    run()
