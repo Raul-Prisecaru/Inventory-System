@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS Drivers(
 
 
 CREATE TABLE IF NOT EXISTS Vehicles(
-    VehicleID INTEGER PRIMARY KEY,
+    VehicleID INTEGER PRIMARY KEY AUTOINCREMENT,
     VehicleType TEXT,
     VehicleBrand TEXT,
     VehicleLicensePlate TEXT,
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS Vehicles(
 
 
 CREATE TABLE IF NOT EXISTS OutgoingTransportationSchedules(
-    OutgoingScheduleID INTEGER PRIMARY KEY,
+    OutgoingScheduleID INTEGER PRIMARY KEY AUTOINCREMENT,
     ExpectedArrivalDate DATE,
     ExpectedArrivalTime INTEGER,
     IsItOnTheWay INTEGER,
