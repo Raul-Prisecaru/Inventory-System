@@ -2,24 +2,14 @@ import sqlite3
 import tkinter as tk
 from DeveloperMode import countDatabase
 
-def run():
-    window = create_window()
-    add_componenets(window)
-    window.mainloop()
-def create_window():
-    window = tk.Tk()
-    window.geometry("600x500")
-    window.title("St Mary's Logistic System")
-    return window
-
-def add_componenets(window):
-    textTotalRecords(window)
-
-def textTotalRecords(window):
-    test = "ExternalCompanies"
-    Records_label = tk.Label(window)
-    Records_label.config(text=f"{countDatabase(test)}", bg="#ddf", font=("Arial", 12))
-    Records_label.grid(row=0, column=0, columnspan=2, sticky="EW")
+userInput = int(input("""Welcome to St Mary's Logistic System:
+    What would you like to do?
+        [1] Add new Inventory
+        [2] Modify Inventory
+        [3] Track Shipments
+        [4] Generate Report
+        [5] Quit
+            :: """))
 
 
 def setup_database():
@@ -43,4 +33,16 @@ def setup_database():
 
 
 if __name__ == '__main__':
-    run()
+    match (userInput):
+        case 1:
+            print("You have selected option 1")
+        case 2:
+            print("You have selected option 2")
+        case 3:
+            print("You have selected option 3")
+        case 4:
+            print("You have selected option 4")
+        case 5:
+            print("You have selected option 5")
+        case _:
+            print("Invalid option")
