@@ -1,6 +1,5 @@
 import sqlite3
 
-
 def getAllColumns(Table):
     columnList = []
 
@@ -14,48 +13,37 @@ def getAllColumns(Table):
     return columnList
 
 
-def getPlaceholders(Table, Values):
+def getPlaceholders(Table):
     connection = sqlite3.connect("Database/CentralisedDatabase.db")
     cursor = connection.cursor()
 
     cursor.execute(f"SELECT * FROM {Table}")
     columns = cursor.fetchall()
 
-def addNewInventory(Table, values):
-    columnList = []
-    # global row
+    Values = len(columns[0])
+    print(Values)
+
+    placeholderValues = ", ".join('?' for _ in range(Values))
+    print(placeholderValues)
+
+    return placeholderValues
+
+def addToInventory(Table, values):
+    # Connect to Database
     connection = sqlite3.connect("Database/CentralisedDatabase.db")
     cursor = connection.cursor()
 
-    #Get Information About Columns
-    cursor.execute(f"PRAGMA table_info({Table});")
-    columns = cursor.fetchall()
-
-    # Count the columns in a table
-    numberColumns = len(columns)
-    print(numberColumns)
-
-    selectQuery = cursor.execute(f"SELECT * FROM {Table}")
-    # Add placeholders with .join with a ", " for the number of columns.
-    totalValues = ", ".join('?' for _ in range(numberColumns))
-    print(totalValues)
-
-    # Get Column Name with .description and add to the list.
-    for row in selectQuery.description:
-        columnList.append(row[0])
-        print(row[0])
-
-    print(columnList)
-    allColumnNames = ', '.join(columnList)
-
     # INSERT INTO {Table that user provides} ({All of the columns available in the table}) VALUES ({add placeholders per column})
-    select_query = f"INSERT INTO {Table} ({allColumnNames}) VALUES ({totalValues})"
+    select_query = f"INSERT INTO {Table} ({getAllColumns({Table})}) VALUES ({getPlaceholders({Table})})"
 
+    # Execute
     cursor.execute(select_query, f"{values}")
 
+    # Commit and Close Connection
     connection.commit()
     connection.close()
 
 
 if __name__ == '__main__':
-    addNewInventory("Inventory")
+    pass
+    # addToInventory("Inventory")
