@@ -1,6 +1,7 @@
 import sqlite3
 import tkinter as tk
 from DeveloperMode import countDatabase
+from AddNewInventory import getAllColumns as displayAllColumns
 
 userInput = int(input("""Welcome to St Mary's Logistic System:
     What would you like to do?
@@ -31,11 +32,19 @@ def setup_database():
     except Exception as e:
         print("Error Caught: " + str(e))
 
-
 if __name__ == '__main__':
     match (userInput):
         case 1:
             print("You have selected option 1")
+            try:
+                selectTable = str(input("What table do you want to add?"))
+                tableColumns = str(input(f"""Enter in this format: {displayAllColumns(selectTable)}
+                    :: """))
+                splitColumns = tableColumns.split(",")
+
+                # addNewInventory(f"{selectTable}", f"{splitColumns}")
+            except Exception as e:
+                print(f"Something went wrong: {e}")
         case 2:
             print("You have selected option 2")
         case 3:
@@ -46,3 +55,5 @@ if __name__ == '__main__':
             print("You have selected option 5")
         case _:
             print("Invalid option")
+
+
