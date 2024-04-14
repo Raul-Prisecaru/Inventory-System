@@ -33,11 +33,14 @@ def addToInventory(Table, values):
     connection = sqlite3.connect("Database/CentralisedDatabase.db")
     cursor = connection.cursor()
 
+    columns = getAllColumns(Table)
+    placeHolders = getPlaceholders(Table)
+
     # INSERT INTO {Table that user provides} ({All of the columns available in the table}) VALUES ({add placeholders per column})
-    select_query = f"INSERT INTO {Table} ({getAllColumns({Table})}) VALUES ({getPlaceholders({Table})})"
+    select_query = f"INSERT INTO {Table} ({','.join(columns)}) VALUES ({placeHolders})"
 
     # Execute
-    cursor.execute(select_query, f"{values}")
+    cursor.execute(select_query, values)
 
     # Commit and Close Connection
     connection.commit()
