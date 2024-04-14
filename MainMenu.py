@@ -10,7 +10,8 @@ userInput = int(input("""Welcome to St Mary's Logistic System:
         [2] Modify Inventory
         [3] Track Shipments
         [4] Generate Report
-        [5] Quit
+        [5] Introduction To System.
+        [6] Quit
             :: """))
 
 def setup_database():
@@ -32,19 +33,24 @@ def setup_database():
     except Exception as e:
         print("Error Caught: " + str(e))
 
-
 if __name__ == '__main__':
     match userInput:
         case 1:
             print("You have selected option 1")
             try:
+                valueStrip = []
                 selectTable = str(input("What table do you want to add?"))
                 tableColumns = str(input(f"""Enter in this format: {displayAllColumns(selectTable)}
                     :: """))
-                splitColumns = tableColumns.split(", ")
-                print(f"Result: {splitColumns} ")
+                # Take the User Input and Split it accordingly to be used for the  table placeholders
+                splitColumns = tableColumns.split(",")
 
-                addToInventory(f"{selectTable}", f"{splitColumns}")
+                # Do a ForLoop to strip any WhiteSpace in the User Answer
+                for value in splitColumns:
+                    valueStrip.append(value.strip())
+
+                # Arguments: {Table}, {Placeholder Answers}.
+                addToInventory(selectTable, valueStrip)
             except Exception as e:
                 print(f"Something went wrong: {e}")
         case 2:
@@ -55,6 +61,8 @@ if __name__ == '__main__':
             print("You have selected option 4")
         case 5:
             print("You have selected option 5")
+        case 6:
+            print("You have selected option 6")
         case _:
             print("Invalid option")
 
