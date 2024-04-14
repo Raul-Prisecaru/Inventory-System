@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS IncomingTransportationSchedules;
 DROP TABLE IF EXISTS ExternalCompanies;
 
 CREATE TABLE IF NOT EXISTS Inventory(
-    InventoryID INTEGER PRIMARY KEY AUTOINCREMENT ,
+    InventoryID INTEGER PRIMARY KEY,
     InventoryName TEXT,
     StockLevel INTEGER,
     LocationBuilding TEXT,

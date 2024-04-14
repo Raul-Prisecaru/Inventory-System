@@ -3,6 +3,7 @@ import tkinter as tk
 from DeveloperMode import countDatabase
 from AddNewInventory import getAllColumns as displayAllColumns
 from AddNewInventory import addToInventory
+from ModifyInventory import modifyAllInventory, getAllColumns as displayAllColumnsModify
 
 userInput = int(input("""Welcome to St Mary's Logistic System:
     What would you like to do?
@@ -55,6 +56,22 @@ if __name__ == '__main__':
                 print(f"Something went wrong: {e}")
         case 2:
             print("You have selected option 2")
+            try:
+                valueStrip = []
+                selectTable = str(input("What table do you want to Modify?"))
+                tableColumns = str(input(f"""Enter in this format: {displayAllColumnsModify(selectTable)}
+                        :: """))
+                # Take the User Input and Split it accordingly to be used for the  table placeholders
+                splitColumns = tableColumns.split(",")
+
+                # Do a ForLoop to strip any WhiteSpace in the User Answer
+                for value in splitColumns:
+                    valueStrip.append(value.strip())
+
+                # Arguments: {Table}, {Placeholder Answers}, {ID to modify}.
+                modifyAllInventory(selectTable, valueStrip)
+            except Exception as e:
+                print(f"Something went wrong: {e}")
         case 3:
             print("You have selected option 3")
         case 4:
@@ -63,7 +80,11 @@ if __name__ == '__main__':
             print("You have selected option 5")
         case 6:
             print("You have selected option 6")
+        case 7:
+            setup_database()
         case _:
             print("Invalid option")
 
 # 4000, "Google", 400, "London", 123
+# 1,'updated',213,'asd',123
+# 1,Updated,123,asd,123

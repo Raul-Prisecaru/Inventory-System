@@ -77,14 +77,14 @@ def randomiseInventory():
         cursor = connection.cursor()
 
         select_query = """
-            INSERT INTO Inventory(InventoryName, StockLevel, LocationBuilding)
-            VALUES (?,?,?)
+            INSERT INTO Inventory(InventoryID, InventoryName, StockLevel, LocationBuilding)
+            VALUES (?,?,?,?)
             """
 
         showcase_query = "SELECT * FROM Inventory;"
 
         for row in range(5):
-            cursor.execute(select_query,(random.choice(nameList), random.randint(30, 400), random.choice(locationList)))
+            cursor.execute(select_query,(random.randint(30, 400) ,random.choice(nameList), random.randint(30, 400), random.choice(locationList)))
 
         cursor.execute(showcase_query)
 
@@ -283,4 +283,4 @@ def countDatabase(column):
         print("Something Else Went Wrong: " + str(e))
 
 if __name__ == '__main__':
-    countDatabase("")
+    randomiseInventory()

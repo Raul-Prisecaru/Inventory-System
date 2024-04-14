@@ -14,6 +14,7 @@ def getAllColumns(Table):
 
 
 def getPlaceholders(Table):
+    placeholderValues = []
     connection = sqlite3.connect("Database/CentralisedDatabase.db")
     cursor = connection.cursor()
 
@@ -23,8 +24,8 @@ def getPlaceholders(Table):
     Values = len(columns[0])
     print(Values)
 
-    placeholderValues = ", ".join('?' for _ in range(Values))
-    print(placeholderValues)
+    for _ in range(Values):
+        placeholderValues.append(", ".join("?"))
 
     return placeholderValues
 
@@ -46,7 +47,7 @@ def addToInventory(Table, values):
     connection.commit()
     connection.close()
 
-
+# Testing Functions
 if __name__ == '__main__':
     pass
     # addToInventory("Inventory")
