@@ -57,3 +57,13 @@ CREATE TABLE IF NOT EXISTS ExternalCompanies(
     ExternalCompanyRelationship DATE
 );
 
+CREATE VIEW viewInventoryNoID AS
+    SELECT InventoryName, StockLevel, LocationBuilding, IncomingScheduleID
+    FROM Inventory;
+
+-- CREATE VIEW viewDriversNoID as
+--     SELECT DriverName, DriverPhoneNumber, DriverLicenseRegistrationID
+--     FROM Drivers;
+--
+-- CREATE VIEW viewVehicles
+

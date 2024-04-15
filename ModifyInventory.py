@@ -1,7 +1,7 @@
 import sqlite3
 
 
-def getAllColumns(Table):
+def getAllColumnsNoID(Table):
     columnList = []
 
     connection = sqlite3.connect("Database/CentralisedDatabase.db")
@@ -16,14 +16,14 @@ def getAllColumns(Table):
     return columnList
 
 
-def getPlaceholders(Table):
+def getPlaceholdersNoID(Table):
     placeholderValues = []
     connection = sqlite3.connect("Database/CentralisedDatabase.db")
     cursor = connection.cursor()
 
     cursor.execute(f"SELECT * FROM {Table}")
     columns = cursor.fetchall()
-
+    # Get number of columns from Table then subtract -1 to not include ID
     Values = len(columns[0] - 1)
     print(Values)
 
@@ -43,18 +43,28 @@ def modifyAllInventory(Table, values):
     connection = sqlite3.connect("Database/CentralisedDatabase.db")
     cursor = connection.cursor()
 
-    columns = getAllColumns(Table)
-    # placeholders = getPlaceholders(Table)
+    columns = getAllColumnsNoID(Table)
 
-    # Construct the SET clause dynamically
-    for column in columns:
-        setClause = ', '.join(f'{column} = ?')
 
-    # Construct the UPDATE query
-    update_query = f"UPDATE {Table} SET {setClause} WHERE NOT LIKE '%ID'"
 
-    # Execute the query
-    cursor.execute(update_query, values)
+    # columns = getAllColumns(Table)
+    #
+    # Update Clause
+
+    updateFormat = ', '.join([f'{column} = ?' for column in columns])
+
+    updateQuery = f'UPDATE {Table} SET {updateFormat}'
+
+
+    # cursor.execute(viewQuery)  # Execute the CREATE VIEW statement
+    cursor.execute(updateQuery, values)  # Execute the UPDATE query
 
     connection.commit()
     connection.close()
+    # CREATE VIEW statement to create a temporary view with all columns from the table
+    # viewQuery = f"""CREATE VIEW viewTable AS
+    # SELECT {', '.join(columns)}
+    # FROM {Table}"""
+    #
+    # # Construct the UPDATE query
+    # updateQuery = f"UPDATE viewTable SET {setClause}"

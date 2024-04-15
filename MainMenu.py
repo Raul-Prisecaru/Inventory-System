@@ -3,7 +3,7 @@ import tkinter as tk
 from DeveloperMode import countDatabase
 from AddNewInventory import getAllColumns as displayAllColumns
 from AddNewInventory import addToInventory
-from ModifyInventory import modifyAllInventory, getAllColumns as displayAllColumnsModify
+from ModifyInventory import modifyAllInventory, getAllColumnsNoID as displayAllColumnsModify
 
 userInput = int(input("""Welcome to St Mary's Logistic System:
     What would you like to do?
