@@ -5,7 +5,7 @@ def getAllColumnsByID(Table):
     # List
     columnList = []
 
-    # Connect to Database
+    # Connect To Database
     connection = sqlite3.connect('Database/CentralisedDatabase.db')
     cursor = connection.cursor()
 
@@ -32,7 +32,7 @@ def getAllColumnsNoID(Table):
     cursor = connection.cursor()
     selectQuery = cursor.execute(f"SELECT * FROM {Table}")
 
-    # Get all information from Table and execute
+    # Get all information from Table and store to list
     for row in selectQuery.description:
         columnList.append(row[0])
 
@@ -52,7 +52,6 @@ def getPlaceholdersNoID(Table):
     # Get all results from table and use fetchall to store each row as a tuple
     cursor.execute(f"SELECT * FROM {Table}")
     columns = cursor.fetchall()
-    print(columns)
 
     # Get number of columns from Table then subtract -1 to not include ID
     Values = len(columns[0]) - 1
@@ -85,5 +84,6 @@ def modifyAllInventory(Table, values, ID):
     # Execute SQLQuery and values that user provides
     cursor.execute(updateQuery, values)
 
+    # Commit and Close Connection
     connection.commit()
     connection.close()
