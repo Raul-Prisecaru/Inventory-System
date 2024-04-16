@@ -1,6 +1,21 @@
 import sqlite3
 
 
+def getAllColumns(Table):
+    columnList = []
+    connection = sqlite3.connect('Database/CentralisedDatabase.db')
+    cursor = connection.cursor()
+
+    executeQuery = f'SELECT * FROM {Table}'
+    rows = cursor.execute(executeQuery)
+
+    for row in rows.description:
+        columnList.append(row)
+
+    columnID = columnList[0]
+    return columnID[0]
+
+
 def getAllColumnsNoID(Table):
     columnList = []
 
@@ -39,32 +54,26 @@ def modifyOneInventory(Table, values, row):
     cursor = connection.cursor()
 
 
-def modifyAllInventory(Table, values):
+def modifyAllInventory(Table, values, ID):
+    GetColumnID = getAllColumns(Table)
+    print(GetColumnID)
     connection = sqlite3.connect("Database/CentralisedDatabase.db")
     cursor = connection.cursor()
 
     columns = getAllColumnsNoID(Table)
 
-
-
-    # columns = getAllColumns(Table)
-    #
-    # Update Clause
-
     updateFormat = ', '.join([f'{column} = ?' for column in columns])
 
-    updateQuery = f'UPDATE {Table} SET {updateFormat}'
+    getID = f'SELECT * FROM {Table} WHERE'
 
+    updateQuery = f'UPDATE {Table} SET {updateFormat} WHERE {GetColumnID} = {ID}'
 
     # cursor.execute(viewQuery)  # Execute the CREATE VIEW statement
     cursor.execute(updateQuery, values)  # Execute the UPDATE query
 
     connection.commit()
     connection.close()
-    # CREATE VIEW statement to create a temporary view with all columns from the table
-    # viewQuery = f"""CREATE VIEW viewTable AS
-    # SELECT {', '.join(columns)}
-    # FROM {Table}"""
-    #
-    # # Construct the UPDATE query
-    # updateQuery = f"UPDATE viewTable SET {setClause}"
+
+
+if __name__ == '__main__':
+    print(getAllColumns('Drivers'))

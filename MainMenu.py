@@ -69,7 +69,7 @@ if __name__ == '__main__':
                     valueStrip.append(value.strip())
 
                 # Arguments: {Table}, {Placeholder Answers}, {ID to modify}.
-                modifyAllInventory(selectTable, valueStrip)
+                modifyAllInventory(selectTable, valueStrip, 42)
             except Exception as e:
                 print(f"Something went wrong: {e}")
         case 3:
