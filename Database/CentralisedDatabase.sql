@@ -1,9 +1,15 @@
+DROP TABLE IF EXISTS LoginInformation;
 DROP TABLE IF EXISTS Inventory;
 DROP TABLE IF EXISTS Drivers;
 DROP TABLE IF EXISTS Vehicles;
 DROP TABLE IF EXISTS OutgoingTransportationSchedules;
 DROP TABLE IF EXISTS IncomingTransportationSchedules;
 DROP TABLE IF EXISTS ExternalCompanies;
+
+CREATE TABLE IF NOT EXISTS LoginInformation(
+    Username TEXT,
+    Password TEXT
+);
 
 CREATE TABLE IF NOT EXISTS Inventory(
     InventoryID INTEGER PRIMARY KEY,
@@ -57,13 +63,4 @@ CREATE TABLE IF NOT EXISTS ExternalCompanies(
     ExternalCompanyRelationship DATE
 );
 
-CREATE VIEW viewInventoryNoID AS
-    SELECT InventoryName, StockLevel, LocationBuilding, IncomingScheduleID
-    FROM Inventory;
-
--- CREATE VIEW viewDriversNoID as
---     SELECT DriverName, DriverPhoneNumber, DriverLicenseRegistrationID
---     FROM Drivers;
---
--- CREATE VIEW viewVehicles
-
+INSERT INTO LoginInformation (Username, Password) VALUES ('Admin', 'Password')

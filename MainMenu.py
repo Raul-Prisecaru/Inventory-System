@@ -35,8 +35,20 @@ def LoginPage(window):
     SButton = tk.Button(window, text="Sign Up")
     SButton.pack()
 
+
+# def onClick():
+#     connection = sqlite3.connect('Database/CentralisedDatabase.db')
+#     cursor = connection.cursor()
+#
+#     cursor.execute('SELECT Password FROM LoginInformation WHERE Username = ?', ('Admin', ))
+#     e = cursor.fetchall()
+#
+#     print(e)
+
+
 def addComponents(window):
     LoginPage(window)
+    onClick(window)
 
 
 # userInput = int(input("""Welcome to St Mary's Logistic System:
@@ -71,7 +83,9 @@ def setup_database():
 
 
 if __name__ == '__main__':
-    run()
+    # setup_database()
+    # run()
+    onClick()
     # match userInput:
     #     case 1:
     #         print("You have selected option 1")
