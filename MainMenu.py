@@ -22,9 +22,18 @@ def MainWindowConfig():
 def LoginPage(window):
     loginLabel = tk.Label(window, text="Username: ")
     loginLabel.pack()
+    loginEntry = tk.Entry(window)
+    loginEntry.pack()
 
     passwordLabel = tk.Label(window, text="Password: ")
     passwordLabel.pack()
+    passwordEntry = tk.Entry(window)
+    passwordEntry.pack()
+
+    LButton = tk.Button(window, text="Login")
+    LButton.pack()
+    SButton = tk.Button(window, text="Sign Up")
+    SButton.pack()
 
 def addComponents(window):
     LoginPage(window)
