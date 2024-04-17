@@ -1,14 +1,6 @@
 import sqlite3
 
 
-def SignUp(Table, Query1='Admin', Query2='Password'):
-    connection = sqlite3.connect("Database/CentralisedDatabase.db")
-    cursor = connection.cursor()
-
-    # executeQuery = f"INSERT INTO {Table} (Username, Password) VALUES (?,?)"
-    # cursor.execute(executeQuery, (Query1, Query2))
-
-
 def Login(username, password):
     connection = sqlite3.connect('Database/CentralisedDatabase.db')
     cursor = connection.cursor()
@@ -23,8 +15,19 @@ def Login(username, password):
         return False
 
 
+def SignUp(username, password):
+    connection = sqlite3.connect("Database/CentralisedDatabase.db")
+    cursor = connection.cursor()
+
+    cursor.execute('INSERT INTO LoginInformation VALUES (?,?)', (username, password))
+    connection.commit()
+    connection.close()
+
+
+
 if __name__ == '__main__':
-    if Login('asd', 'Password'):
-        print("Login Successful")
-    else:
-        print("Login Failed")
+    # if Login('asd', 'Password'):
+    #     print("Login Successful")
+    # else:
+    #     print("Login Failed")
+    SignUp('Jake', '123')
