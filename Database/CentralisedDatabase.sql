@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS IncomingTransportationSchedules;
 DROP TABLE IF EXISTS ExternalCompanies;
 
 CREATE TABLE IF NOT EXISTS LoginInformation(
-    Username TEXT,
+    Username TEXT UNIQUE,
     Password TEXT
 );
 

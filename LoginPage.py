@@ -5,8 +5,10 @@ from DeveloperMode import countDatabase
 from AddNewInventory import getAllColumns as displayAllColumns
 from AddNewInventory import addToInventory
 from ModifyInventory import modifyAllInventory, getAllColumnsNoID as displayAllColumnsModify
-from Login import Login
+from Login import Login, SignUp
+from AddInventoryPage import run as AddInventoryPageRun
 components = {}
+
 
 def run():
     window = MainWindowConfig()
@@ -41,30 +43,27 @@ def LoginPage(window):
     LButton.bind("<ButtonRelease-1>", onLoginButtonPress)
     SButton = tk.Button(window, text="Sign Up")
     SButton.pack()
+    SButton.bind("<ButtonRelease-1>", onSignUpButtonPress)
 
 
 def onLoginButtonPress(event):
     Username = components['loginEntry'].get()
     Password = components['passwordEntry'].get()
-    Login(f'{Username}', f'{Password}')
-    # messagebox.showinfo('asd')
+    if Login(f'{Username}', f'{Password}'):
+        AddInventoryPageRun()
+    else:
+        print('Cannot switch page')
+
+
+def onSignUpButtonPress(event):
+    Username = components['loginEntry'].get()
+    Password = components['passwordEntry'].get()
+    SignUp(f'{Username}', f'{Password}')
+
 
 
 def addComponents(window):
     LoginPage(window)
-    # onClick(window)
-
-
-# userInput = int(input("""Welcome to St Mary's Logistic System:
-#     What would you like to do?
-#         [1] Add new Inventory
-#         [2] Modify Inventory
-#         [3] Track Shipments
-#         [4] Generate Report
-#         [5] Introduction To System.
-#         [6] Quit
-#             :: """))
-
 
 def setup_database():
     try:
@@ -89,7 +88,6 @@ def setup_database():
 if __name__ == '__main__':
     # setup_database()
     run()
-    # onClick()
     # match userInput:
     #     case 1:
     #         print("You have selected option 1")
