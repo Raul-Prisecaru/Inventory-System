@@ -1,5 +1,6 @@
 import tkinter as tk
 from AddNewInventory import *
+
 components = {}
 
 
@@ -17,16 +18,24 @@ def MainWindowConfig():
 
 
 def LoginPage(window):
-    rows = getAllColumns('Inventory')
-    for row in rows:
-        rowLabel = tk.Label(window, text=f'{row}')
-        rowLabel.pack()
+    columns = getAllColumns('Inventory')
+    for column in columns:
+        columnLabel = tk.Label(window, text=f'{column}')
+        columnLabel.pack()
 
         columnEntry = tk.Entry(window)
         columnEntry.pack()
-        print(rowLabel)
+        components['columnEntry'] = columnEntry
+
+    addInventoryButton = tk.Button(window, text='Add To Inventory')
+    addInventoryButton.pack()
+    addInventoryButton.bind('<ButtonRelease-1>', onAddInventoryPress)
 
 
+def onAddInventoryPress(event):
+    columns = components['columnEntry'].get()
+    print(columns)
+    # addToInventory('Inventory', columns)
 
 
 def InventoryOptions(event):
@@ -39,5 +48,6 @@ def onSignUpButtonPress(event):
 
 def addComponents(window):
     LoginPage(window)
+
 
 run()
