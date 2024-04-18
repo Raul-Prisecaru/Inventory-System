@@ -1,10 +1,12 @@
 import sqlite3
 import tkinter as tk
+from tkinter import messagebox
 from DeveloperMode import countDatabase
 from AddNewInventory import getAllColumns as displayAllColumns
 from AddNewInventory import addToInventory
 from ModifyInventory import modifyAllInventory, getAllColumnsNoID as displayAllColumnsModify
-
+from Login import Login
+components = {}
 
 def run():
     window = MainWindowConfig()
@@ -22,33 +24,35 @@ def MainWindowConfig():
 def LoginPage(window):
     loginLabel = tk.Label(window, text="Username: ")
     loginLabel.pack()
+
     loginEntry = tk.Entry(window)
     loginEntry.pack()
+    components['loginEntry'] = loginEntry
 
     passwordLabel = tk.Label(window, text="Password: ")
     passwordLabel.pack()
+
     passwordEntry = tk.Entry(window)
     passwordEntry.pack()
+    components['passwordEntry'] = passwordEntry
 
     LButton = tk.Button(window, text="Login")
     LButton.pack()
+    LButton.bind("<ButtonRelease-1>", onLoginButtonPress)
     SButton = tk.Button(window, text="Sign Up")
     SButton.pack()
 
 
-# def onClick():
-#     connection = sqlite3.connect('Database/CentralisedDatabase.db')
-#     cursor = connection.cursor()
-#
-#     cursor.execute('SELECT Password FROM LoginInformation WHERE Username = ?', ('Admin', ))
-#     e = cursor.fetchall()
-#
-#     print(e)
+def onLoginButtonPress(event):
+    Username = components['loginEntry'].get()
+    Password = components['passwordEntry'].get()
+    Login(f'{Username}', f'{Password}')
+    # messagebox.showinfo('asd')
 
 
 def addComponents(window):
     LoginPage(window)
-    onClick(window)
+    # onClick(window)
 
 
 # userInput = int(input("""Welcome to St Mary's Logistic System:
@@ -84,8 +88,8 @@ def setup_database():
 
 if __name__ == '__main__':
     # setup_database()
-    # run()
-    onClick()
+    run()
+    # onClick()
     # match userInput:
     #     case 1:
     #         print("You have selected option 1")
