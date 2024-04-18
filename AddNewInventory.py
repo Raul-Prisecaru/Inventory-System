@@ -26,17 +26,15 @@ def getPlaceholders(Table):
     connection = sqlite3.connect("Database/CentralisedDatabase.db")
     cursor = connection.cursor()
 
-    # Get all results from table and use fetchall to store each row as a tuple
-    cursor.execute(f"SELECT * FROM {Table}")
-    columns = cursor.fetchall()
-
     # Get number of columns from Table
-    Values = len(columns[0])
+    Values = len(getAllColumns(Table))
+    print(f"Function getPlaceHolders Values: {Values}")
 
     # # Used to format all the Placeholders in a list to be later used in the SQL query
     for _ in range(Values):
         placeholderValues.append(", ".join("?"))
 
+    print(f"Function getPlaceHolders Placeholders ?: {placeholderValues}")
     # Return list with placeholders
     return placeholderValues
 
@@ -59,3 +57,7 @@ def addToInventory(Table, values):
     # Commit and Close Connection
     connection.commit()
     connection.close()
+
+
+print(getAllColumns('Inventory'))
+getPlaceholders('Inventory')
