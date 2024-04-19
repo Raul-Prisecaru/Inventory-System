@@ -25,17 +25,16 @@ def LoginPage(window):
 
         columnEntry = tk.Entry(window)
         columnEntry.pack()
-        components['columnEntry'] = columnEntry
+        components[column] = columnEntry
 
     addInventoryButton = tk.Button(window, text='Add To Inventory')
     addInventoryButton.pack()
     addInventoryButton.bind('<ButtonRelease-1>', onAddInventoryPress)
 
+    return components
+
 
 def onAddInventoryPress(event):
-    columns = components['columnEntry'].get()
-    print(columns)
-    # addToInventory('Inventory', columns)
 
 
 def InventoryOptions(event):
