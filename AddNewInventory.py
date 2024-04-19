@@ -20,7 +20,7 @@ def getAllColumns(Table):
 
 def getPlaceholders(Table):
     # List
-    placeholderValues = []
+    # placeholderValues = []
 
     # Connect To Database
     connection = sqlite3.connect("Database/CentralisedDatabase.db")
@@ -28,15 +28,17 @@ def getPlaceholders(Table):
 
     # Get number of columns from Table
     Values = len(getAllColumns(Table))
-    print(f"Function getPlaceHolders Values: {Values}")
+    # print(f"Function getPlaceHolders Values: {Values}")
 
     # Used to format all the Placeholders in a list to be later used in the SQL query
-    for _ in range(Values):
-        placeholderValues.append(", ".join("?"))
 
-    print(f"Function getPlaceHolders Placeholders ?: {placeholderValues}")
+    placeholder = ', '.join(['?' for _ in range(Values)])
+    # for _ in range(Values):
+    #     placeholderValues.append(", ".join("?"))
+
+    # print(f"Function getPlaceHolders Placeholders ?: {placeholderValues}")
     # Return list with placeholders
-    return placeholderValues
+    return placeholder
 
 
 def addToInventory(Table, values):
@@ -46,10 +48,10 @@ def addToInventory(Table, values):
 
     # Store columns and placeholders functions in appropriate variables.
     columns = getAllColumns(Table)
-    placeHolders = getPlaceholders(Table)
+    placeholders = getPlaceholders(Table)
 
     # INSERT INTO {Table that user provides} ({All of the columns available in the table}) VALUES ({add placeholders per column})
-    select_query = f"INSERT INTO {Table} ({','.join(columns)}) VALUES ({placeHolders})"
+    select_query = f"INSERT INTO {Table} ({','.join(columns)}) VALUES ({placeholders})"
 
     # Execute SQLQuery and values that user provides
     cursor.execute(select_query, values)
@@ -57,4 +59,5 @@ def addToInventory(Table, values):
     # Commit and Close Connection
     connection.commit()
     connection.close()
+
 
