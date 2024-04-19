@@ -30,7 +30,7 @@ def getPlaceholders(Table):
     Values = len(getAllColumns(Table))
     print(f"Function getPlaceHolders Values: {Values}")
 
-    # # Used to format all the Placeholders in a list to be later used in the SQL query
+    # Used to format all the Placeholders in a list to be later used in the SQL query
     for _ in range(Values):
         placeholderValues.append(", ".join("?"))
 
@@ -58,6 +58,3 @@ def addToInventory(Table, values):
     connection.commit()
     connection.close()
 
-
-print(getAllColumns('Inventory'))
-getPlaceholders('Inventory')
