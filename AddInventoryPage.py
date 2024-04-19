@@ -13,7 +13,7 @@ def run():
 def MainWindowConfig():
     window = tk.Tk()
     window.geometry('600x500')
-    window.title("Main Menu")
+    window.title("Add Inventory SUStem")
     return window
 
 
@@ -26,6 +26,7 @@ def LoginPage(window):
         columnEntry = tk.Entry(window)
         columnEntry.pack()
         components[column] = columnEntry
+        print(columnEntry)
 
     addInventoryButton = tk.Button(window, text='Add To Inventory')
     addInventoryButton.pack()
@@ -35,7 +36,7 @@ def LoginPage(window):
 
 
 def onAddInventoryPress(event):
-
+    pass
 
 def InventoryOptions(event):
     pass
