@@ -2,7 +2,7 @@ import tkinter as tk
 from AddNewInventory import *
 
 components = {}
-forloopvalue = []
+# forloopvalue = []
 
 
 def run():
@@ -28,7 +28,7 @@ def LoginPage(window):
         columnEntry = tk.Entry(window)
         columnEntry.pack()
 
-        forloopvalue.append(columnEntry)
+        components[column] = columnEntry
 
     addInventoryButton = tk.Button(window, text='Add To Inventory')
     addInventoryButton.pack()
@@ -38,9 +38,10 @@ def LoginPage(window):
 
 
 def onAddInventoryPress(event):
-    value = forloopvalue
+    userValues = [entry.get() for entry in components.values()]
+    addToInventory('Inventory', userValues)
 
-    print(value)
+    print(userValues)
     # components[column] = columnEntry
     # print(columnEntry)
 
