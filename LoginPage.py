@@ -1,12 +1,7 @@
 import sqlite3
 import tkinter as tk
-from tkinter import messagebox
-from DeveloperMode import countDatabase
-from AddNewInventory import getAllColumns as displayAllColumns
-from AddNewInventory import addToInventory
-from ModifyInventory import modifyAllInventory, getAllColumnsNoID as displayAllColumnsModify
-from Login import Login, SignUp
-from AddInventoryPage import run as AddInventoryPageRun
+from Features.Login import Login, SignUp
+from Features.AddInventoryPage import run as AddInventoryPageRun
 components = {}
 
 
@@ -18,6 +13,7 @@ def run():
 
 def MainWindowConfig():
     window = tk.Tk()
+    
     window.geometry('600x500')
     window.title("St Mary's University Inventory System")
     return window
@@ -65,24 +61,24 @@ def onSignUpButtonPress(event):
 def addComponents(window):
     LoginPage(window)
 
-def setup_database():
-    try:
-        connection = sqlite3.connect("Database/CentralisedDatabase.db")
-        cursor = connection.cursor()
-
-        with open("Database/CentralisedDatabase.sql", "r") as sql_file:
-            sql_script = sql_file.read()
-
-        cursor.executescript(sql_script)
-
-        connection.commit()
-        connection.close()
-        print("Database Successfully Created")
-
-    except NameError:
-        print("NameError Caught: Database (.db) Not Found.")
-    except Exception as e:
-        print("Error Caught: " + str(e))
+# def setup_database():
+#     try:
+#         connection = sqlite3.connect('Database/CentralisedDatabase.db')
+#         cursor = connection.cursor()
+#
+#         with open('Database/CentralisedDatabase.sql', "r") as sql_file:
+#             sql_script = sql_file.read()
+#
+#         cursor.executescript(sql_script)
+#
+#         connection.commit()
+#         connection.close()
+#         print("Database Successfully Created")
+#
+#     except NameError:
+#         print("NameError Caught: Database (.db) Not Found.")
+#     except Exception as e:
+#         print("Error Caught: " + str(e))
 
 
 if __name__ == '__main__':
