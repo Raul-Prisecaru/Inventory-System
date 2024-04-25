@@ -2,6 +2,7 @@ import sqlite3
 import tkinter as tk
 from Features.Login import Login, SignUp
 from Pages.AddInventoryPage import run as AddInventoryPageRun
+from Pages.MainMenuPages import run as MainMenuPageRun
 components = {}
 
 
@@ -46,7 +47,7 @@ def onLoginButtonPress(event):
     Username = components['loginEntry'].get()
     Password = components['passwordEntry'].get()
     if Login(f'{Username}', f'{Password}'):
-        AddInventoryPageRun()
+        MainMenuPageRun()
     else:
         print('Cannot switch page')
 
