@@ -1,7 +1,7 @@
 import sqlite3
 import tkinter as tk
 from Features.Login import Login, SignUp
-from Features.AddInventoryPage import run as AddInventoryPageRun
+from Pages.AddInventoryPage import run as AddInventoryPageRun
 components = {}
 
 

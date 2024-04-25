@@ -61,4 +61,4 @@ def addComponents(window):
     LoginPage(window)
 
 
-run()
+# run()
