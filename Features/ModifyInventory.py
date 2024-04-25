@@ -6,7 +6,7 @@ def getAllColumnsByID(Table):
     columnList = []
 
     # Connect To Database
-    connection = sqlite3.connect('Database/CentralisedDatabase.db')
+    connection = sqlite3.connect('../Database/CentralisedDatabase.db')
     cursor = connection.cursor()
 
     # Get all information from Table and execute
@@ -28,7 +28,7 @@ def getAllColumnsNoID(Table):
     columnList = []
 
     # Connect to Database
-    connection = sqlite3.connect("Database/CentralisedDatabase.db")
+    connection = sqlite3.connect("../Database/CentralisedDatabase.db")
     cursor = connection.cursor()
     selectQuery = cursor.execute(f"SELECT * FROM {Table}")
 
@@ -46,7 +46,7 @@ def getPlaceholdersNoID(Table):
     placeholderValues = []
 
     # Connect to Database
-    connection = sqlite3.connect("Database/CentralisedDatabase.db")
+    connection = sqlite3.connect("../Database/CentralisedDatabase.db")
     cursor = connection.cursor()
 
     # Get all results from table and use fetchall to store each row as a tuple
@@ -69,7 +69,7 @@ def modifyAllInventory(Table, values, ID):
     GetColumnID = getAllColumnsByID(Table)
 
     # Connect To Database
-    connection = sqlite3.connect("Database/CentralisedDatabase.db")
+    connection = sqlite3.connect("../Database/CentralisedDatabase.db")
     cursor = connection.cursor()
 
     # Store all Columns Except ID
