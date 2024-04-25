@@ -1,18 +1,22 @@
-import sqlite3;
+import sqlite3
 import tkinter as tk
+from Pages.AddInventoryPage import run as AddInventoryPageRun
 # from AddNewInventory import *
 # from AddNewInventory import *
 # from Features.AddNewInventory import *
 
 
+
 components = {}
+
+
 # forloopvalue = []
 
 def getAllTables():
     tableList = []
-    with open ('Pages/MainMenuOptions.txt', 'r') as Options:
+    with open('MainMenuOptions.txt', 'r') as Options:
         for option in Options:
-             tableList.append(option)
+            tableList.append(option)
 
     print(tableList)
     return tableList
@@ -46,11 +50,13 @@ def LoginPage(window):
 
 def onAddInventoryPress(event, index):
     if index == 0:
-           print("Index 0 pressed")
+        AddInventoryPageRun()
     elif index == 1:
-            # Open the second file
-            print("Index 1 pressed")
-
+        print("Index 1 pressed")
+    elif index == 2:
+        print("Index 2 pressed")
+    elif index == 3:
+        print("Index 3 pressed")
 
 
 def addComponents(window):

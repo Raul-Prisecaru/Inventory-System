@@ -1,12 +1,17 @@
 import sqlite3
+import os, sys
+# Get the directory of the current script file
+current_directory = os.path.dirname(__file__)
 
+# Construct the path to the database file relative to the current directory
+database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
 
 def getAllColumns(Table):
     # List
     columnList = []
 
     # Connect To Database
-    connection = sqlite3.connect("./Database/CentralisedDatabase.db")
+    connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
     selectQuery = cursor.execute(f"SELECT * FROM {Table}")
 
@@ -24,7 +29,7 @@ def getPlaceholders(Table):
     # placeholderValues = []
 
     # Connect To Database
-    connection = sqlite3.connect("./Database/CentralisedDatabase.db")
+    connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
 
     # Get number of columns from Table
@@ -45,7 +50,7 @@ def getPlaceholders(Table):
 
 def addToInventory(Table, values):
     # Connect to Database
-    connection = sqlite3.connect("./Database/CentralisedDatabase.db")
+    connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
 
     # Store columns and placeholders functions in appropriate variables.
