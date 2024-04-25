@@ -1,20 +1,26 @@
 import sqlite3
 import tkinter as tk
+from tkinter import ttk
 from Pages.AddInventoryPage import run as AddInventoryPageRun
-# from AddNewInventory import *
-# from AddNewInventory import *
-# from Features.AddNewInventory import *
+import os
 
+# Get the directory of the current script file
+current_directory = os.path.dirname(__file__)
 
+# Construct the path to the database file relative to the current directory
+txt_path = os.path.join(current_directory, '..', 'Pages', 'MainMenuOptions.txt')
+print(txt_path)
 
 components = {}
+options = []
+selectedTable = {}
 
 
 # forloopvalue = []
 
 def getAllTables():
     tableList = []
-    with open('MainMenuOptions.txt', 'r') as Options:
+    with open(txt_path, 'r') as Options:
         for option in Options:
             tableList.append(option)
 
@@ -36,6 +42,7 @@ def MainWindowConfig():
 
 
 def LoginPage(window):
+    global tableOptions2
     tables = getAllTables()
     userLabel = tk.Label(window, text="Welcome user")
     userLabel.pack()
@@ -43,8 +50,10 @@ def LoginPage(window):
     for index, table in enumerate(tables):
         tableButton = tk.Button(window, text=f'{table}')
         tableButton.pack()
-        components[table] = tableButton
         tableButton.bind('<ButtonRelease-1>', lambda event, index=index: onAddInventoryPress(event, index))
+
+
+
     return
 
 
@@ -62,6 +71,5 @@ def onAddInventoryPress(event, index):
 def addComponents(window):
     LoginPage(window)
 
-
 # getAllTables()
-run()
+# run()
