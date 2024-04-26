@@ -1,5 +1,5 @@
 import sqlite3
-import os, sys
+import os
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
 
@@ -18,8 +18,7 @@ def getAllColumns(Table):
     # Get all information from Table and store to list
     for row in selectQuery.description:
         columnList.append(row[0])
-
-    connection.close()
+    print(columnList)
     # return list with columns
     return columnList
 
@@ -34,17 +33,13 @@ def getPlaceholders(Table):
 
     # Get number of columns from Table
     Values = len(getAllColumns(Table))
+    print(Values)
     # print(f"Function getPlaceHolders Values: {Values}")
 
     # Used to format all the Placeholders in a list to be later used in the SQL query
 
     placeholder = ', '.join(['?' for _ in range(Values)])
-    # for _ in range(Values):
-    #     placeholderValues.append(", ".join("?"))
-
-    # print(f"Function getPlaceHolders Placeholders ?: {placeholderValues}")
-    # Return list with placeholders
-    connection.close()
+    print(placeholder)
     return placeholder
 
 

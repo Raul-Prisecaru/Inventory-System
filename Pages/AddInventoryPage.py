@@ -1,8 +1,6 @@
 import sqlite3
 import tkinter as tk
 from tkinter import ttk
-# from AddNewInventory import *
-# from AddNewInventory import *
 from Features.AddNewInventory import *
 # from Pages.MainMenuPages import getAllTables
 import os
@@ -13,6 +11,8 @@ database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDa
 
 components = {}
 options = []
+
+userOption = ''
 def getAllTables():
     tableinfo = []
     connection = sqlite3.connect(database_path)
@@ -45,52 +45,64 @@ def MainWindowConfig():
 
 def LoginPage(window):
     global tableOptions2
+    global userOption
+
+    def display_components():
+        global userOption
+        columns = getAllColumns(tableOptions2.get())
+        userOption = tableOptions2.get()
+        print(f'tableOptions2: {tableOptions2.get()}')
+        for column in columns:
+            columnLabel = tk.Label(window, text=f'{column}')
+            columnLabel.pack()
+
+            columnEntry = tk.Entry(window)
+            columnEntry.pack()
+
+            components[column] = columnEntry
+
+        addInventoryButton = tk.Button(window, text='Add to table')
+        addInventoryButton.pack()
+        addInventoryButton.bind('<ButtonRelease-1>', onAddInventoryPress)
+
     tableLabel = tk.Label(window, text='Which Table would you like to deal with?')
     tableLabel.pack()
-    tableSelect = tk.Entry(window)
-    tableSelect.pack()
 
-    columns = getAllColumns('Inventory')
-
-    for column in columns:
-
-        columnLabel = tk.Label(window, text=f'{column}')
-        columnLabel.pack()
-
-        columnEntry = tk.Entry(window)
-        columnEntry.pack()
-
-        components[column] = columnEntry
-
-    addInventoryButton = tk.Button(window, text='Add To Inventory')
-    addInventoryButton.pack()
-    addInventoryButton.bind('<ButtonRelease-1>', onAddInventoryPress)
-
-    # Dropdown Table code
+    # Create the dropdown table options
     functionTableOption = getAllTables()
-    for table in functionTableOption:
-        options.append(table)
+    print(f'functionTableOption: {functionTableOption}')
+    if not functionTableOption:
+        print('No options available. Please select an option.')
+        return  # Exit the function if there are no options
 
-    tableOptions2 = ttk.Combobox(window, value=options)
+    tableOptions2 = ttk.Combobox(window, value=functionTableOption)
     tableOptions2.pack()
 
-    tableOptions2.bind('<<ComboboxSelected>>', onOptionSelected)
+    # Define the function to be executed when an option is selected
+    def on_option_selected(event):
+        display_components()
+
+    # Bind the function to the ComboboxSelected event
+    tableOptions2.bind('<<ComboboxSelected>>', on_option_selected)
 
     return components
 
-def onOptionSelected(event):
-    global tableOptions2
-    selectedTable = tableOptions2.get()
-    print(f"{selectedTable} was selected")
 
-    return selectedTable
+# def onOptionSelected(event):
+#     global tableOptions2
+#     selectedTable = tableOptions2.get()
+#     print(f"{selectedTable} was selected")
+#
+#     return selectedTable
 
 
 def onAddInventoryPress(event):
     userValues = [entry.get() for entry in components.values()]
-    addToInventory('Inventory', userValues)
+    print(f'components: {components}')
+    print(f'userValues: {userValues}')
+    print(f'userOption: {userOption}')
+    addToInventory(userOption, userValues)
 
-    print(userValues)
     # components[column] = columnEntry
     # print(columnEntry)
 
