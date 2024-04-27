@@ -2,6 +2,7 @@ import sqlite3
 import tkinter as tk
 from tkinter import ttk
 from Pages.AddInventoryPage import run as AddInventoryPageRun
+from Pages.ModifyInventoryPage import run as ModifyInventoryPageRun
 import os
 
 # Get the directory of the current script file
@@ -14,9 +15,6 @@ print(txt_path)
 components = {}
 options = []
 selectedTable = {}
-
-
-# forloopvalue = []
 
 def getAllTables():
     tableList = []
@@ -42,7 +40,7 @@ def MainWindowConfig():
 
 
 def LoginPage(window):
-    global tableOptions2
+    # global tableOptions2
     tables = getAllTables()
     userLabel = tk.Label(window, text="Welcome user")
     userLabel.pack()
@@ -53,15 +51,11 @@ def LoginPage(window):
         tableButton.bind('<ButtonRelease-1>', lambda event, index=index: onAddInventoryPress(event, index))
 
 
-
-    return
-
-
 def onAddInventoryPress(event, index):
     if index == 0:
         AddInventoryPageRun()
     elif index == 1:
-        print("Index 1 pressed")
+        ModifyInventoryPageRun()
     elif index == 2:
         print("Index 2 pressed")
     elif index == 3:

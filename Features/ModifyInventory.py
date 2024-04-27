@@ -1,12 +1,18 @@
 import sqlite3
+import os
 
+# Get the directory of the current script file
+current_directory = os.path.dirname(__file__)
+
+# Construct the path to the database file relative to the current directory
+database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
 
 def getAllColumnsByID(Table):
     # List
     columnList = []
 
     # Connect To Database
-    connection = sqlite3.connect('../Database/CentralisedDatabase.db')
+    connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
 
     # Get all information from Table and execute
@@ -16,10 +22,11 @@ def getAllColumnsByID(Table):
     # Get all available Information from a table by using .description
     for row in rows.description:
         columnList.append(row)
-    print(columnList)
+
 
     # Get the Column Name (First in the list)
     columnID = columnList[0]
+    print(columnID)
     return columnID[0]
 
 
@@ -28,7 +35,7 @@ def getAllColumnsNoID(Table):
     columnList = []
 
     # Connect to Database
-    connection = sqlite3.connect("../Database/CentralisedDatabase.db")
+    connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
     selectQuery = cursor.execute(f"SELECT * FROM {Table}")
 
@@ -46,7 +53,7 @@ def getPlaceholdersNoID(Table):
     placeholderValues = []
 
     # Connect to Database
-    connection = sqlite3.connect("../Database/CentralisedDatabase.db")
+    connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
 
     # Get all results from table and use fetchall to store each row as a tuple
@@ -69,7 +76,7 @@ def modifyAllInventory(Table, values, ID):
     GetColumnID = getAllColumnsByID(Table)
 
     # Connect To Database
-    connection = sqlite3.connect("../Database/CentralisedDatabase.db")
+    connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
 
     # Store all Columns Except ID
@@ -87,3 +94,6 @@ def modifyAllInventory(Table, values, ID):
     # Commit and Close Connection
     connection.commit()
     connection.close()
+
+
+# getAllColumnsByID('Inventory')
