@@ -63,4 +63,10 @@ CREATE TABLE IF NOT EXISTS ExternalCompanies(
     ExternalCompanyRelationship DATE
 );
 
+CREATE TABLE IF NOT EXISTS Logs(
+    LogID INTEGER PRIMARY KEY AUTOINCREMENT,
+    Username TEXT, -- foreign Key to Login
+    Description TEXT
+);
+
 INSERT INTO LoginInformation (Username, Password) VALUES ('Admin', 'Password')
