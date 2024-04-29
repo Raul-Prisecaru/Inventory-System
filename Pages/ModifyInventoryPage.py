@@ -51,7 +51,7 @@ def run():
 def MainWindowConfig():
     window = tk.Tk()
     window.geometry('600x500')
-    window.title("Add Inventory System")
+    window.title("Modify Inventory System")
     return window
 
 
