@@ -2,6 +2,7 @@ import sqlite3
 from Features.AddNewInventory import *
 import os
 
+
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
 
@@ -9,6 +10,8 @@ current_directory = os.path.dirname(__file__)
 database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
 
 # Function to get all of the tables found in the DB
+
+
 def getAllTables():
     # List to store all of the tables
     tableinfo = []
@@ -27,13 +30,20 @@ def getAllTables():
     # Remove the irrelevant tables
     tableinfo.remove("sqlite_sequence")
     tableinfo.remove("LoginInformation")
+    tableinfo.remove("logs")
 
     # Return List to display the tables to the user later on
     return tableinfo
 
 
 def run():
-    print(getAllColumns('Inventory'))
+    userTable = str(input(f'''What Table do you want to add to? 
+    All Tables Available
+    -------------------
+    {getAllTables()}
+    -------------------
+        :: '''))
+
     userAnswer = []
     # decideTable = str(input(f'''What do you want to add to the {userTable}?
     # :'''))
@@ -43,7 +53,7 @@ def run():
     Ensure the following:
     [1] - follow the following format
     -----------------
-    {getAllColumns('Inventory')}
+    {getAllColumns(userTable)}
     -----------------
     [2] - After each column, ensure you have a space between the comma such as:
     123, Name1, Name2, 123
@@ -51,10 +61,11 @@ def run():
     [3] - Do not enter quotations marks when entering string
     -----You May Enter-----------
     """))
+
     inputSplit = userInput.split(',')
     for answers in inputSplit:
         userAnswer.append(answers)
     print(f'userAnswer: {userAnswer}')
-    addToInventory('Inventory', userAnswer)
+    addToInventory(userTable, userAnswer)
 
 
