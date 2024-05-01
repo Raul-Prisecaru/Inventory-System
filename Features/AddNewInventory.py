@@ -18,7 +18,7 @@ def getAllColumns(Table):
     # Get all information from Table and store to list
     for row in selectQuery.description:
         columnList.append(row[0])
-    print(columnList)
+    print(f'columnList: {columnList}')
     # return list with columns
     return columnList
 
@@ -61,5 +61,10 @@ def addToInventory(Table, values):
     # Commit and Close Connection
     connection.commit()
     connection.close()
+
+
+
+
+
 
 
