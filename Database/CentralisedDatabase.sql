@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS ExternalCompanies(
 );
 
 CREATE TABLE IF NOT EXISTS logs(
-    LogID INTEGER PRIMARY KEY,
+--     LogID INTEGER PRIMARY KEY,
     Username TEXT, -- foreign Key to Login
     Description TEXT
 );
