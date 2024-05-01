@@ -1,5 +1,6 @@
 import sqlite3
 from TUI.AddInventoryTUI import run as AddInventoryRun
+from TUI.ModifyInventoryTUI import run as ModifyInventoryRun
 import os
 
 # Get the directory of the current script file
@@ -53,7 +54,8 @@ if __name__ == '__main__':
             print('You have selected option 2')
 
         case 3:
-            print('You have selected option 3')
+            print('You have selected: Modify System')
+            ModifyInventoryRun()
 
         case 4:
             print('You have selected option 4')
