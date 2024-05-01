@@ -1,10 +1,11 @@
-import sqlite3
 from TUI.AddInventoryTUI import run as AddInventoryRun
 from TUI.ModifyInventoryTUI import run as ModifyInventoryRun
-import os
+from Features.Login import *
+from Features.GenerateLogs import addToLogs, displayLogs
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
+
 
 # Construct the path to the database file relative to the current directory
 # database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
@@ -29,45 +30,66 @@ def setup_database():
         print("Error Caught: " + str(e))
 
 
-userInput = int(input("""Welcome to St Mary's Inventory System
-    What would you like to do?
-        [0] - Reset Database
-        [1] - Add Items to Inventory
-        [2] - Add Stock to Inventory
-        [3] - Modify System
-        [4] - Track Shipments
-        [5] - View Database
-        [6] - View Logs
-        [7] - Admin
-            :: """))
+def displayOptions():
+    userInput = int(input("""Welcome to St Mary's Inventory System
+        What would you like to do?
+            [0] - Reset Database
+            [1] - Add Items to Inventory
+            [2] - Add Stock to Inventory
+            [3] - Modify System
+            [4] - Track Shipments
+            [5] - View Database
+            [6] - View Logs
+            [7] - Admin
+                :: """))
+
+    return userInput
+
+
+userLoginSignup = int(input('''Do you want to:
+[1] - Login
+[2] - Signup'''))
+username = str(input('Enter Your Username: '))
+password = str(input('Enter Your Password: '))
 
 if __name__ == '__main__':
-    match userInput:
-        case 0:
-                print('Resetting Database in progress...')
-                setup_database()
-                print('Database successfully reset...')
-        case 1:
-            print('You have selected: Add Items to Inventory')
-            AddInventoryRun()
-        case 2:
-            print('You have selected option 2')
+    if userLoginSignup == 1:
+        if Login(username, password):
+            print('Login Successful')
+            addToLogs(username, f'{username} has logged into the system')
+            match displayOptions():
+                case 0:
+                    print('Resetting Database in progress...')
+                    setup_database()
+                    print('Database successfully reset...')
+                case 1:
+                    print('You have selected: Add Items to Inventory')
+                    AddInventoryRun()
+                case 2:
+                    print('You have selected option 2')
 
-        case 3:
-            print('You have selected: Modify System')
-            ModifyInventoryRun()
+                case 3:
+                    print('You have selected: Modify System')
+                    ModifyInventoryRun()
 
-        case 4:
-            print('You have selected option 4')
+                case 4:
+                    print('You have selected option 4')
 
-        case 5:
-            print('You have selected option 5')
+                case 5:
+                    print('You have selected option 5')
 
-        case 6:
-            print('You have selected option 6')
+                case 6:
+                    print('You have selected: View Logs')
+                    displayLogs()
 
-        case 7:
-            print('You have selected option 7')
+                case 7:
+                    pass
 
-        case _:
-            print('Invalid Option')
+                case _:
+                    print('Invalid Option')
+        else:
+            print('Login Failed')
+            addToLogs(username, f'{username} has attempted to login and failed')
+    else:
+        SignUp(username, password)
+        addToLogs(username, f'{username} has signed up for the system')
