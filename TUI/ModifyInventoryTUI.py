@@ -2,6 +2,8 @@ import sqlite3
 from Features.AddNewInventory import *
 import os
 
+from Features.ModifyInventory import modifyAllInventory, getAllColumnsNoID
+
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
 
@@ -35,7 +37,7 @@ def getAllTables():
 
 
 def run():
-    userTable = str(input(f'''What Table do you want to add to? 
+    userTable = str(input(f'''What Table do you want to Modify to? 
     All Tables Available
     -------------------
     {getAllTables()}
@@ -43,19 +45,18 @@ def run():
         :: '''))
 
     userAnswer = []
-    # decideTable = str(input(f'''What do you want to add to the {userTable}?
-    # :'''))
+    entryID = str(input(f'Enter ID to the entry you want to modify?'))
 
     userInput = str(input(f"""\nInserting new Inventory Guide:
     To Ensure that data is properly inserted into Database,
     Ensure the following:
     [1] - follow the following format
     -----------------
-    {getAllColumns(userTable)}
+    {getAllColumnsNoID(userTable)}
     -----------------
     [2] - After each column, ensure you have a space between the comma such as:
     123, Name1, Name2, 123
-    
+
     [3] - Do not enter quotations marks when entering string
     -----You May Enter-----------
     """))
@@ -64,4 +65,4 @@ def run():
     for answers in inputSplit:
         userAnswer.append(answers)
     print(f'userAnswer: {userAnswer}')
-    addToInventory(userTable, userAnswer)
+    modifyAllInventory(userTable, userAnswer, entryID)
