@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS Vehicles;
 DROP TABLE IF EXISTS OutgoingTransportationSchedules;
 DROP TABLE IF EXISTS IncomingTransportationSchedules;
 DROP TABLE IF EXISTS ExternalCompanies;
+DROP TABLE IF EXISTS logs;
 
 CREATE TABLE IF NOT EXISTS LoginInformation(
     Username TEXT UNIQUE,
@@ -63,8 +64,8 @@ CREATE TABLE IF NOT EXISTS ExternalCompanies(
     ExternalCompanyRelationship DATE
 );
 
-CREATE TABLE IF NOT EXISTS Logs(
-    LogID INTEGER PRIMARY KEY AUTOINCREMENT,
+CREATE TABLE IF NOT EXISTS logs(
+    LogID INTEGER PRIMARY KEY,
     Username TEXT, -- foreign Key to Login
     Description TEXT
 );

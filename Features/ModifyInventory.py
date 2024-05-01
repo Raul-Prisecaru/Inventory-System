@@ -61,7 +61,7 @@ def getPlaceholdersNoID(Table):
     columns = cursor.fetchall()
 
     # Get number of columns from Table then subtract -1 to not include ID
-    Values = len(columns[0]) - 1
+    Values = len(columns[0])
 
     # Used to format all the Placeholders in a list to be later used in the SQL query
     for _ in range(Values):
