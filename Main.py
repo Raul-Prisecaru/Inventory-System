@@ -2,6 +2,7 @@ from TUI.AddInventoryTUI import run as AddInventoryRun
 from TUI.ModifyInventoryTUI import run as ModifyInventoryRun
 from Features.Login import *
 from Features.GenerateLogs import addToLogs, displayLogs
+import os
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
@@ -56,7 +57,6 @@ if __name__ == '__main__':
     if userLoginSignup == 1:
         if Login(username, password):
             print('Login Successful')
-            addToLogs(username, f'{username} has logged into the system')
             match displayOptions():
                 case 0:
                     print('Resetting Database in progress...')
@@ -87,9 +87,5 @@ if __name__ == '__main__':
 
                 case _:
                     print('Invalid Option')
-        else:
-            print('Login Failed')
-            addToLogs(username, f'{username} has attempted to login and failed')
     else:
         SignUp(username, password)
-        addToLogs(username, f'{username} has signed up for the system')
