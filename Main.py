@@ -1,14 +1,16 @@
 from TUI.AddInventoryTUI import run as AddInventoryRun
 from TUI.ModifyInventoryTUI import run as ModifyInventoryRun
 from Features.Login import *
-from Features.GenerateLogs import addToLogs, displayLogs
+from Features.GenerateLogs import displayLogs
 from Features.TrackShipment import getAllShipments
 from Features.DeveloperMode import run as GenerateDatabase
+import Features.session as session
 import os
 
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
+
 
 def setup_database():
     try:
@@ -55,6 +57,8 @@ password = str(input('Enter Your Password: '))
 if __name__ == '__main__':
     if userLoginSignup == 1:
         if Login(username, password):
+            session.logUser = username
+            print(f'logUser: {session.logUser}')
             print('Login Successful')
             match displayOptions():
                 case 0:
@@ -103,7 +107,17 @@ if __name__ == '__main__':
                             print('Database successfully reset...')
 
                             print('Generating New Database...')
-                            GenerateDatabase()
+                            GenerateDatabase(20)
+                        case 3:
+                            AccountModification = str(input('Which account do you want to unlock?'))
+                            print(session.logUser)
+                            connection = sqlite3.connect(database_path)
+                            cursor = connection.cursor()
+                            username = session.logUser
+                            cursor.execute('UPDATE LoginInformation SET AccountStatus = "Unlocked" WHERE Username = username')
+                            connection.commit()
+                            connection.close()
+
 
                 case _:
                     print('Invalid Option')

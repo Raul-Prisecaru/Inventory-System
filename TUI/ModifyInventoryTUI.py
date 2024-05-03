@@ -1,5 +1,6 @@
 import sqlite3
 from Features.AddNewInventory import *
+from Features.Login import *
 import os
 
 from Features.ModifyInventory import modifyAllInventory, getAllColumnsNoID
@@ -37,32 +38,46 @@ def getAllTables():
 
 
 def run():
-    userTable = str(input(f'''What Table do you want to Modify to? 
-    All Tables Available
-    -------------------
-    {getAllTables()}
-    -------------------
-        :: '''))
+    retryCounter = 0
+    while retryCounter < 3:
+        print('Authentication Required: ')
+        username = str(input('Enter Your Username: '))
+        password = str(input('Enter Your Password: '))
+        if Login(username, password):
+            userTable = str(input(f'''What Table do you want to Modify to? 
+            All Tables Available
+            -------------------
+            {getAllTables()}
+            -------------------
+                :: '''))
 
-    userAnswer = []
-    entryID = str(input(f'Enter ID to the entry you want to modify?'))
+            userAnswer = []
+            entryID = str(input(f'Enter ID to the entry you want to modify?'))
 
-    userInput = str(input(f"""\nInserting new Inventory Guide:
-    To Ensure that data is properly inserted into Database,
-    Ensure the following:
-    [1] - follow the following format
-    -----------------
-    {getAllColumnsNoID(userTable)}
-    -----------------
-    [2] - After each column, ensure you have a space between the comma such as:
-    123, Name1, Name2, 123
+            userInput = str(input(f"""\nInserting new Inventory Guide:
+            To Ensure that data is properly inserted into Database,
+            Ensure the following:
+            [1] - follow the following format
+            -----------------
+            {getAllColumnsNoID(userTable)}
+            -----------------
+            [2] - After each column, ensure you have a space between the comma such as:
+            123, Name1, Name2, 123
+        
+            [3] - Do not enter quotations marks when entering string
+            -----You May Enter-----------
+            """))
 
-    [3] - Do not enter quotations marks when entering string
-    -----You May Enter-----------
-    """))
+            inputSplit = userInput.split(',')
+            for answers in inputSplit:
+                userAnswer.append(answers)
+            print(f'userAnswer: {userAnswer}')
+            modifyAllInventory(userTable, userAnswer, entryID)
 
-    inputSplit = userInput.split(',')
-    for answers in inputSplit:
-        userAnswer.append(answers)
-    print(f'userAnswer: {userAnswer}')
-    modifyAllInventory(userTable, userAnswer, entryID)
+        else:
+            retryCounter += 1
+            print('Try Again')
+
+        if retryCounter == 3:
+            print('''[❌ ATTENTION NEEDED!] Account Locked for Security Purposes
+                Contact Admin to Unlock Account''')
