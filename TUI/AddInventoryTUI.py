@@ -2,6 +2,7 @@ import sqlite3
 from Features.AddNewInventory import *
 from Features.Login import *
 import os
+import Features.session
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
@@ -36,12 +37,12 @@ def getAllTables():
 
 
 def run():
+    print(Features.session.logUser)
     retryCounter = 0
     while retryCounter < 3:
         print('Authentication Required: ')
-        username = str(input('Enter Your Username: '))
         password = str(input('Enter Your Password: '))
-        if Login(username, password):
+        if Login(Features.session.logUser, password):
             print('Login Successful')
             userTable = str(input(f'''What Table do you want to add to?
                     All Tables Available
@@ -79,8 +80,17 @@ def run():
             print('Try Again')
 
         if retryCounter == 3:
+            print(Features.session.logUser)
+            connection = sqlite3.connect(database_path)
+            cursor = connection.cursor()
+            username = Features.session.logUser
+            cursor.execute('UPDATE LoginInformation SET AccountStatus = "Locked" WHERE Username = username')
+            connection.commit()
+            connection.close()
+            # cursor.execute(updateRecord, 'Locked', username)
+
+
+
             print('''[❌ ATTENTION NEEDED!] Account Locked for Security Purposes
                 Contact Admin to Unlock Account''')
-
-        # if LoginSecurity:
 

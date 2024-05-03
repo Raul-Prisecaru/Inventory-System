@@ -3,6 +3,7 @@ import os
 
 from Features.GenerateLogs import addToLogs
 from Features.Login import *
+import Features.session as session
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
@@ -65,7 +66,7 @@ def addToInventory(Table, values):
     connection.commit()
     connection.close()
 
-    addToLogs('UsernameDemo', f'UsernameDemo has added {values} to {Table}')
+    addToLogs(session.logUser, f'{session.logUser} has added {values} to {Table}')
 
 
 # def addToStocks(value):

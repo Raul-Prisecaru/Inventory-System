@@ -299,7 +299,7 @@ def countDatabase(column):
         print("Something Else Went Wrong: " + str(e))
 
 
-def run(repeat=100):
+def run(repeat=1000):
 
     for row in range(repeat):
         randomiseInventory()

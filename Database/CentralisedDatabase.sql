@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS LoginInformation(
     Username TEXT UNIQUE,
     Password TEXT,
     Permission TEXT,
-    AccountStatus TEXT
+    AccountStatus TEXT DEFAULT 'Unlocked'
 );
 
 CREATE TABLE IF NOT EXISTS Inventory(
@@ -72,4 +72,6 @@ CREATE TABLE IF NOT EXISTS logs(
     Description TEXT
 );
 -- Default LOGIN
-INSERT INTO LoginInformation (Username, Password, Permission, AccountStatus) VALUES ('Admin', 'Admin', 'Admin', 'Unlocked')
+INSERT INTO LoginInformation (Username, Password, Permission) VALUES ('Admin', 'Admin', 'Admin');
+INSERT INTO LoginInformation (Username, Password, Permission) VALUES ('asd', 'asd', 'Staff');
+
