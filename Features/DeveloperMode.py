@@ -4,7 +4,7 @@ import random
 numbersNcharacters = [1, 2, 3, 4, 5, 6, 7, 8, 9, "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
                       "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 
-with open("../TextFile/NameRecords.txt", "r") as file:
+with open("./TextFile/NameRecords.txt", "r") as file:
     nameList = []
     try:
         for line in file:
@@ -13,7 +13,7 @@ with open("../TextFile/NameRecords.txt", "r") as file:
     except IOError:
         print("Error Caught: NameRecords.txt not found")
 
-with open("../TextFile/LocationBuilding.txt", "r") as file:
+with open("./TextFile/LocationBuilding.txt", "r") as file:
     locationList = []
     try:
         for line in file:
@@ -22,7 +22,7 @@ with open("../TextFile/LocationBuilding.txt", "r") as file:
     except IOError:
         print("Error Caught: LocationBuilding.txt not found")
 
-with open("../TextFile/VehicleType.txt", "r") as file:
+with open("./TextFile/VehicleType.txt", "r") as file:
     VehicleTypeList = []
     try:
         for line in file:
@@ -31,7 +31,7 @@ with open("../TextFile/VehicleType.txt", "r") as file:
     except IOError:
         print("Error Caught: VehicleType.txt not found")
 
-with open("../TextFile/VehicleBrand.txt", "r") as file:
+with open("./TextFile/VehicleBrand.txt", "r") as file:
     VehicleBrandList = []
     try:
         for line in file:
@@ -40,7 +40,7 @@ with open("../TextFile/VehicleBrand.txt", "r") as file:
     except IOError:
         print("Error Caught: VehicleBrand.txt not found")
 
-with open("../TextFile/ExternalCompanies.txt", "r") as file:
+with open("./TextFile/ExternalCompanies.txt", "r") as file:
     ExternalCompaniesList = []
     try:
         for line in file:
@@ -292,14 +292,15 @@ def countDatabase(column):
         print("Something Else Went Wrong: " + str(e))
 
 
-def run():
+def run(repeat=100):
 
-    for row in range(100):
-        randomiseInventory()
-        randomiseDrivers()
-        randomiseVehicles()
-        randomiseIncomingTransportationSchedules()
-        randomiseOutgoingTransportationSchedules()
-        randomiseExternalCompanies()
+    for row in range(repeat):
+        # randomiseInventory()
+        # randomiseDrivers()
+        # randomiseVehicles()
+        # randomiseIncomingTransportationSchedules()
+        # randomiseOutgoingTransportationSchedules()
+        # randomiseExternalCompanies()
+        pass
 
 run()
