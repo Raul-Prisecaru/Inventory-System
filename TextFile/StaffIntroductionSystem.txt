@@ -1,0 +1,39 @@
+This guidebook will walk you through what each option is used for:
+
+[1] - Add to Inventory
+----------------------
+Permission Level - Staff+
+This option is used for adding Inventory to the system
+Which there will be a format guideline to follow in how to add without errors
+
+Staff+ is able to add Inventory to the system
+
+
+[2] - xxx
+----------------------
+Currently Unavailable
+
+[3] - Modify Inventory
+----------------------
+Permission Level - Staff+
+This option is used for modifying already existing items located in Inventory
+Which there will be a format guideline to follow in how to modify without errors
+
+Staff+ is able to modify To successfully modify the inventory however,
+Staff+ will need to verify themself by relogging for verification purposes
+
+[AWARE] Be aware that 3 failed login attempts and you will be kicked out and account will be locked
+    You will need to contact Admin to unlock the account
+
+[4] - View Shipments
+----------------------
+Permission Level - Unavailable
+This option is used to track all incoming and outgoing deliveries.
+This will show all deliveries happening on set dates while showing details such as:
+External Company Name, Driver Name, Vehicle Type, Tracking Number, Delivery Expected Date & Time, Security code
+
+[5] - View Inventory
+----------------------
+Permission Level - Staff+
+
+This option is used to show all All Details of Inventories such as ID and stock level

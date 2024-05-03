@@ -2,6 +2,7 @@ from TUI.AddInventoryTUI import run as AddInventoryRun
 from TUI.ModifyInventoryTUI import run as ModifyInventoryRun
 from Features.Login import *
 from Features.GenerateLogs import addToLogs, displayLogs
+from Features.TrackShipment import getAllShipments
 import os
 
 # Get the directory of the current script file
@@ -34,14 +35,14 @@ def setup_database():
 def displayOptions():
     userInput = int(input("""Welcome to St Mary's Inventory System
         What would you like to do?
-            [0] - Reset Database
-            [1] - Add Items to Inventory
-            [2] - Add Stock to Inventory
-            [3] - Modify System
-            [4] - Track Shipments
-            [5] - View Database
+            [0] - Guidebook to using the System
+            [1] - Add To Inventory
+            [2] - Temporarily Unavailable
+            [3] - Modify Inventory
+            [4] - Track All Shipments
+            [5] - View Inventory
             [6] - View Logs
-            [7] - Admin
+            [7] - Admin | Reset Database
                 :: """))
 
     return userInput
@@ -59,21 +60,22 @@ if __name__ == '__main__':
             print('Login Successful')
             match displayOptions():
                 case 0:
-                    print('Resetting Database in progress...')
-                    setup_database()
-                    print('Database successfully reset...')
+                    with open('TextFile/StaffIntroductionSystem.txt', 'r') as File:
+                        for line in File:
+                            print(line, end='')
                 case 1:
                     print('You have selected: Add Items to Inventory')
                     AddInventoryRun()
                 case 2:
-                    print('You have selected option 2')
+                    print('You have selected: Check Inventory for Low Stocks')
 
                 case 3:
                     print('You have selected: Modify System')
                     ModifyInventoryRun()
 
                 case 4:
-                    print('You have selected option 4')
+                    print('You have selected: Track Shipment')
+                    getAllShipments()
 
                 case 5:
                     print('You have selected option 5')
@@ -83,7 +85,16 @@ if __name__ == '__main__':
                     displayLogs()
 
                 case 7:
-                    pass
+                    AdminOption = int(input('''What would you like to do?
+                    [1] - Delete Database*
+                    [2] - Generate Database**
+                    [3] - Lock/Unlock Account
+                    
+                    * Please Note that this will delete EVERYTHING. Proceed with caution
+                    ** Please Note that this will delete EVERYTHING and generate new records. Proceed with caution.'''))
+                    print('Resetting Database in progress...')
+                    setup_database()
+                    print('Database successfully reset...')
 
                 case _:
                     print('Invalid Option')
