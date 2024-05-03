@@ -52,7 +52,9 @@ def displayOptions():
 
 userLoginSignup = int(input('''Do you want to:
 [1] - Login
-[2] - Signup'''))
+[2] - Signup
+[3] - Exit
+    :: '''))
 username = str(input('Enter Your Username: '))
 password = str(input('Enter Your Password: '))
 
@@ -93,7 +95,7 @@ if __name__ == '__main__':
                     [3] - Lock/Unlock Account
                     
                     * Please Note that this will delete EVERYTHING. Proceed with caution
-                    ** Please Note that this will delete EVERYTHING and generate new records. Proceed with caution.'''))
+                    ** Please Note that this will DELETE EVERYTHING and generate NEW RECORDS. Proceed with caution.'''))
 
                     match AdminOption:
                         case 1:
@@ -108,5 +110,8 @@ if __name__ == '__main__':
 
                 case _:
                     print('Invalid Option')
-    else:
+    elif userLoginSignup == 2:
         SignUp(username, password)
+    elif userLoginSignup == 3:
+        print('Exiting...')
+        # Insert Closing Logic
