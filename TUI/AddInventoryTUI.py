@@ -84,7 +84,10 @@ def run():
             connection = sqlite3.connect(database_path)
             cursor = connection.cursor()
             username = Features.session.logUser
-            cursor.execute('UPDATE LoginInformation SET AccountStatus = "Locked" WHERE Username = username')
+            print(username)
+            sql_query = "UPDATE LoginInformation SET AccountStatus = 'Locked' WHERE Username = ?"
+            cursor.execute(sql_query, (username, ))
+
             connection.commit()
             connection.close()
             # cursor.execute(updateRecord, 'Locked', username)

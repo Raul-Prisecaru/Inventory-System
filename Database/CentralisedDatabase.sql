@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS logs;
 CREATE TABLE IF NOT EXISTS LoginInformation(
     Username TEXT UNIQUE,
     Password TEXT,
-    Permission TEXT,
+    Permission TEXT DEFAULT 'User',
     AccountStatus TEXT DEFAULT 'Unlocked'
 );
 

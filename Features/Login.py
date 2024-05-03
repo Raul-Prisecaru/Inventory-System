@@ -17,28 +17,35 @@ def Login(username, password):
 
         cursor.execute('SELECT Password FROM LoginInformation WHERE Username = ?', (username,))
         loginInfo = cursor.fetchone()
-        connection.close()
+
+        cursor.execute('SELECT Username FROM LoginInformation WHERE AccountStatus = "Locked" AND Username = ?', (username,))
+        LockedAccounts = cursor.fetchone()
+
+        if LockedAccounts:
+            print(f'{username} is Locked')
+            return False
 
         if loginInfo and loginInfo[0] == password:
             print("Login Successful...")
             addToLogs(username, f'{username} has successfully logged in')
-            globalUsername = username
             return True
         else:
             print("Incorrect Username or Password...")
             addToLogs(username, f'{username} has failed to log in')
             return False
+
+
     except Exception as e:
         print(f"Unable to Login: {e}")
         return False
 
 
-def SignUp(username, password):
+def SignUp(username, password, permission, accountStatus):
     try:
         connection = sqlite3.connect(database_path)
         cursor = connection.cursor()
 
-        cursor.execute('INSERT INTO LoginInformation VALUES (?,?)', (username, password))
+        cursor.execute('INSERT INTO LoginInformation VALUES (?,?,?,?)', (username, password, permission, accountStatus))
         connection.commit()
         connection.close()
         addToLogs(username, f'{username} has successfully signed up to the system')
