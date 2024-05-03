@@ -10,7 +10,8 @@ DROP TABLE IF EXISTS logs;
 CREATE TABLE IF NOT EXISTS LoginInformation(
     Username TEXT UNIQUE,
     Password TEXT,
-    Permission TEXT
+    Permission TEXT,
+    AccountStatus TEXT
 );
 
 CREATE TABLE IF NOT EXISTS Inventory(
@@ -71,4 +72,4 @@ CREATE TABLE IF NOT EXISTS logs(
     Description TEXT
 );
 -- Default LOGIN
-INSERT INTO LoginInformation (Username, Password, Permission) VALUES ('Admin', 'Admin', 'Admin')
+INSERT INTO LoginInformation (Username, Password, Permission, AccountStatus) VALUES ('Admin', 'Admin', 'Admin', 'Unlocked')

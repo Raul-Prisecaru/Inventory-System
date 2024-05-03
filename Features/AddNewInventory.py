@@ -23,7 +23,6 @@ def getAllColumns(Table):
     # Get all information from Table and store to list
     for row in selectQuery.description:
         columnList.append(row[0])
-    print(f'columnList: {columnList}')
     # return list with columns
     return columnList
 
@@ -38,13 +37,12 @@ def getPlaceholders(Table):
 
     # Get number of columns from Table
     Values = len(getAllColumns(Table))
-    print(Values)
+
     # print(f"Function getPlaceHolders Values: {Values}")
 
     # Used to format all the Placeholders in a list to be later used in the SQL query
 
     placeholder = ', '.join(['?' for _ in range(Values)])
-    print(placeholder)
     return placeholder
 
 

@@ -1,8 +1,15 @@
 import sqlite3
 import random
-
+import os
 numbersNcharacters = [1, 2, 3, 4, 5, 6, 7, 8, 9, "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
                       "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+
+# Get the directory of the current script file
+current_directory = os.path.dirname(__file__)
+
+# Construct the path to the database file relative to the current directory
+database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
+sql_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.sql')
 
 with open("./TextFile/NameRecords.txt", "r") as file:
     nameList = []
@@ -78,7 +85,7 @@ def randomTime(startHour=1, endHour=12, startMinute=1, endMinute=59):
 
 def randomiseInventory():
     try:
-        connection = sqlite3.connect('../Database/CentralisedDatabase.db')
+        connection = sqlite3.connect(database_path)
         cursor = connection.cursor()
 
         select_query = """
@@ -110,7 +117,7 @@ def randomiseInventory():
 
 def randomiseDrivers():
     try:
-        connection = sqlite3.connect('../Database/CentralisedDatabase.db')
+        connection = sqlite3.connect(database_path)
         cursor = connection.cursor()
 
         select_query = """
@@ -140,7 +147,7 @@ def randomiseDrivers():
 
 def randomiseVehicles():
     try:
-        connection = sqlite3.connect('../Database/CentralisedDatabase.db')
+        connection = sqlite3.connect(database_path)
         cursor = connection.cursor()
 
         select_query = """
@@ -171,7 +178,7 @@ def randomiseVehicles():
 
 def randomiseOutgoingTransportationSchedules():
     try:
-        connection = sqlite3.connect('../Database/CentralisedDatabase.db')
+        connection = sqlite3.connect(database_path)
         cursor = connection.cursor()
 
         select_query = """
@@ -201,7 +208,7 @@ def randomiseOutgoingTransportationSchedules():
 
 def randomiseIncomingTransportationSchedules():
     try:
-        connection = sqlite3.connect('../Database/CentralisedDatabase.db')
+        connection = sqlite3.connect(database_path)
         cursor = connection.cursor()
 
         select_query = """
@@ -231,7 +238,7 @@ def randomiseIncomingTransportationSchedules():
 
 def randomiseExternalCompanies():
     try:
-        connection = sqlite3.connect('../Database/CentralisedDatabase.db')
+        connection = sqlite3.connect(database_path)
         cursor = connection.cursor()
 
         select_query = """
@@ -241,12 +248,12 @@ def randomiseExternalCompanies():
 
         showcase_query = "SELECT * FROM ExternalCompanies;"
 
-        with open("../TextFile/NameRecords.txt", "r") as file:
+        with open("./TextFile/NameRecords.txt", "r") as file:
             for line in file:
                 nameList.append(line)
                 line.strip()
 
-        with open("../TextFile/LocationBuilding.txt", "r") as file:
+        with open("./TextFile/LocationBuilding.txt", "r") as file:
             for line in file:
                 locationList.append(line)
                 line.strip()
@@ -272,7 +279,7 @@ def randomiseExternalCompanies():
 def countDatabase(column):
     numberRows = 0
     try:
-        connection = sqlite3.connect('../Database/CentralisedDatabase.db')
+        connection = sqlite3.connect(database_path)
         cursor = connection.cursor()
 
         showcase_query = f"SELECT * FROM {column};"
@@ -295,12 +302,10 @@ def countDatabase(column):
 def run(repeat=100):
 
     for row in range(repeat):
-        # randomiseInventory()
-        # randomiseDrivers()
-        # randomiseVehicles()
-        # randomiseIncomingTransportationSchedules()
-        # randomiseOutgoingTransportationSchedules()
-        # randomiseExternalCompanies()
-        pass
+        randomiseInventory()
+        randomiseDrivers()
+        randomiseVehicles()
+        randomiseIncomingTransportationSchedules()
+        randomiseOutgoingTransportationSchedules()
+        randomiseExternalCompanies()
 
-run()

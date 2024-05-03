@@ -1,5 +1,6 @@
 import sqlite3
 from Features.AddNewInventory import *
+from Features.Login import *
 import os
 
 # Get the directory of the current script file
@@ -35,34 +36,51 @@ def getAllTables():
 
 
 def run():
-    userTable = str(input(f'''What Table do you want to add to? 
-    All Tables Available
-    -------------------
-    {getAllTables()}
-    -------------------
-        :: '''))
+    retryCounter = 0
+    while retryCounter < 3:
+        print('Authentication Required: ')
+        username = str(input('Enter Your Username: '))
+        password = str(input('Enter Your Password: '))
+        if Login(username, password):
+            print('Login Successful')
+            userTable = str(input(f'''What Table do you want to add to?
+                    All Tables Available
+                    -------------------
+                    {getAllTables()}
+                    -------------------
+                        :: '''))
 
-    userAnswer = []
-    # decideTable = str(input(f'''What do you want to add to the {userTable}?
-    # :'''))
+            userAnswer = []
 
-    userInput = str(input(f"""\nInserting new Inventory Guide:
-    To Ensure that data is properly inserted into Database,
-    Ensure the following:
-    [1] - follow the following format
-    -----------------
-    {getAllColumns(userTable)}
-    -----------------
-    [2] - After each column, ensure you have a space between the comma such as:
-    123, Name1, Name2, 123
-    
-    [3] - Do not enter quotations marks when entering string
-    -----You May Enter-----------
-    """))
+            userInput = str(input(f"""\nInserting new Inventory Guide:
+                    To Ensure that data is properly inserted into Database,
+                    Ensure the following:
+                    [1] - follow the following format
+                    -----------------
+                    {getAllColumns(userTable)}
+                    -----------------
+                    [2] - After each column, ensure you have a space between the comma such as:
+                    123, Name1, Name2, 123
 
-    inputSplit = userInput.split(',')
-    for answers in inputSplit:
-        userAnswer.append(answers)
-    print(f'userAnswer: {userAnswer}')
-    addToInventory(userTable, userAnswer)
-    GenerateAlert()
+                    [3] - Do not enter quotations marks when entering string
+                    -----You May Enter-----------
+                    """))
+
+            inputSplit = userInput.split(',')
+            for answers in inputSplit:
+                userAnswer.append(answers)
+            print(f'userAnswer: {userAnswer}')
+            addToInventory(userTable, userAnswer)
+            GenerateAlert()
+            break
+
+        else:
+            retryCounter += 1
+            print('Try Again')
+
+        if retryCounter == 3:
+            print('''[❌ ATTENTION NEEDED!] Account Locked for Security Purposes
+                Contact Admin to Unlock Account''')
+
+        # if LoginSecurity:
+
