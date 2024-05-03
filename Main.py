@@ -90,7 +90,7 @@ if __name__ == '__main__':
                     AdminOption = int(input('''What would you like to do?
                     [1] - Delete Database*
                     [2] - Generate Database**
-                    [3] - Lock/Unlock Account
+                    [3] - Unblock Account
                     
                     * Please Note that this will delete EVERYTHING. Proceed with caution
                     ** Please Note that this will DELETE EVERYTHING and generate NEW RECORDS. Proceed with caution.
@@ -109,10 +109,14 @@ if __name__ == '__main__':
                             print('Generating New Database...')
                             GenerateDatabase(20)
                         case 3:
-                            AccountModification = str(input('Which account do you want to unlock?'))
                             print(session.logUser)
                             connection = sqlite3.connect(database_path)
                             cursor = connection.cursor()
+                            cursor.execute('SELECT Username FROM LoginInformation;')
+                            rows = cursor.fetchall()
+                            AccountModification = str(input(f'''Which account do you want to unlock?
+                            Accounts Available {rows}
+                                :: '''))
                             username = session.logUser
                             cursor.execute('UPDATE LoginInformation SET AccountStatus = "Unlocked" WHERE Username = username')
                             connection.commit()
@@ -122,7 +126,8 @@ if __name__ == '__main__':
                 case _:
                     print('Invalid Option')
     elif userLoginSignup == 2:
-        SignUp(username, password)
+        permission = str(input('Enter The Account Permission Level: '))
+        SignUp(username, password, permission, 'Unlocked')
     elif userLoginSignup == 3:
         print('Exiting...')
         # Insert Closing Logic
