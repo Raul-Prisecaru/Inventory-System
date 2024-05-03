@@ -9,11 +9,12 @@ DROP TABLE IF EXISTS logs;
 
 CREATE TABLE IF NOT EXISTS LoginInformation(
     Username TEXT UNIQUE,
-    Password TEXT
+    Password TEXT,
+    Permission TEXT
 );
 
 CREATE TABLE IF NOT EXISTS Inventory(
-    InventoryID INTEGER PRIMARY KEY,
+    InventoryID INTEGER PRIMARY KEY AUTOINCREMENT,
     InventoryName TEXT,
     StockLevel INTEGER,
     LocationBuilding TEXT,
@@ -69,5 +70,5 @@ CREATE TABLE IF NOT EXISTS logs(
     Username TEXT, -- foreign Key to Login
     Description TEXT
 );
-
-INSERT INTO LoginInformation (Username, Password) VALUES ('Admin', 'Password')
+-- Default LOGIN
+INSERT INTO LoginInformation (Username, Password, Permission) VALUES ('Admin', 'Admin', 'Admin')

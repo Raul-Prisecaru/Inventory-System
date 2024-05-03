@@ -65,3 +65,4 @@ def run():
         userAnswer.append(answers)
     print(f'userAnswer: {userAnswer}')
     addToInventory(userTable, userAnswer)
+    GenerateAlert()
