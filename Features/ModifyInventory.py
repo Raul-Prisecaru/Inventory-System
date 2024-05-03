@@ -27,7 +27,7 @@ def getAllColumnsByID(Table):
 
     # Get the Column Name (First in the list)
     columnID = columnList[0]
-    print(columnID)
+
     return columnID[0]
 
 

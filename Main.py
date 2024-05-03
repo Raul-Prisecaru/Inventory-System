@@ -10,12 +10,6 @@ import os
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
 
-
-# Construct the path to the database file relative to the current directory
-# database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
-# sql_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.sql')
-
-
 def setup_database():
     try:
         connection = sqlite3.connect('Database/CentralisedDatabase.db')
@@ -95,7 +89,8 @@ if __name__ == '__main__':
                     [3] - Lock/Unlock Account
                     
                     * Please Note that this will delete EVERYTHING. Proceed with caution
-                    ** Please Note that this will DELETE EVERYTHING and generate NEW RECORDS. Proceed with caution.'''))
+                    ** Please Note that this will DELETE EVERYTHING and generate NEW RECORDS. Proceed with caution.
+                            :: '''))
 
                     match AdminOption:
                         case 1:
@@ -103,9 +98,11 @@ if __name__ == '__main__':
                             setup_database()
                             print('Database successfully reset...')
                         case 2:
-                            print('Deleting Database...')
+                            print('Resetting Database in progress...')
                             setup_database()
-                            print('Generating New Database')
+                            print('Database successfully reset...')
+
+                            print('Generating New Database...')
                             GenerateDatabase()
 
                 case _:
