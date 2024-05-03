@@ -50,6 +50,7 @@ userLoginSignup = int(input('''Do you want to:
 [1] - Login
 [2] - Signup
 [3] - Exit
+[4] - Emergency Reset
     :: '''))
 username = str(input('Enter Your Username: '))
 password = str(input('Enter Your Password: '))
@@ -118,7 +119,9 @@ if __name__ == '__main__':
                             Accounts Available {rows}
                                 :: '''))
                             username = session.logUser
-                            cursor.execute('UPDATE LoginInformation SET AccountStatus = "Unlocked" WHERE Username = username')
+                            print(username)
+                            sql_query = f"UPDATE LoginInformation SET AccountStatus = 'Unlocked' WHERE Username = ?"
+                            cursor.execute(sql_query, (AccountModification, ))
                             connection.commit()
                             connection.close()
 
@@ -130,4 +133,7 @@ if __name__ == '__main__':
         SignUp(username, password, permission, 'Unlocked')
     elif userLoginSignup == 3:
         print('Exiting...')
+    elif userLoginSignup == 4:
+        print('resetting Database...')
+        setup_database()
         # Insert Closing Logic
