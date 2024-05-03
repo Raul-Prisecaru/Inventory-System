@@ -3,7 +3,9 @@ from TUI.ModifyInventoryTUI import run as ModifyInventoryRun
 from Features.Login import *
 from Features.GenerateLogs import addToLogs, displayLogs
 from Features.TrackShipment import getAllShipments
+from Features.DeveloperMode import run as GenerateDatabase
 import os
+
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
@@ -92,9 +94,17 @@ if __name__ == '__main__':
                     
                     * Please Note that this will delete EVERYTHING. Proceed with caution
                     ** Please Note that this will delete EVERYTHING and generate new records. Proceed with caution.'''))
-                    print('Resetting Database in progress...')
-                    setup_database()
-                    print('Database successfully reset...')
+
+                    match AdminOption:
+                        case 1:
+                            print('Resetting Database in progress...')
+                            setup_database()
+                            print('Database successfully reset...')
+                        case 2:
+                            print('Deleting Database...')
+                            setup_database()
+                            print('Generating New Database')
+                            GenerateDatabase()
 
                 case _:
                     print('Invalid Option')
