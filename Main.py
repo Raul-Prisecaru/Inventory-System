@@ -5,6 +5,7 @@ from Features.GenerateLogs import displayLogs
 from Features.TrackShipment import getAllShipments
 from Features.DeveloperMode import run as GenerateDatabase
 import Features.session as session
+from Features.PermissionCheck import PermissionChecker
 import os
 
 # Get the directory of the current script file
@@ -30,17 +31,43 @@ def setup_database():
 
 
 def displayOptions():
-    userInput = int(input("""Welcome to St Mary's Inventory System
-        What would you like to do?
-            [0] - Guidebook to using the System
-            [1] - Add To Inventory
-            [2] - Temporarily Unavailable
-            [3] - Modify Inventory
-            [4] - Track All Shipments
-            [5] - View Inventory
-            [6] - View Logs
-            [7] - Admin | Reset Database
-                :: """))
+    if PermissionChecker == 'Admin':
+        userInput = int(input("""Welcome to St Mary's Inventory System
+            What would you like to do?
+                [0] - Guidebook to using the System
+                [1] - Add To Inventory
+                [2] - Temporarily Unavailable
+                [3] - Modify Inventory
+                [4] - Track All Shipments
+                [5] - View Inventory
+                [6] - View Logs
+                [7] - Admin | Reset Database
+                    :: """))
+    elif PermissionChecker == 'Staff':
+        userInput = int(input("""Welcome to St Mary's Inventory System
+            What would you like to do?
+                [0] - Guidebook to using the System
+                [1] - Add To Inventory
+                [2] - Temporarily Unavailable
+                [3] - Modify Inventory
+                [4] - Track All Shipments
+                [5] - View Inventory
+                    :: """))
+    elif PermissionChecker == 'ExternalCompany':
+        userInput = int(input("""Welcome to St Mary's Inventory System
+            What would you like to do?
+                [1] - Track Outgoing Shipments
+                    :: """))
+
+    elif PermissionChecker == 'Driver':
+        userInput = int(input("""Welcome to St Mary's Inventory System
+            What would you like to do?
+                [1] - Display Your Information
+                [2] - View your task
+                    :: """))
+    else:
+        print('Your Account has an Invalid Permission.')
+
 
     return userInput
 
