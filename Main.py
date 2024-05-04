@@ -5,7 +5,7 @@ from Features.GenerateLogs import displayLogs
 from Features.TrackShipment import getAllShipments
 from Features.DeveloperMode import run as GenerateDatabase
 import Features.session as session
-from Features.PermissionCheck import PermissionChecker
+from Features.PermissionCheck import PermissionCheck
 import os
 
 # Get the directory of the current script file
@@ -31,10 +31,9 @@ def setup_database():
 
 
 def displayOptions():
-    if PermissionChecker == 'Admin':
+    if PermissionCheck(session.logUser) == 'Admin':
         userInput = int(input("""Welcome to St Mary's Inventory System
             What would you like to do?
-                [0] - Guidebook to using the System
                 [1] - Add To Inventory
                 [2] - Temporarily Unavailable
                 [3] - Modify Inventory
@@ -43,23 +42,22 @@ def displayOptions():
                 [6] - View Logs
                 [7] - Admin | Reset Database
                     :: """))
-    elif PermissionChecker == 'Staff':
+    elif PermissionCheck(session.logUser) == 'Staff':
         userInput = int(input("""Welcome to St Mary's Inventory System
             What would you like to do?
-                [0] - Guidebook to using the System
                 [1] - Add To Inventory
                 [2] - Temporarily Unavailable
                 [3] - Modify Inventory
                 [4] - Track All Shipments
                 [5] - View Inventory
                     :: """))
-    elif PermissionChecker == 'ExternalCompany':
+    elif PermissionCheck(session.logUser) == 'ExternalCompany':
         userInput = int(input("""Welcome to St Mary's Inventory System
             What would you like to do?
                 [1] - Track Outgoing Shipments
                     :: """))
 
-    elif PermissionChecker == 'Driver':
+    elif PermissionCheck(session.logUser) == 'Driver':
         userInput = int(input("""Welcome to St Mary's Inventory System
             What would you like to do?
                 [1] - Display Your Information
@@ -67,7 +65,6 @@ def displayOptions():
                     :: """))
     else:
         print('Your Account has an Invalid Permission.')
-
 
     return userInput
 
@@ -87,72 +84,104 @@ if __name__ == '__main__':
             session.logUser = username
             print(f'logUser: {session.logUser}')
             print('Login Successful')
-            match displayOptions():
-                case 0:
-                    with open('TextFile/StaffIntroductionSystem.txt', 'r') as File:
-                        for line in File:
-                            print(line, end='')
-                case 1:
-                    print('You have selected: Add Items to Inventory')
-                    AddInventoryRun()
-                case 2:
-                    print('You have selected: Check Inventory for Low Stocks')
+            if PermissionCheck(session.logUser) == 'Admin':
+                match displayOptions():
+                    case 1:
+                        print('You have selected: Add Items to Inventory')
+                        AddInventoryRun()
+                    case 2:
+                        print('You have selected: Check Inventory for Low Stocks')
 
-                case 3:
-                    print('You have selected: Modify System')
-                    ModifyInventoryRun()
+                    case 3:
+                        print('You have selected: Modify System')
+                        ModifyInventoryRun()
 
-                case 4:
-                    print('You have selected: Track Shipment')
-                    getAllShipments()
+                    case 4:
+                        print('You have selected: Track Shipment')
+                        getAllShipments()
 
-                case 5:
-                    print('You have selected option 5')
+                    case 5:
+                        print('You have selected option 5')
 
-                case 6:
-                    print('You have selected: View Logs')
-                    displayLogs()
+                    case 6:
+                        print('You have selected: View Logs')
+                        displayLogs()
 
-                case 7:
-                    AdminOption = int(input('''What would you like to do?
-                    [1] - Delete Database*
-                    [2] - Generate Database**
-                    [3] - Unblock Account
-                    
-                    * Please Note that this will delete EVERYTHING. Proceed with caution
-                    ** Please Note that this will DELETE EVERYTHING and generate NEW RECORDS. Proceed with caution.
-                            :: '''))
-
-                    match AdminOption:
-                        case 1:
-                            print('Resetting Database in progress...')
-                            setup_database()
-                            print('Database successfully reset...')
-                        case 2:
-                            print('Resetting Database in progress...')
-                            setup_database()
-                            print('Database successfully reset...')
-
-                            print('Generating New Database...')
-                            GenerateDatabase(10)
-                        case 3:
-                            print(session.logUser)
-                            connection = sqlite3.connect(database_path)
-                            cursor = connection.cursor()
-                            cursor.execute('SELECT Username FROM LoginInformation;')
-                            rows = cursor.fetchall()
-                            AccountModification = str(input(f'''Which account do you want to unlock?
-                            Accounts Available {rows}
+                    case 7:
+                        AdminOption = int(input('''What would you like to do?
+                        [1] - Delete Database*
+                        [2] - Generate Database**
+                        [3] - Unblock Account
+                        
+                        * Please Note that this will delete EVERYTHING. Proceed with caution
+                        ** Please Note that this will DELETE EVERYTHING and generate NEW RECORDS. Proceed with caution.
                                 :: '''))
-                            username = session.logUser
-                            print(username)
-                            sql_query = f"UPDATE LoginInformation SET AccountStatus = 'Unlocked' WHERE Username = ?"
-                            cursor.execute(sql_query, (AccountModification,))
-                            connection.commit()
-                            connection.close()
 
-                case _:
-                    print('Invalid Option')
+                        match AdminOption:
+                            case 1:
+                                print('Resetting Database in progress...')
+                                setup_database()
+                                print('Database successfully reset...')
+                            case 2:
+                                print('Resetting Database in progress...')
+                                setup_database()
+                                print('Database successfully reset...')
+
+                                print('Generating New Database...')
+                                GenerateDatabase(10)
+                            case 3:
+                                print(session.logUser)
+                                connection = sqlite3.connect(database_path)
+                                cursor = connection.cursor()
+                                cursor.execute('SELECT Username FROM LoginInformation;')
+                                rows = cursor.fetchall()
+                                AccountModification = str(input(f'''Which account do you want to unlock?
+                                Accounts Available {rows}
+                                    :: '''))
+                                username = session.logUser
+                                print(username)
+                                sql_query = f"UPDATE LoginInformation SET AccountStatus = 'Unlocked' WHERE Username = ?"
+                                cursor.execute(sql_query, (AccountModification,))
+                                connection.commit()
+                                connection.close()
+
+                    case _:
+                        print('Invalid Option')
+            if PermissionCheck(session.logUser) == 'Staff':
+                match displayOptions():
+                    case 1:
+                        print('You have selected: Add Items to Inventory')
+                        AddInventoryRun()
+                    case 2:
+                        print('You have selected: Check Inventory for Low Stocks')
+
+                    case 3:
+                        print('You have selected: Modify System')
+                        ModifyInventoryRun()
+
+                    case 4:
+                        print('You have selected: Track Shipment')
+                        getAllShipments()
+
+                    case 5:
+                        print('You have selected option 5')
+
+            if PermissionCheck(session.logUser) == 'ExternalCompany':
+                match displayOptions():
+                    case 1:
+                        print('Option 1')
+
+                    case 2:
+                        print('Maybe add Requests from Internal Company')
+
+            if PermissionCheck(session.logUser) == 'Driver':
+                match displayOptions():
+                    case 1:
+                        print('Option 1')
+
+                    case 2:
+                        print('Option 2')
+
     elif userLoginSignup == 2:
         SignUp(username, password)
     elif userLoginSignup == 3:

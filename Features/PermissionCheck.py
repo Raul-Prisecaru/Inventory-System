@@ -9,12 +9,12 @@ current_directory = os.path.dirname(__file__)
 database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
 
 
-def PermissionChecker(username, permissionExpected):
+def PermissionCheck(username):
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
 
-    selectQuery = f'SELECT Username, Permission FROM LoginInformation WHERE Username = ? AND Permission = ?'
-    cursor.execute(selectQuery, (username, permissionExpected))
+    selectQuery = f'SELECT Username, Permission FROM LoginInformation WHERE Username = ?'
+    cursor.execute(selectQuery, (username, ))
     result = cursor.fetchone()
 
     if result:
@@ -23,5 +23,3 @@ def PermissionChecker(username, permissionExpected):
 
     if not result:
         return print('No result found')
-
-
