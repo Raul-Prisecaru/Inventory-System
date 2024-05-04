@@ -8,9 +8,10 @@ DROP TABLE IF EXISTS ExternalCompanies;
 DROP TABLE IF EXISTS logs;
 
 CREATE TABLE IF NOT EXISTS LoginInformation(
+    LoginID INTEGER PRIMARY KEY AUTOINCREMENT,
     Username TEXT UNIQUE,
     Password TEXT,
-    Permission TEXT DEFAULT 'User',
+    Permission TEXT DEFAULT 'User', -- Can Be Changed By Admin
     AccountStatus TEXT DEFAULT 'Unlocked'
 );
 

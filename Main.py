@@ -7,7 +7,6 @@ from Features.DeveloperMode import run as GenerateDatabase
 import Features.session as session
 import os
 
-
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
 
@@ -108,7 +107,7 @@ if __name__ == '__main__':
                             print('Database successfully reset...')
 
                             print('Generating New Database...')
-                            GenerateDatabase(20)
+                            GenerateDatabase(10)
                         case 3:
                             print(session.logUser)
                             connection = sqlite3.connect(database_path)
@@ -121,16 +120,14 @@ if __name__ == '__main__':
                             username = session.logUser
                             print(username)
                             sql_query = f"UPDATE LoginInformation SET AccountStatus = 'Unlocked' WHERE Username = ?"
-                            cursor.execute(sql_query, (AccountModification, ))
+                            cursor.execute(sql_query, (AccountModification,))
                             connection.commit()
                             connection.close()
-
 
                 case _:
                     print('Invalid Option')
     elif userLoginSignup == 2:
-        permission = str(input('Enter The Account Permission Level: '))
-        SignUp(username, password, permission, 'Unlocked')
+        SignUp(username, password)
     elif userLoginSignup == 3:
         print('Exiting...')
     elif userLoginSignup == 4:

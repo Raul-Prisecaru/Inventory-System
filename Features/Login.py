@@ -34,18 +34,17 @@ def Login(username, password):
             addToLogs(username, f'{username} has failed to log in')
             return False
 
-
     except Exception as e:
         print(f"Unable to Login: {e}")
         return False
 
 
-def SignUp(username, password, permission, accountStatus):
+def SignUp(username, password):
     try:
         connection = sqlite3.connect(database_path)
         cursor = connection.cursor()
 
-        cursor.execute('INSERT INTO LoginInformation VALUES (?,?,?,?)', (username, password, permission, accountStatus))
+        cursor.execute('INSERT INTO LoginInformation (Username, Password) VALUES (?,?)', (username, password))
         connection.commit()
         connection.close()
         addToLogs(username, f'{username} has successfully signed up to the system')

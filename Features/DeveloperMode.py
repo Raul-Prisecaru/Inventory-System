@@ -1,17 +1,25 @@
 import sqlite3
 import random
+import timeit
 import os
 numbersNcharacters = [1, 2, 3, 4, 5, 6, 7, 8, 9, "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
                       "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
+print(f'currentDirectory: {current_directory}')
 
 # Construct the path to the database file relative to the current directory
-database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
-sql_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.sql')
+databasePath = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
+sqlPath = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.sql')
+nameRecordPath = os.path.join(current_directory, '..', 'TextFile', 'NameRecords.txt')
+locationBuildingPath = os.path.join(current_directory, '..', 'TextFile', 'LocationBuilding.txt')
+vehicleBrandPath = os.path.join(current_directory, '..', 'TextFile', 'VehicleBrand.txt')
+vehicleTypePath = os.path.join(current_directory, '..', 'TextFile', 'VehicleType.txt')
+externalCompaniesPath = os.path.join(current_directory, '..', 'TextFile', 'ExternalCompanies.txt')
+print(f'databasepath: {databasePath}')
 
-with open("./TextFile/NameRecords.txt", "r") as file:
+with open(nameRecordPath, "r") as file:
     nameList = []
     try:
         for line in file:
@@ -20,7 +28,7 @@ with open("./TextFile/NameRecords.txt", "r") as file:
     except IOError:
         print("Error Caught: NameRecords.txt not found")
 
-with open("./TextFile/LocationBuilding.txt", "r") as file:
+with open(locationBuildingPath, "r") as file:
     locationList = []
     try:
         for line in file:
@@ -29,7 +37,7 @@ with open("./TextFile/LocationBuilding.txt", "r") as file:
     except IOError:
         print("Error Caught: LocationBuilding.txt not found")
 
-with open("./TextFile/VehicleType.txt", "r") as file:
+with open(vehicleTypePath, "r") as file:
     VehicleTypeList = []
     try:
         for line in file:
@@ -38,7 +46,7 @@ with open("./TextFile/VehicleType.txt", "r") as file:
     except IOError:
         print("Error Caught: VehicleType.txt not found")
 
-with open("./TextFile/VehicleBrand.txt", "r") as file:
+with open(vehicleBrandPath, "r") as file:
     VehicleBrandList = []
     try:
         for line in file:
@@ -47,7 +55,7 @@ with open("./TextFile/VehicleBrand.txt", "r") as file:
     except IOError:
         print("Error Caught: VehicleBrand.txt not found")
 
-with open("./TextFile/ExternalCompanies.txt", "r") as file:
+with open(externalCompaniesPath, "r") as file:
     ExternalCompaniesList = []
     try:
         for line in file:
@@ -85,7 +93,7 @@ def randomTime(startHour=1, endHour=12, startMinute=1, endMinute=59):
 
 def randomiseInventory():
     try:
-        connection = sqlite3.connect(database_path)
+        connection = sqlite3.connect(databasePath)
         cursor = connection.cursor()
 
         select_query = """
@@ -117,7 +125,7 @@ def randomiseInventory():
 
 def randomiseDrivers():
     try:
-        connection = sqlite3.connect(database_path)
+        connection = sqlite3.connect(databasePath)
         cursor = connection.cursor()
 
         select_query = """
@@ -147,7 +155,7 @@ def randomiseDrivers():
 
 def randomiseVehicles():
     try:
-        connection = sqlite3.connect(database_path)
+        connection = sqlite3.connect(databasePath)
         cursor = connection.cursor()
 
         select_query = """
@@ -178,7 +186,7 @@ def randomiseVehicles():
 
 def randomiseOutgoingTransportationSchedules():
     try:
-        connection = sqlite3.connect(database_path)
+        connection = sqlite3.connect(databasePath)
         cursor = connection.cursor()
 
         select_query = """
@@ -208,7 +216,7 @@ def randomiseOutgoingTransportationSchedules():
 
 def randomiseIncomingTransportationSchedules():
     try:
-        connection = sqlite3.connect(database_path)
+        connection = sqlite3.connect(databasePath)
         cursor = connection.cursor()
 
         select_query = """
@@ -238,7 +246,7 @@ def randomiseIncomingTransportationSchedules():
 
 def randomiseExternalCompanies():
     try:
-        connection = sqlite3.connect(database_path)
+        connection = sqlite3.connect(databasePath)
         cursor = connection.cursor()
 
         select_query = """
@@ -248,12 +256,12 @@ def randomiseExternalCompanies():
 
         showcase_query = "SELECT * FROM ExternalCompanies;"
 
-        with open("./TextFile/NameRecords.txt", "r") as file:
+        with open(nameRecordPath, "r") as file:
             for line in file:
                 nameList.append(line)
                 line.strip()
 
-        with open("./TextFile/LocationBuilding.txt", "r") as file:
+        with open(locationBuildingPath, "r") as file:
             for line in file:
                 locationList.append(line)
                 line.strip()
@@ -279,7 +287,7 @@ def randomiseExternalCompanies():
 def countDatabase(column):
     numberRows = 0
     try:
-        connection = sqlite3.connect(database_path)
+        connection = sqlite3.connect(databasePath)
         cursor = connection.cursor()
 
         showcase_query = f"SELECT * FROM {column};"
@@ -299,7 +307,8 @@ def countDatabase(column):
         print("Something Else Went Wrong: " + str(e))
 
 
-def run(repeat=1000):
+def run(repeat=10):
+    # start_time = timeit.default_timer()
 
     for row in range(repeat):
         randomiseInventory()
@@ -309,3 +318,8 @@ def run(repeat=1000):
         randomiseOutgoingTransportationSchedules()
         randomiseExternalCompanies()
 
+    # end_time = timeit.default_timer()
+    # return end_time - start_time
+
+# time_taken = timeit.timeit(stmt="run(10)", setup="from __main__ import run", number=1)
+# print("Time taken:", time_taken)
