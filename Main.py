@@ -68,6 +68,7 @@ def displayOptions():
 
     return userInput
 
+setup_database()
 userLoginSignup = int(input('''Do you want to:
 [1] - Login
 [2] - Signup

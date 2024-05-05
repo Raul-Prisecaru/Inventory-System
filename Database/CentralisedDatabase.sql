@@ -14,6 +14,7 @@ DROP TABLE IF EXISTS userConsent;
 DROP VIEW IF EXISTS masked_login_information;
 DROP VIEW IF EXISTS viewInventory;
 DROP VIEW IF EXISTS masked_Customer;
+DROP VIEW IF EXISTS viewCustomer;
 
 CREATE TABLE IF NOT EXISTS LoginInformation(
     LoginID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -112,6 +113,15 @@ CREATE TABLE IF NOT EXISTS logs(
     Description TEXT
 );
 
+
+-- Default LOGIN
+INSERT INTO LoginInformation (Username, Password, Permission) VALUES ('Admin', 'Admin', 'Admin');
+INSERT INTO LoginInformation (Username, Password, Permission) VALUES ('asd', 'asd', 'Staff');
+INSERT INTO LoginInformation (Username, Password, Permission) VALUES ('Customer', 'Customer', 'Customer');
+INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('Administrator', 'Admin@stmarys.com', 123123, 1234123412341234);
+INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('Jake', 'Staff@stmarys.com', 123123, 1234123412341234);
+INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('Raul', 'Raul@Prisecaru.com', 123123, 1234123412341234);
+
 -- Masking Sensitive Views
 
 CREATE VIEW masked_login_information AS
@@ -139,6 +149,12 @@ SELECT LoginInformation.LoginID, LoginInformation.Username, Customer.CustomerID,
 FROM LoginInformation
 INNER JOIN Customer ON LoginInformation.LoginID = Customer.CustomerID;
 
+CREATE VIEW viewCustomer AS
+    SELECT masked_login_information.* ,masked_Customer.*
+    FROM masked_login_information
+    INNER JOIN masked_Customer ON masked_Customer.CustomerID == masked_login_information.LoginID;
+
+
 CREATE VIEW viewInventory AS
     SELECT
         InventoryID,
@@ -158,13 +174,7 @@ CREATE TRIGGER afterCustomerExecution
 
 
 
--- Default LOGIN
-INSERT INTO LoginInformation (Username, Password, Permission) VALUES ('Admin', 'Admin', 'Admin');
-INSERT INTO LoginInformation (Username, Password, Permission) VALUES ('asd', 'asd', 'Staff');
-INSERT INTO LoginInformation (Username, Password, Permission) VALUES ('Customer', 'Customer', 'Customer');
-INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('Administrator', 'Admin@stmarys.com', 123123, 1234123412341234);
-INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('Jake', 'Staff@stmarys.com', 123123, 1234123412341234);
-INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('Raul', 'Raul@Prisecaru.com', 123123, 1234123412341234);
+
 
 
 
