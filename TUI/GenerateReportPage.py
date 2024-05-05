@@ -42,7 +42,7 @@ def LoginPage(window):
 
 def onAddInventoryPress(event):
     userValues = [entry.get() for entry in components.values()]
-    addToInventory('Inventory', userValues)
+    addToSystem('Inventory', userValues)
 
     print(userValues)
     # components[column] = columnEntry

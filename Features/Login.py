@@ -10,6 +10,17 @@ current_directory = os.path.dirname(__file__)
 database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
 
 
+# def displayInformation():
+#     connection = sqlite3.connect(database_path)
+#     cursor = connection.cursor()
+#
+#     cursor.execute('SELECT * FROM masked_Customer')
+#     rows = cursor.fetchall()
+#
+#     for row in rows:
+#         print(row)
+
+
 def Login(username, password):
     try:
         connection = sqlite3.connect(database_path)
@@ -18,7 +29,8 @@ def Login(username, password):
         cursor.execute('SELECT Password FROM LoginInformation WHERE Username = ?', (username,))
         loginInfo = cursor.fetchone()
 
-        cursor.execute('SELECT Username FROM LoginInformation WHERE AccountStatus = "Locked" AND Username = ?', (username,))
+        cursor.execute('SELECT Username FROM LoginInformation WHERE AccountStatus = "Locked" AND Username = ?',
+                       (username,))
         LockedAccounts = cursor.fetchone()
 
         if LockedAccounts:
@@ -27,11 +39,11 @@ def Login(username, password):
 
         if loginInfo and loginInfo[0] == password:
             print("Login Successful...")
-            addToLogs(username, f'{username} has successfully logged in')
+            # addToLogs(username, f'{username} has successfully logged in')
             return True
         else:
             print("Incorrect Username or Password...")
-            addToLogs(username, f'{username} has failed to log in')
+            # addToLogs(username, f'{username} has failed to log in')
             return False
 
     except Exception as e:
@@ -39,18 +51,20 @@ def Login(username, password):
         return False
 
 
-def SignUp(username, password):
+def SignUp(username, password, Name, Email, Address, PhoneNumber, CreditCard):
     try:
         connection = sqlite3.connect(database_path)
         cursor = connection.cursor()
 
         cursor.execute('INSERT INTO LoginInformation (Username, Password) VALUES (?,?)', (username, password))
+        cursor.execute('''INSERT INTO Customer (CustomerName, CustomerEmail, CustomerAddress, CustomerPhoneNumber, CustomerCreditCard) 
+                                VALUES (?,?,?,?,?)''', (Name, Email, Address, PhoneNumber, CreditCard))
         connection.commit()
         connection.close()
-        addToLogs(username, f'{username} has successfully signed up to the system')
+        # addToLogs(username, f'{username} has successfully signed up to the system')
         return True
 
     except Exception as e:
         print(f"Unable to Sign up: {e}")
-        addToLogs(username, f'{username} has failed to Sign Up due to error')
+        # addToLogs(username, f'{username} has failed to Sign Up due to error')
         return False

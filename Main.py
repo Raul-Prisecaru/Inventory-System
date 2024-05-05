@@ -1,4 +1,5 @@
 from TUI.AddInventoryTUI import run as AddInventoryRun
+from TUI.PurchaseInventoryTUI import run as PurchaseInventoryRun
 from TUI.ModifyInventoryTUI import run as ModifyInventoryRun
 from Features.Login import *
 from Features.GenerateLogs import displayLogs
@@ -10,6 +11,10 @@ import os
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
+
+# Construct the path to the database file relative to the current directory
+database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
+sql_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.sql')
 
 
 def setup_database():
@@ -51,23 +56,17 @@ def displayOptions():
                 [4] - Track All Shipments
                 [5] - View Inventory
                     :: """))
-    elif PermissionCheck(session.logUser) == 'ExternalCompany':
+    elif PermissionCheck(session.logUser) == 'Customer':
         userInput = int(input("""Welcome to St Mary's Inventory System
             What would you like to do?
-                [1] - Track Outgoing Shipments
+                [1] - Purchase Items
+                [2] - View Your information
                     :: """))
 
-    elif PermissionCheck(session.logUser) == 'Driver':
-        userInput = int(input("""Welcome to St Mary's Inventory System
-            What would you like to do?
-                [1] - Display Your Information
-                [2] - View your task
-                    :: """))
     else:
         print('Your Account has an Invalid Permission.')
 
     return userInput
-
 
 userLoginSignup = int(input('''Do you want to:
 [1] - Login
@@ -166,27 +165,33 @@ if __name__ == '__main__':
                     case 5:
                         print('You have selected option 5')
 
-            if PermissionCheck(session.logUser) == 'ExternalCompany':
+                    case _:
+                        print('Invalid Option')
+
+            if PermissionCheck(session.logUser) == 'Customer':
                 match displayOptions():
                     case 1:
-                        print('Option 1')
-
-                    case 2:
-                        print('Maybe add Requests from Internal Company')
-
-            if PermissionCheck(session.logUser) == 'Driver':
-                match displayOptions():
-                    case 1:
-                        print('Option 1')
+                        print('You have selected: Purchase Inventory')
+                        PurchaseInventoryRun()
 
                     case 2:
                         print('Option 2')
 
+                    case _:
+                        print('Invalid Option')
+
     elif userLoginSignup == 2:
-        SignUp(username, password)
+        CustomerName = str(input('Enter Your Name: '))
+        CustomerEmail = str(input('Enter Your Email: '))
+        CustomerAddress = str(input('Enter Your Address: '))
+        CustomerPhoneNumber = int(input('Enter Your Phone Number: '))
+        CustomerCreditCard = int(input('Enter Your Long Credit Card: '))
+        SignUp(username, password, CustomerName, CustomerEmail, CustomerAddress, CustomerPhoneNumber, CustomerCreditCard)
     elif userLoginSignup == 3:
         print('Exiting...')
-    elif userLoginSignup == 4:
-        print('resetting Database...')
-        setup_database()
-        # Insert Closing Logic
+
+
+# if userLoginSignup == 1:
+#     print('resetting Database...')
+#     setup_database()
+#         # Insert Closing Logic

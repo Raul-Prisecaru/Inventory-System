@@ -1,0 +1,100 @@
+Laptop
+Smartphone
+Desktop Computer
+Tablet
+Smartwatch
+Wireless Keyboard
+Wireless Mouse
+Gaming Console
+Virtual Reality Headset
+External Hard Drive
+USB Flash Drive
+Bluetooth Speaker
+Wireless Headphones
+DSLR Camera
+Mirrorless Camera
+Action Camera
+Portable Projector
+Fitness Tracker
+Smart Thermostat
+Robot Vacuum Cleaner
+Electric Toothbrush
+Air Purifier
+Portable Blender
+Electric Kettle
+Coffee Maker
+Rice Cooker
+Slow Cooker
+Electric Grill
+Air Fryer
+Stand Mixer
+Electric Scooter
+Hoverboard
+Electric Bike
+Folding Bike
+Skateboard
+Camping Tent
+Sleeping Bag
+Backpack
+Hiking Boots
+Outdoor Jacket
+Portable Charger
+Solar Power Bank
+Bluetooth Earbuds
+Gaming Mousepad
+Gaming Chair
+Gaming Keyboard
+Gaming Headset
+Gaming Monitor
+Graphics Card
+Gaming Laptop
+Gaming Desk
+Gaming Controller
+Mechanical Keyboard
+Mechanical Watch
+Smart Door Lock
+Smart Bulb
+Smart Plug
+Smart TV
+Smart Scale
+Smart Mirror
+Home Security Camera
+Video Doorbell
+Wireless Security System
+Baby Monitor
+Pet Tracker
+GPS Tracker
+Drone
+Portable Scanner
+Wireless Printer
+3D Printer
+Graphic Tablet
+Drawing Pad
+Digital Piano
+MIDI Controller
+Studio Microphone
+DJ Controller
+Studio Monitor Speakers
+Noise-Canceling Headphones
+Audio Interface
+Synthesizer
+Guitar Effects Pedal
+Bass Guitar
+Acoustic Guitar
+Electric Guitar
+Ukulele
+Violin
+Saxophone
+Trumpet
+Flute
+Clarinet
+Drum Kit
+Cajon
+Keyboard Piano
+Harmonica
+Banjo
+Mandolin
+Accordion
+Bagpipes
+Didgeridoo
+Theremin

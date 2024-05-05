@@ -13,6 +13,7 @@ print(f'currentDirectory: {current_directory}')
 databasePath = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
 sqlPath = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.sql')
 nameRecordPath = os.path.join(current_directory, '..', 'TextFile', 'NameRecords.txt')
+InventoryPath = os.path.join(current_directory, '..', 'TextFile', 'InventoryItems.txt')
 locationBuildingPath = os.path.join(current_directory, '..', 'TextFile', 'LocationBuilding.txt')
 vehicleBrandPath = os.path.join(current_directory, '..', 'TextFile', 'VehicleBrand.txt')
 vehicleTypePath = os.path.join(current_directory, '..', 'TextFile', 'VehicleType.txt')
@@ -27,6 +28,17 @@ with open(nameRecordPath, "r") as file:
             line.strip()
     except IOError:
         print("Error Caught: NameRecords.txt not found")
+
+with open(InventoryPath, "r") as file:
+    inventoryList = []
+    try:
+        for line in file:
+            inventoryList.append(line)
+            line.strip()
+    except IOError:
+        print("Error Caught: File not found")
+
+
 
 with open(locationBuildingPath, "r") as file:
     locationList = []
@@ -97,15 +109,17 @@ def randomiseInventory():
         cursor = connection.cursor()
 
         select_query = """
-            INSERT INTO Inventory(InventoryName, StockLevel, LocationBuilding)
-            VALUES (?,?,?)
+            INSERT INTO Inventory(InventoryName, StockLevel, InventoryPrice, LocationBuilding)
+            VALUES (?,?,?,?)
             """
 
         showcase_query = "SELECT * FROM Inventory;"
 
-        for row in range(5):
-            cursor.execute(select_query, (
-           random.choice(nameList), random.randint(30, 400), random.choice(locationList)))
+        randomFloat = random.uniform(1,1000)
+        randomFloatRounded = round(randomFloat, 2)
+
+        cursor.execute(select_query, (
+        random.choice(inventoryList), random.randint(30, 400), randomFloatRounded, random.choice(locationList)))
 
 
         cursor.execute(showcase_query)
@@ -311,7 +325,9 @@ def run(repeat=10):
     # start_time = timeit.default_timer()
 
     for row in range(repeat):
+        print('----Inventory----')
         randomiseInventory()
+        print('-----------------')
         randomiseDrivers()
         randomiseVehicles()
         randomiseIncomingTransportationSchedules()

@@ -71,7 +71,7 @@ def run():
             for answers in inputSplit:
                 userAnswer.append(answers)
             print(f'userAnswer: {userAnswer}')
-            addToInventory(userTable, userAnswer)
+            addToSystem(userTable, userAnswer)
             GenerateAlert()
             break
 
