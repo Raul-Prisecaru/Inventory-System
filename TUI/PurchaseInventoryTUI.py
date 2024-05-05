@@ -1,6 +1,6 @@
 import sqlite3
 from Features.AddNewInventory import *
-from Features.purchaseInventory import purchaseInventory
+from Features.purchaseInventory import purchaseInventory, confirmationPurchase
 from Features.Login import *
 import os
 import Features.session
@@ -34,37 +34,38 @@ database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDa
 #     tableinfo.remove("LoginInformation")
 #     tableinfo.remove("logs")
 
-    # # Return List to display the tables to the user later on
-    # return tableinfo
+# # Return List to display the tables to the user later on
+# return tableinfo
 
 
 def run():
     print(Features.session.logUser)
     userAnswer = []
+    while True:
+        print(f'''Available for purchase:
+            {displayCustomerInventory()}''')
 
-    print(f'''Available for purchase:
-        {displayCustomerInventory()}''')
+        userInput = str(input(f"""\nPurchasing Guide:
+                Ensure the following:
+                [1] - follow the following format
+                -----------------
+                [InventoryID, Quantity] 
+                -----------------
+                [2] - After each column, ensure you have a space between the comma such as:
+                13, 123
+    
+                [3] - Do not enter quotations marks when entering string
+                -----You May Enter-----------
+                """))
 
+        inputSplit = userInput.split(',')
+        for answers in inputSplit:
+            userAnswer.append(answers)
 
-    userInput = str(input(f"""\nPurchasing Guide:
-            To Ensure that data is properly inserted into Database,
-            Ensure the following:
-            [1] - follow the following format
-            -----------------
-            [InventoryID, Quantity] 
-            -----------------
-            [2] - After each column, ensure you have a space between the comma such as:
-            13, 123
-
-            [3] - Do not enter quotations marks when entering string
-            -----You May Enter-----------
-            """))
-
-    inputSplit = userInput.split(',')
-    for answers in inputSplit:
-        userAnswer.append(answers)
-    stockReduction = userAnswer[1]
-    print(f'userAnswer: {userAnswer}')
-    purchaseInventory(userAnswer[0], userAnswer[1])
-
-
+        print(userAnswer[1])
+        if confirmationPurchase(userAnswer[0], userAnswer[1]):
+            print('Purchase Successful')
+            purchaseInventory(userAnswer[0], userAnswer[1])
+            break
+        else:
+            print('Confirmation Cleared')
