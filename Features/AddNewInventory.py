@@ -47,7 +47,7 @@ def getPlaceholders(Table):
     return placeholder
 
 
-def addToInventory(Table, values):
+def addToSystem(Table, values):
     # Connect to Database
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
@@ -94,3 +94,16 @@ def GenerateAlert(LowStockLevel=10):
             ID | Name | Stock
             ------------------------------------
             {row[0]} | {row[1]} | {row[2]}''')
+
+
+def displayCustomerInventory():
+    # Connect to Database
+    connection = sqlite3.connect(database_path)
+    cursor = connection.cursor()
+
+    # INSERT INTO {Table that user provides} ({All of the columns available in the table}) VALUES ({add placeholders per column})
+    cursor.execute(f"SELECT * FROM viewInventory;")
+    rows = cursor.fetchall()
+
+    for row in rows:
+        print(row)
