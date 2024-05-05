@@ -7,7 +7,6 @@ numbersNcharacters = [1, 2, 3, 4, 5, 6, 7, 8, 9, "A", "B", "C", "D", "E", "F", "
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
-print(f'currentDirectory: {current_directory}')
 
 # Construct the path to the database file relative to the current directory
 databasePath = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
@@ -149,8 +148,8 @@ def randomiseDrivers():
 
         showcase_query = "SELECT * FROM Drivers;"
 
-        for row in range(5):
-            cursor.execute(select_query, (random.choice(nameList), numberGenerator(10), licenseGenerator(16)))
+
+        cursor.execute(select_query, (random.choice(nameList), numberGenerator(10), licenseGenerator(16)))
 
         cursor.execute(showcase_query)
 
@@ -179,8 +178,8 @@ def randomiseVehicles():
 
         showcase_query = "SELECT * FROM Vehicles;"
 
-        for row in range(5):
-            cursor.execute(select_query,
+
+        cursor.execute(select_query,
                            (random.choice(VehicleTypeList), random.choice(VehicleBrandList), licenseGenerator(7)))
 
         cursor.execute(showcase_query)
@@ -210,8 +209,8 @@ def randomiseOutgoingTransportationSchedules():
 
         showcase_query = "SELECT * FROM OutgoingTransportationSchedules;"
 
-        for row in range(5):
-            cursor.execute(select_query, (randomDate(), randomTime(), random.randint(0, 1)))
+
+        cursor.execute(select_query, (randomDate(), randomTime(), random.randint(0, 1)))
 
         cursor.execute(showcase_query)
 
@@ -240,8 +239,8 @@ def randomiseIncomingTransportationSchedules():
 
         showcase_query = "SELECT * FROM IncomingTransportationSchedules;"
 
-        for row in range(5):
-            cursor.execute(select_query, (randomDate(), randomTime(), random.randint(0, 1)))
+
+        cursor.execute(select_query, (randomDate(), randomTime(), random.randint(0, 1)))
 
         cursor.execute(showcase_query)
 
@@ -280,8 +279,8 @@ def randomiseExternalCompanies():
                 locationList.append(line)
                 line.strip()
 
-        for row in range(5):
-            cursor.execute(select_query, (random.choice(ExternalCompaniesList), randomDate(1990, 2024)))
+
+        cursor.execute(select_query, (random.choice(ExternalCompaniesList), randomDate(1990, 2024)))
 
         cursor.execute(showcase_query)
 
@@ -325,9 +324,7 @@ def run(repeat=10):
     # start_time = timeit.default_timer()
 
     for row in range(repeat):
-        print('----Inventory----')
         randomiseInventory()
-        print('-----------------')
         randomiseDrivers()
         randomiseVehicles()
         randomiseIncomingTransportationSchedules()
