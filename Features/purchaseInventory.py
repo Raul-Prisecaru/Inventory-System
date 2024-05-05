@@ -23,16 +23,46 @@ def purchaseInventory(ID, Stock):
     # Execute SQLQuery and values that user provides
     cursor.execute(select_query)
 
-    priceQuery = f'SELECT InventoryPrice * {Stock} FROM Inventory WHERE InventoryID = {ID}'
-
-    cursor.execute(priceQuery)
-    priceTotal = cursor.fetchone()
-    print(f'£{priceTotal}')
-
     # Commit and Close Connection
     connection.commit()
     connection.close()
 
+
+def confirmationPurchase(ID, Stock):
+    # Connect to Database
+    connection = sqlite3.connect(database_path)
+    cursor = connection.cursor()
+
+    # Prepare the query with placeholders for variables
+    cursor.execute(f'''
+        SELECT 
+            InventoryID,
+            InventoryName,
+            InventoryPrice * {Stock} AS FormattedPrice  
+        FROM 
+            Inventory 
+        WHERE 
+            InventoryID = {ID}
+    ''')
+
+    # Fetch the result
+    confirmation = cursor.fetchall()
+    for row in confirmation:
+        inventory_id = row[0]
+        inventory_name = row[1].strip()  # Strip leading/trailing whitespace
+        total_price = row[2]
+        userConfirmation = int(input(f'''Do you want to proceed?
+        Inventory ID | Inventory Name | Total Price            
+            {inventory_id} | {inventory_name} | £{total_price}               
+
+        [1] - Proceed
+        [2] - Cancel
+        :: '''))
+
+        if userConfirmation == 1:
+            return True
+        else:
+            return False
 
 # def addToStocks(value):
 #     connection = sqlite3.connect(database_path)
