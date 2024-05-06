@@ -1,4 +1,4 @@
-from Features.AddNewInventory import GenerateAlert
+from Features.AddNewInventory import GenerateAlert, getAllColumns
 from Features.TermsOfService import termsService
 from Features.UpdateAccount import updateAccount
 from TUI.AddInventoryTUI import run as AddInventoryRun
@@ -49,7 +49,7 @@ def displayOptions():
                 [2] - Temporarily Unavailable
                 [3] - Modify Inventory
                 [4] - Track All Shipments
-                [5] - View Inventory
+                [5] - View System
                 [6] - View Logs
                 [7] - Admin
                     :: """))
@@ -107,7 +107,8 @@ if __name__ == '__main__':
                         getAllShipments()
 
                     case 5:
-                        print('You have selected option 5')
+                        print('You have selected: Display Inventory')
+                        getAllColumns('Inventory')
 
                     case 6:
                         print('You have selected: View Logs')
@@ -174,8 +175,8 @@ if __name__ == '__main__':
                         getAllShipments(Inout)
 
                     case 5:
-                        print('You have selected option 5')
-
+                        print('You have selected: View Inventory')
+                        getAllColumns('Inventory')
                     case _:
                         print('Invalid Option')
 
