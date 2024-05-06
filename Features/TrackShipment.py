@@ -25,15 +25,15 @@ def getAllShipments(number):
 
         for row in rows:
             print(row)
-            # print(f'''
-            #         Schedule ID: {row[0]}
-            #         Schedule Date: {row[1]}
-            #         Is it on the way?: {row[2]}
-            #         CustomerID: {row[3]}
-            #         PurchaseID: {row[4]}
-            #         Customer Name: {row[5]}
-            #         Delivery Address: {row[6]}
-            #         ---------Next Item----------''')
+            print(f''' INCOMING SCHEDULES:
+                    Schedule ID: {row[0]}
+                    Schedule Date: {row[1]}
+                    Is it on the way?: {'Yes' if row[2] == 1 else 'No'}
+                    InventoryID: {row[3]}
+                    ExternalCompanyID: {row[4]}
+                    External Company Name: {row[5]}
+                    Relationship Date: {row[6]}
+                    ---------Next Item----------''')
 
         connection.commit()
         connection.close()
@@ -45,7 +45,7 @@ def getAllShipments(number):
             print(f'''
             Schedule ID: {row[0]}
             Schedule Date: {row[1]}
-            Is it on the way?: {row[2]}
+            Is it on the way?: {'Yes' if row[2] == 1 else 'No'}
             CustomerID: {row[3]}
             PurchaseID: {row[4]}
             Customer Name: {row[5]}
