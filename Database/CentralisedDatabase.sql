@@ -119,12 +119,16 @@ CREATE TABLE IF NOT EXISTS logs(
 INSERT INTO LoginInformation (Username, Password, Permission, CustomerID) VALUES ('Admin', 'Admin', 'Admin', 1);
 INSERT INTO LoginInformation (Username, Password, Permission, CustomerID) VALUES ('Staff', 'Staff', 'Staff', 2);
 INSERT INTO LoginInformation (Username, Password, Permission, CustomerID) VALUES ('Customer', 'Customer', 'Customer', 3);
+INSERT INTO LoginInformation (Username, Password, Permission, CustomerID) VALUES ('zxc', 'zxc', 'Customer', 4);
 INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('Administrator', 'Admin@stmarys.com', 123123, 1234123412341234);
 INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('Jake', 'Staff@stmarys.com', 123123, 1234123412341234);
 INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('Raul', 'Raul@Prisecaru.com', 123123, 1234123412341234);
+INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('user4', 'user4', 423243234, 243342324342);
 
 -- Testing Purposes
 INSERT INTO Inventory (InventoryName, StockLevel, InventoryPrice) VALUES ('Empty Stock', 0, '10');
+INSERT INTO Purchase (PurchaseName, PurchaseDeliveryDate, PurchaseStock, CustomerID) VALUES ('CustomerTest', 2024-20-1, 10, 3);
+INSERT INTO Purchase (PurchaseName, PurchaseDeliveryDate, PurchaseStock, CustomerID) VALUES ('CustomerTest', 2024-20-1, 10, 4);
 
 CREATE VIEW viewInventory AS
     SELECT
@@ -134,9 +138,14 @@ CREATE VIEW viewInventory AS
     FROM Inventory;
 
 CREATE VIEW viewCustomerLogin AS
-    SELECT Customer.CustomerID, LoginInformation.LoginID
+    SELECT Customer.CustomerID, LoginInformation.LoginID, LoginInformation.Username
     FROM Customer
     INNER JOIN LoginInformation on Customer.CustomerID = LoginInformation.CustomerID;
+
+CREATE VIEW viewPurchase AS
+    SELECT Customer.CustomerID, Purchase.PurchaseID, Purchase.PurchaseName, Purchase.PurchaseDeliveryDate, Purchase.PurchaseStock
+    FROM Customer
+    INNER JOIN Purchase ON Customer.CustomerID = Purchase.CustomerID;
 
 -- Masking Sensitive Views
 
@@ -171,8 +180,5 @@ CREATE VIEW viewCustomerProfile AS
     INNER JOIN masked_Customer ON masked_Customer.CustomerID = masked_login_information.CustomerID
     INNER JOIN Purchase ON Purchase.CustomerID = masked_Customer.CustomerID;
 
-CREATE VIEW viewPurchase AS
-    SELECT Customer.CustomerID, Purchase.PurchaseName, Purchase.PurchaseDeliveryDate, Purchase.PurchaseStock
-    FROM Customer
-    INNER JOIN Purchase on Customer.CustomerID = Purchase.CustomerID;
+
 

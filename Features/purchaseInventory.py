@@ -1,10 +1,7 @@
 import sqlite3
 import os
 
-# from Features.AddNewInventory import addToSystem
-
-# from Features.Login import *
-
+import Features.session as session
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
@@ -12,11 +9,16 @@ current_directory = os.path.dirname(__file__)
 # Construct the path to the database file relative to the current directory
 database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
 
-def getCustomerID(Username):
+
+def getCustomerID():
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
     # Come back to this
-    cursor.execute(f'SELECT CustomerID FROM viewCustomerLogin WHERE ')
+    cursor.execute(f'SELECT CustomerID FROM LoginInformation WHERE Username = ?', (session.logUser,))
+    CustomerID = cursor.fetchone()
+
+    return CustomerID[0]
+
 
 def CustomerPurchase(ID, Stock):
     # Connect to Database
@@ -55,7 +57,7 @@ def confirmationPurchase(ID, Stock, Username):
     if confirmation:
         inventory_id, inventory_name, total_price, stock_level_check = confirmation
         stock_level = stock_level_check
-        if stock_level < 0:
+        if stock_level <= 0:
             print("Error: No stock available \n")
             return False
 
@@ -69,7 +71,8 @@ def confirmationPurchase(ID, Stock, Username):
         :: '''))
 
         if userConfirmation == 1:
-            cursor.execute("INSERT INTO Purchase (PurchaseName, PurchaseStock, CustomerID) VALUES (?,?,?)", (inventory_name, Stock, Username))
+            cursor.execute("INSERT INTO Purchase (PurchaseName, PurchaseStock, CustomerID) VALUES (?,?,?)",
+                           (inventory_name, Stock, getCustomerID()))
             connection.commit()
             connection.close()
             return True
