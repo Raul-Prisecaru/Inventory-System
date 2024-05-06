@@ -1,3 +1,4 @@
+from Features.UpdatePermission import updateAccount
 from TUI.AddInventoryTUI import run as AddInventoryRun
 from TUI.PurchaseInventoryTUI import run as PurchaseInventoryRun
 from TUI.ModifyInventoryTUI import run as ModifyInventoryRun
@@ -47,7 +48,7 @@ def displayOptions():
                 [4] - Track All Shipments
                 [5] - View Inventory
                 [6] - View Logs
-                [7] - Admin | Reset Database
+                [7] - Admin
                     :: """))
     elif PermissionCheck(session.logUser) == 'Staff':
         userInput = int(input("""Welcome to St Mary's Inventory System
@@ -113,6 +114,7 @@ if __name__ == '__main__':
                         [1] - Delete Database*
                         [2] - Generate Database**
                         [3] - Unblock Account
+                        [4] - Sign Up Staff
                         
                         * Please Note that this will delete EVERYTHING. Proceed with caution
                         ** Please Note that this will DELETE EVERYTHING and generate NEW RECORDS. Proceed with caution.
@@ -131,20 +133,22 @@ if __name__ == '__main__':
                                 print('Generating New Database...')
                                 GenerateDatabase(10)
                             case 3:
-                                print(session.logUser)
+
                                 connection = sqlite3.connect(database_path)
                                 cursor = connection.cursor()
-                                cursor.execute('SELECT Username FROM LoginInformation;')
+                                cursor.execute('SELECT LoginID, Username, Permission, AccountStatus FROM LoginInformation;')
                                 rows = cursor.fetchall()
-                                AccountModification = str(input(f'''Which account do you want to unlock?
+                                AccountLoginID = int(input(f'''Select Account to Unlock by LoginID?
                                 Accounts Available {rows}
                                     :: '''))
-                                username = session.logUser
-                                print(username)
-                                sql_query = f"UPDATE LoginInformation SET AccountStatus = 'Unlocked' WHERE Username = ?"
-                                cursor.execute(sql_query, (AccountModification,))
-                                connection.commit()
-                                connection.close()
+                                updateAccount('Account', 'Unlocked', AccountLoginID)
+
+                            case 4:
+                                AccountLoginID = int(input(f'''Select Account to sign up to STAFF By LoginID?
+                                    Accounts Available
+                                        :: '''))
+                                updateAccount('Permission', 'Customer', AccountLoginID)
+
 
                     case _:
                         print('Invalid Option')

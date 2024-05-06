@@ -1,6 +1,8 @@
 import sqlite3
 import os
 
+from Features.purchaseInventory import getCustomerID
+
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
 
@@ -13,28 +15,33 @@ def displayProfile(username):
     cursor = connection.cursor()
 
     cursor.execute(f'SELECT * FROM viewCustomer WHERE Username = ?;', (username,))
-    rows = cursor.fetchall()
+    CustomerDetails = cursor.fetchall()
 
-    cursor.execute('SELECT * FROM viewPurchase;')
-
+    cursor.execute('SELECT * FROM viewPurchase WHERE CustomerID = ?', (getCustomerID(),))
     purchase = cursor.fetchall()
 
-    for row in rows:
+    for detail in CustomerDetails:
         print(f'''User Profile:
         ---User Account---
-        LoginID: {row[0]}
-        Username: {row[1]}
-        Password: {row[2]}
-        AccountPlan: {row[3]}
-        AccountStatus: {row[4]}
+        LoginID: {detail[0]}
+        Username: {detail[1]}
+        Password: {detail[2]}
+        AccountPlan: {detail[3]}
+        AccountStatus: {detail[4]}
         ---Customer Details---
-        CustomerID: {row[5]}
-        Customer Name: {row[6]}
-        Customer Email: {row[7]}
-        Customer PhoneNumber: {row[8]}
-        Customer CreditCard: {row[9]}
-        RegisterDate: {row[10]}
+        CustomerID: {detail[5]}
+        Customer Name: {detail[6]}
+        Customer Email: {detail[7]}
+        Customer PhoneNumber: {detail[8]}
+        Customer CreditCard: {detail[9]}
+        RegisterDate: {detail[10]}
         ---Purchase History---''')
-        for row in purchase:
-            print(f'''      {row}''')
+        for item in purchase:
+            print(f'''
+            PurchaseID: {item[1]}
+            Item Name: {item[2]}
+            Delivery Date: {item[3]}
+            Quantity Purchased: {item[4]}
+            -----------Next Item---------''')
+
 
