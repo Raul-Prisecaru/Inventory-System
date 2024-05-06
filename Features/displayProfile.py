@@ -8,12 +8,17 @@ current_directory = os.path.dirname(__file__)
 databasePath = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
 
 
-def displayProfile():
+def displayProfile(username):
     connection = sqlite3.connect(databasePath)
     cursor = connection.cursor()
 
-    cursor.execute(f'SELECT * FROM viewCustomer WHERE Username = ?;', ('Customer',))
+    cursor.execute(f'SELECT * FROM viewCustomer WHERE Username = ?;', (username,))
     rows = cursor.fetchall()
+
+    cursor.execute('SELECT * FROM viewPurchase;')
+
+    purchase = cursor.fetchall()
+
     for row in rows:
         print(f'''User Profile:
         ---User Account---
@@ -28,7 +33,8 @@ def displayProfile():
         Customer Email: {row[7]}
         Customer PhoneNumber: {row[8]}
         Customer CreditCard: {row[9]}
-        RegisterDate: {row[10]}''')
+        RegisterDate: {row[10]}
+        ---Purchase History---''')
+        for row in purchase:
+            print(f'''      {row}''')
 
-
-displayProfile()

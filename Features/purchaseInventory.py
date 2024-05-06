@@ -1,9 +1,10 @@
 import sqlite3
 import os
 
-from Features.GenerateLogs import addToLogs
-from Features.Login import *
-import Features.session as session
+# from Features.AddNewInventory import addToSystem
+
+# from Features.Login import *
+
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
@@ -11,24 +12,26 @@ current_directory = os.path.dirname(__file__)
 # Construct the path to the database file relative to the current directory
 database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
 
+def getCustomerID(Username):
+    connection = sqlite3.connect(database_path)
+    cursor = connection.cursor()
+    # Come back to this
+    cursor.execute(f'SELECT CustomerID FROM viewCustomerLogin WHERE ')
 
-def purchaseInventory(ID, Stock):
+def CustomerPurchase(ID, Stock):
     # Connect to Database
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
 
     # INSERT INTO {Table that user provides} ({All of the columns available in the table}) VALUES ({add placeholders per column})
-    select_query = f"UPDATE Inventory SET StockLevel = StockLevel - {Stock} WHERE InventoryID = {ID}"
-
-    # Execute SQLQuery and values that user provides
-    cursor.execute(select_query)
+    cursor.execute(f"""UPDATE Inventory SET StockLevel = StockLevel - {Stock} WHERE InventoryID = {ID}""")
 
     # Commit and Close Connection
     connection.commit()
     connection.close()
 
 
-def confirmationPurchase(ID, Stock):
+def confirmationPurchase(ID, Stock, Username):
     # Connect to Database
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
@@ -38,7 +41,8 @@ def confirmationPurchase(ID, Stock):
         SELECT 
             InventoryID,
             InventoryName,
-            InventoryPrice * {Stock} AS FormattedPrice  
+            InventoryPrice * {Stock} AS FormattedPrice,
+            StockLevel
         FROM 
             Inventory 
         WHERE 
@@ -46,59 +50,29 @@ def confirmationPurchase(ID, Stock):
     ''')
 
     # Fetch the result
-    confirmation = cursor.fetchall()
-    for row in confirmation:
-        inventory_id = row[0]
-        inventory_name = row[1].strip()  # Strip leading/trailing whitespace
-        total_price = row[2]
+    confirmation = cursor.fetchone()
+
+    if confirmation:
+        inventory_id, inventory_name, total_price, stock_level_check = confirmation
+        stock_level = stock_level_check
+        if stock_level < 0:
+            print("Error: No stock available \n")
+            return False
+
         userConfirmation = int(input(f'''Do you want to proceed?
-        Inventory ID | Inventory Name | Total Price            
-            {inventory_id} | {inventory_name} | £{total_price}               
+        Inventory ID: {inventory_id} 
+        Inventory Name: {inventory_name}
+        Total Price: {total_price}                          
 
         [1] - Proceed
         [2] - Cancel
         :: '''))
 
         if userConfirmation == 1:
+            cursor.execute("INSERT INTO Purchase (PurchaseName, PurchaseStock, CustomerID) VALUES (?,?,?)", (inventory_name, Stock, Username))
+            connection.commit()
+            connection.close()
             return True
         else:
+            connection.close()
             return False
-
-# def addToStocks(value):
-#     connection = sqlite3.connect(database_path)
-#     cursor = connection.cursor()
-#
-#     cursor.execute(f"SELECT * FROM 'Inventory' LIKE 'Stock%'")
-#     rows = cursor.fetchall()
-#
-#     for row in rows:
-#         print(row)
-
-# def GenerateAlert(LowStockLevel=10):
-#     connection = sqlite3.connect(database_path)
-#     cursor = connection.cursor()
-#
-#     cursor.execute(f'SELECT InventoryID, InventoryName, StockLevel FROM Inventory WHERE StockLevel <= {LowStockLevel}')
-#     rows = cursor.fetchall()
-#
-#     if not rows:
-#             print('[✔️] No Items is Currently Running Low On Stock!')
-#     else:
-#         for row in rows:
-#             print(f'''[❌ ATTENTION NEEDED!] The Following Stocks are Running Low
-#             ID | Name | Stock
-#             ------------------------------------
-#             {row[0]} | {row[1]} | {row[2]}''')
-#
-#
-# def displayCustomerInventory():
-#     # Connect to Database
-#     connection = sqlite3.connect(database_path)
-#     cursor = connection.cursor()
-#
-#     # INSERT INTO {Table that user provides} ({All of the columns available in the table}) VALUES ({add placeholders per column})
-#     cursor.execute(f"SELECT * FROM viewInventory;")
-#     rows = cursor.fetchall()
-#
-#     for row in rows:
-#         print(row)

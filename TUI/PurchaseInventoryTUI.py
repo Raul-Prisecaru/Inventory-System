@@ -1,6 +1,6 @@
 import sqlite3
 from Features.AddNewInventory import *
-from Features.purchaseInventory import purchaseInventory, confirmationPurchase
+from Features.purchaseInventory import CustomerPurchase, confirmationPurchase
 from Features.Login import *
 import os
 import Features.session
@@ -62,10 +62,10 @@ def run():
         for answers in inputSplit:
             userAnswer.append(answers)
 
-        print(userAnswer[1])
-        if confirmationPurchase(userAnswer[0], userAnswer[1]):
+        if confirmationPurchase(userAnswer[0], userAnswer[1], session.logUser):
             print('Purchase Successful')
-            purchaseInventory(userAnswer[0], userAnswer[1])
+            CustomerPurchase(userAnswer[0], userAnswer[1])
+            # addToSystem('Purchase', userAnswer)
             break
         else:
             print('Confirmation Cleared')

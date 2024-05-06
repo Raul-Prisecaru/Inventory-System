@@ -11,10 +11,14 @@ DROP TABLE IF EXISTS IncomingTransportationSchedules;
 DROP TABLE IF EXISTS ExternalCompanies;
 DROP TABLE IF EXISTS logs;
 DROP TABLE IF EXISTS userConsent;
+-- DROP TABLE IF EXISTS AccountStatus;
 DROP VIEW IF EXISTS masked_login_information;
 DROP VIEW IF EXISTS viewInventory;
 DROP VIEW IF EXISTS masked_Customer;
-DROP VIEW IF EXISTS viewCustomer;
+DROP VIEW IF EXISTS viewCustomerProfile;
+DROP VIEW IF EXISTS viewCustomerLogin;
+DROP VIEW IF EXISTS viewPurchase;
+
 
 CREATE TABLE IF NOT EXISTS LoginInformation(
     LoginID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -32,27 +36,24 @@ CREATE TABLE IF NOT EXISTS Customer(
     CustomerAddress TEXT,
     CustomerPhoneNumber INTEGER,
     CustomerCreditCard INTEGER,
-    CreationDate DATETIME
+    CreationDate DATE DEFAULT (date('now'))
 );
 
 CREATE TABLE IF NOT EXISTS Purchase(
     PurchaseID INTEGER PRIMARY KEY AUTOINCREMENT,
     PurchaseName TEXT,
-    CustomerID INTEGER REFERENCES Customer(CustomerID),
-    OrderID INTEGER REFERENCES Orders(OrderID)
-);
-
-CREATE TABLE IF NOT EXISTS PurchaseHistory(
-    PurchaseHistoryID INTEGER PRIMARY KEY AUTOINCREMENT,
-    PurchaseHistoryDate DATE,
-    CustomerID INTEGER REFERENCES Customer(CustomerID),
-    OrderID INTEGER REFERENCES Orders(OrderID)
+    PurchaseDeliveryDate DATE DEFAULT (date('now', '+1 day')),
+    PurchaseStock TEXT,
+    CustomerID INTEGER REFERENCES Customer(CustomerID)
+--     OrderID INTEGER REFERENCES Orders(OrderID)
 );
 
 CREATE TABLE IF NOT EXISTS Orders (
     OrderID INTEGER PRIMARY KEY AUTOINCREMENT,
+    OrderName TEXT,
     DeliveryDate DATE,
-    CustomerID INTEGER
+    CustomerID INTEGER REFERENCES Customer(CustomerID),
+    PurchaseID INTEGER REFERENCES Purchase(PurchaseID)
 );
 
 CREATE TABLE IF NOT EXISTS Inventory(
@@ -115,12 +116,27 @@ CREATE TABLE IF NOT EXISTS logs(
 
 
 -- Default LOGIN
-INSERT INTO LoginInformation (Username, Password, Permission) VALUES ('Admin', 'Admin', 'Admin');
-INSERT INTO LoginInformation (Username, Password, Permission) VALUES ('asd', 'asd', 'Staff');
-INSERT INTO LoginInformation (Username, Password, Permission) VALUES ('Customer', 'Customer', 'Customer');
+INSERT INTO LoginInformation (Username, Password, Permission, CustomerID) VALUES ('Admin', 'Admin', 'Admin', 1);
+INSERT INTO LoginInformation (Username, Password, Permission, CustomerID) VALUES ('Staff', 'Staff', 'Staff', 2);
+INSERT INTO LoginInformation (Username, Password, Permission, CustomerID) VALUES ('Customer', 'Customer', 'Customer', 3);
 INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('Administrator', 'Admin@stmarys.com', 123123, 1234123412341234);
 INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('Jake', 'Staff@stmarys.com', 123123, 1234123412341234);
 INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('Raul', 'Raul@Prisecaru.com', 123123, 1234123412341234);
+
+-- Testing Purposes
+INSERT INTO Inventory (InventoryName, StockLevel, InventoryPrice) VALUES ('Empty Stock', 0, '10');
+
+CREATE VIEW viewInventory AS
+    SELECT
+        InventoryID,
+        InventoryName,
+        StockLevel
+    FROM Inventory;
+
+CREATE VIEW viewCustomerLogin AS
+    SELECT Customer.CustomerID, LoginInformation.LoginID
+    FROM Customer
+    INNER JOIN LoginInformation on Customer.CustomerID = LoginInformation.CustomerID;
 
 -- Masking Sensitive Views
 
@@ -144,37 +160,19 @@ CREATE VIEW masked_Customer AS
     FROM Customer;
 
 
--- Creating Views for Role: Customer
-SELECT LoginInformation.LoginID, LoginInformation.Username, Customer.CustomerID, Customer.CustomerName
-FROM LoginInformation
-INNER JOIN Customer ON LoginInformation.LoginID = Customer.CustomerID;
+-- -- Creating Views for Role: Customer
+-- SELECT LoginInformation.LoginID, LoginInformation.Username, Customer.CustomerID, Customer.CustomerName
+-- FROM LoginInformation
+-- INNER JOIN Customer ON LoginInformation.LoginID = Customer.CustomerID;
 
-CREATE VIEW viewCustomer AS
-    SELECT masked_login_information.* ,masked_Customer.*
+CREATE VIEW viewCustomerProfile AS
+    SELECT masked_login_information.* ,masked_Customer.*, Purchase.*
     FROM masked_login_information
-    INNER JOIN masked_Customer ON masked_Customer.CustomerID == masked_login_information.LoginID;
+    INNER JOIN masked_Customer ON masked_Customer.CustomerID = masked_login_information.CustomerID
+    INNER JOIN Purchase ON Purchase.CustomerID = masked_Customer.CustomerID;
 
-
-CREATE VIEW viewInventory AS
-    SELECT
-        InventoryID,
-        InventoryName,
-        StockLevel
-    FROM Inventory;
-
--- Creating Triggers so that if a customer is created then a new record is created
--- for Purchase, PurchaseHistory and Orders
-
-CREATE TRIGGER afterCustomerExecution
-    AFTER INSERT ON Customer
-    BEGIN
-        INSERT INTO Purchase (PurchaseName, CustomerID) VALUES ('Initial Purchase', NEW.CustomerID);
---         INSERT INTO PurchaseHistory (PurchaseHistoryDate, CustomerID, OrderID) VALUES (DATE('now'), NEW.CustomerID, NULL);
-    END;
-
-
-
-
-
-
+CREATE VIEW viewPurchase AS
+    SELECT Customer.CustomerID, Purchase.PurchaseName, Purchase.PurchaseDeliveryDate, Purchase.PurchaseStock
+    FROM Customer
+    INNER JOIN Purchase on Customer.CustomerID = Purchase.CustomerID;
 
