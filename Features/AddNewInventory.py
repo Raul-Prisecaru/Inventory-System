@@ -102,7 +102,7 @@ def displayCustomerInventory():
     cursor = connection.cursor()
 
     # INSERT INTO {Table that user provides} ({All of the columns available in the table}) VALUES ({add placeholders per column})
-    cursor.execute(f"SELECT * FROM viewInventory;")
+    cursor.execute("SELECT InventoryID, InventoryName, StockLevel FROM Inventory")
     rows = cursor.fetchall()
 
     for row in rows:

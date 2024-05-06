@@ -9,6 +9,8 @@ import Features.session as session
 from Features.PermissionCheck import PermissionCheck
 import os
 
+from Features.displayProfile import displayProfile
+
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
 
@@ -34,7 +36,7 @@ def setup_database():
     except Exception as e:
         print("Error Caught: " + str(e))
 
-
+# setup_database()
 def displayOptions():
     if PermissionCheck(session.logUser) == 'Admin':
         userInput = int(input("""Welcome to St Mary's Inventory System
@@ -68,7 +70,6 @@ def displayOptions():
 
     return userInput
 
-setup_database()
 userLoginSignup = int(input('''Do you want to:
 [1] - Login
 [2] - Signup
@@ -177,6 +178,7 @@ if __name__ == '__main__':
 
                     case 2:
                         print('Option 2')
+                        displayProfile(session.logUser)
 
                     case _:
                         print('Invalid Option')

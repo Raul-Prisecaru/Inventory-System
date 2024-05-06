@@ -56,9 +56,13 @@ def SignUp(username, password, Name, Email, Address, PhoneNumber, CreditCard):
         connection = sqlite3.connect(database_path)
         cursor = connection.cursor()
 
-        cursor.execute('INSERT INTO LoginInformation (Username, Password) VALUES (?,?)', (username, password))
         cursor.execute('''INSERT INTO Customer (CustomerName, CustomerEmail, CustomerAddress, CustomerPhoneNumber, CustomerCreditCard) 
                                 VALUES (?,?,?,?,?)''', (Name, Email, Address, PhoneNumber, CreditCard))
+        CustomerID = cursor.lastrowid
+
+        cursor.execute('''INSERT INTO LoginInformation (Username, Password, CustomerID) 
+                                VALUES (?,?,?)''', (username, password, CustomerID))
+
         connection.commit()
         connection.close()
         # addToLogs(username, f'{username} has successfully signed up to the system')
