@@ -31,6 +31,9 @@ def getAllTables():
     tableinfo.remove("sqlite_sequence")
     tableinfo.remove("LoginInformation")
     tableinfo.remove("logs")
+    tableinfo.remove("Customer")
+    tableinfo.remove("Purchase")
+    tableinfo.remove("Orders")
 
     # Return List to display the tables to the user later on
     return tableinfo
@@ -72,7 +75,6 @@ def run():
                 userAnswer.append(answers)
             print(f'userAnswer: {userAnswer}')
             addToSystem(userTable, userAnswer)
-            GenerateAlert()
             break
 
         else:

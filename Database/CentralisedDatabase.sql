@@ -84,18 +84,19 @@ CREATE TABLE IF NOT EXISTS Vehicles(
 
 CREATE TABLE IF NOT EXISTS OutgoingTransportationSchedules(
     OutgoingScheduleID INTEGER PRIMARY KEY AUTOINCREMENT,
-    ExpectedArrivalDate DATE,
-    ExpectedArrivalTime INTEGER,
+    ExpectedArrivalDate DATE DEFAULT (date('now', '+1 day')),
+--     ExpectedArrivalTime INTEGER,
     IsItOnTheWay INTEGER,
-    InventoryID INTEGER REFERENCES Inventory(InventoryID),
-    DriverID INTEGER REFERENCES Drivers(DriverID)
+--     InventoryID INTEGER REFERENCES Inventory(InventoryID),
+--     DriverID INTEGER REFERENCES Drivers(DriverID),
+    CustomerID INTEGER REFERENCES Customer(CustomerID),
+    PurchaseID INTEGER REFERENCES Purchase(PurchaseID)
 );
 
 
 CREATE TABLE IF NOT EXISTS IncomingTransportationSchedules(
     IncomingScheduleID INTEGER PRIMARY KEY,
     ExpectedArrivalDate DATE,
-    ExpectedArrivalTime INTEGER,
     IsItOnTheWay INTEGER,
     InventoryID INTEGER REFERENCES Inventory(InventoryID),
     ExternalCompanyID INTEGER REFERENCES ExternalCompanies(ExternalCompanyID)
@@ -136,6 +137,18 @@ CREATE VIEW viewInventory AS
         InventoryName,
         StockLevel
     FROM Inventory;
+
+CREATE VIEW viewDisplayIncomingSchedules AS
+    SELECT IncomingTransportationSchedules.*, E.*
+    FROM IncomingTransportationSchedules
+    INNER JOIN ExternalCompanies E on E.ExternalCompanyID = IncomingTransportationSchedules.ExternalCompanyID;
+
+CREATE VIEW viewDisplayOutgoingSchedules AS
+    SELECT OutgoingTransportationSchedules.*, C.CustomerName, C.CustomerAddress
+    FROM OutgoingTransportationSchedules
+    INNER JOIN Customer C on C.CustomerID = OutgoingTransportationSchedules.CustomerID;
+
+
 
 CREATE VIEW viewCustomerLogin AS
     SELECT Customer.CustomerID, LoginInformation.LoginID, LoginInformation.Username

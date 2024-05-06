@@ -73,6 +73,14 @@ def confirmationPurchase(ID, Stock, Username):
         if userConfirmation == 1:
             cursor.execute("INSERT INTO Purchase (PurchaseName, PurchaseStock, CustomerID) VALUES (?,?,?)",
                            (inventory_name, Stock, getCustomerID()))
+
+
+            PurchaseID = cursor.lastrowid
+
+            cursor.execute("INSERT INTO OutgoingTransportationSchedules (IsItOnTheWay, CustomerID, PurchaseID) VALUES (?,?,?)",
+                           (0, getCustomerID(), PurchaseID))
+
+
             connection.commit()
             connection.close()
             return True
