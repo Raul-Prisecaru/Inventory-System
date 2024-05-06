@@ -168,7 +168,10 @@ if __name__ == '__main__':
                         GenerateAlert()
                     case 4:
                         print('You have selected: Track Shipment')
-                        getAllShipments()
+                        Inout = int(input('''Do you want to see Incoming or Outgoing Schedules?
+                        [1] - Incoming
+                        [2] - Outgoing'''))
+                        getAllShipments(Inout)
 
                     case 5:
                         print('You have selected option 5')

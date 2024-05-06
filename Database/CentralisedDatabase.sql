@@ -1,3 +1,4 @@
+-- Drop Tables
 DROP TABLE IF EXISTS LoginInformation;
 DROP TABLE IF EXISTS Customer;
 DROP TABLE IF EXISTS Purchase;
@@ -11,7 +12,8 @@ DROP TABLE IF EXISTS IncomingTransportationSchedules;
 DROP TABLE IF EXISTS ExternalCompanies;
 DROP TABLE IF EXISTS logs;
 DROP TABLE IF EXISTS userConsent;
--- DROP TABLE IF EXISTS AccountStatus;
+
+-- Drop Views
 DROP VIEW IF EXISTS masked_login_information;
 DROP VIEW IF EXISTS viewInventory;
 DROP VIEW IF EXISTS masked_Customer;
@@ -95,7 +97,7 @@ CREATE TABLE IF NOT EXISTS OutgoingTransportationSchedules(
 
 
 CREATE TABLE IF NOT EXISTS IncomingTransportationSchedules(
-    IncomingScheduleID INTEGER PRIMARY KEY,
+    IncomingScheduleID INTEGER PRIMARY KEY AUTOINCREMENT,
     ExpectedArrivalDate DATE,
     IsItOnTheWay INTEGER,
     InventoryID INTEGER REFERENCES Inventory(InventoryID),
@@ -104,7 +106,7 @@ CREATE TABLE IF NOT EXISTS IncomingTransportationSchedules(
 
 
 CREATE TABLE IF NOT EXISTS ExternalCompanies(
-    ExternalCompanyID INTEGER PRIMARY KEY,
+    ExternalCompanyID INTEGER PRIMARY KEY AUTOINCREMENT,
     ExternalCompanyName TEXT,
     ExternalCompanyRelationship DATE
 );
