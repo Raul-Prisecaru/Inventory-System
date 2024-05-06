@@ -1,4 +1,0 @@
-Add to Inventory
-Manage Inventory
-Track Shipment
-Generate Report

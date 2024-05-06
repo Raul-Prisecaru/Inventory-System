@@ -97,6 +97,3 @@ def modifyAllInventory(Table, values, ID):
     connection.close()
 
     addToLogs('UsernameDemo', f'UsernameDemo has Modified {ID} and added {values}')
-
-
-# getAllColumnsByID('Inventory')

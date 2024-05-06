@@ -1,4 +1,6 @@
-from Features.UpdatePermission import updateAccount
+from Features.AddNewInventory import GenerateAlert
+from Features.TermsOfService import termsService
+from Features.UpdateAccount import updateAccount
 from TUI.AddInventoryTUI import run as AddInventoryRun
 from TUI.PurchaseInventoryTUI import run as PurchaseInventoryRun
 from TUI.ModifyInventoryTUI import run as ModifyInventoryRun
@@ -37,6 +39,7 @@ def setup_database():
     except Exception as e:
         print("Error Caught: " + str(e))
 
+
 # setup_database()
 def displayOptions():
     if PermissionCheck(session.logUser) == 'Admin':
@@ -54,8 +57,8 @@ def displayOptions():
         userInput = int(input("""Welcome to St Mary's Inventory System
             What would you like to do?
                 [1] - Add To Inventory
-                [2] - Temporarily Unavailable
-                [3] - Modify Inventory
+                [2] - Modify Inventory
+                [3] - Check Inventory For Low Stocks
                 [4] - Track All Shipments
                 [5] - View Inventory
                     :: """))
@@ -70,6 +73,7 @@ def displayOptions():
         print('Your Account has an Invalid Permission.')
 
     return userInput
+
 
 userLoginSignup = int(input('''Do you want to:
 [1] - Login
@@ -120,6 +124,10 @@ if __name__ == '__main__':
                         ** Please Note that this will DELETE EVERYTHING and generate NEW RECORDS. Proceed with caution.
                                 :: '''))
 
+                        # connection = sqlite3.connect(database_path)
+                        # cursor = connection.cursor()
+                        # cursor.execute('SELECT LoginID, Username, Permission, AccountStatus FROM LoginInformation;')
+                        # userInfo = cursor.fetchall()
                         match AdminOption:
                             case 1:
                                 print('Resetting Database in progress...')
@@ -132,23 +140,17 @@ if __name__ == '__main__':
 
                                 print('Generating New Database...')
                                 GenerateDatabase(10)
-                            case 3:
-
-                                connection = sqlite3.connect(database_path)
-                                cursor = connection.cursor()
-                                cursor.execute('SELECT LoginID, Username, Permission, AccountStatus FROM LoginInformation;')
-                                rows = cursor.fetchall()
-                                AccountLoginID = int(input(f'''Select Account to Unlock by LoginID?
-                                Accounts Available {rows}
-                                    :: '''))
-                                updateAccount('Account', 'Unlocked', AccountLoginID)
-
-                            case 4:
-                                AccountLoginID = int(input(f'''Select Account to sign up to STAFF By LoginID?
-                                    Accounts Available
-                                        :: '''))
-                                updateAccount('Permission', 'Customer', AccountLoginID)
-
+                            # case 3:
+                            #     AccountLoginID = int(input(f'''Select Account to Unlock by LoginID?
+                            #     Accounts Available {userInfo}
+                            #         :: '''))
+                            #     updateAccount('Account', 'Unlocked', AccountLoginID)
+                            #
+                            # case 4:
+                            #     AccountLoginID = int(input(f'''Select Account to sign up to STAFF By LoginID?
+                            #         Accounts Available {userInfo}
+                            #             :: '''))
+                            #     updateAccount('Permission', 'Customer', AccountLoginID)
 
                     case _:
                         print('Invalid Option')
@@ -158,12 +160,12 @@ if __name__ == '__main__':
                         print('You have selected: Add Items to Inventory')
                         AddInventoryRun()
                     case 2:
-                        print('You have selected: Check Inventory for Low Stocks')
-
-                    case 3:
                         print('You have selected: Modify System')
                         ModifyInventoryRun()
 
+                    case 3:
+                        print('You have selected: Check for low stocks')
+                        GenerateAlert()
                     case 4:
                         print('You have selected: Track Shipment')
                         getAllShipments()
@@ -193,12 +195,25 @@ if __name__ == '__main__':
         CustomerAddress = str(input('Enter Your Address: '))
         CustomerPhoneNumber = int(input('Enter Your Phone Number: '))
         CustomerCreditCard = int(input('Enter Your Long Credit Card: '))
-        SignUp(username, password, CustomerName, CustomerEmail, CustomerAddress, CustomerPhoneNumber, CustomerCreditCard)
+        SignUp(username, password, CustomerName, CustomerEmail, CustomerAddress, CustomerPhoneNumber,
+               CustomerCreditCard)
     elif userLoginSignup == 3:
         print('Exiting...')
-
 
 # if userLoginSignup == 1:
 #     print('resetting Database...')
 #     setup_database()
 #         # Insert Closing Logic
+
+# -- OutgoingTransportationSchedules
+# OutGoingScheduleID
+# ExpectedArrivalDate
+# IsItOnTheWay
+# CustomerID
+# PurchaseID
+#
+# -- Customer
+# CustomerName
+# CustomerAddress
+
+

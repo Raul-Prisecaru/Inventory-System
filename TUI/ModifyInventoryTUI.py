@@ -2,6 +2,7 @@ import sqlite3
 from Features.AddNewInventory import *
 from Features.Login import *
 import os
+import Features.session
 
 from Features.ModifyInventory import modifyAllInventory, getAllColumnsNoID
 
@@ -41,9 +42,8 @@ def run():
     retryCounter = 0
     while retryCounter < 3:
         print('Authentication Required: ')
-        username = str(input('Enter Your Username: '))
         password = str(input('Enter Your Password: '))
-        if Login(username, password):
+        if Login(Features.session.logUser, password):
             userTable = str(input(f'''What Table do you want to Modify to? 
             All Tables Available
             -------------------
@@ -52,7 +52,8 @@ def run():
                 :: '''))
 
             userAnswer = []
-            entryID = str(input(f'Enter ID to the entry you want to modify?'))
+            entryID = str(input(f'''Enter ID to the entry you want to modify?
+                :: '''))
 
             userInput = str(input(f"""\nInserting new Inventory Guide:
             To Ensure that data is properly inserted into Database,

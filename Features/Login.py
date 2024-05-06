@@ -9,18 +9,6 @@ current_directory = os.path.dirname(__file__)
 # Construct the path to the database file relative to the current directory
 database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
 
-
-# def displayInformation():
-#     connection = sqlite3.connect(database_path)
-#     cursor = connection.cursor()
-#
-#     cursor.execute('SELECT * FROM masked_Customer')
-#     rows = cursor.fetchall()
-#
-#     for row in rows:
-#         print(row)
-
-
 def Login(username, password):
     try:
         connection = sqlite3.connect(database_path)
