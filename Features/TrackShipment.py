@@ -56,4 +56,4 @@ def getAllShipments(number):
         connection.close()
 
 
-getAllShipments(1)
+# getAllShipments(1)

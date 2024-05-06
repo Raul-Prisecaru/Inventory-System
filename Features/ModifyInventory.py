@@ -50,8 +50,6 @@ def getAllColumnsNoID(Table):
 
 
 def getPlaceholdersNoID(Table):
-    # List
-    placeholderValues = []
 
     # Connect to Database
     connection = sqlite3.connect(database_path)
@@ -65,8 +63,7 @@ def getPlaceholdersNoID(Table):
     Values = len(columns[0])
 
     # Used to format all the Placeholders in a list to be later used in the SQL query
-    for _ in range(Values):
-        placeholderValues.append(", ".join("?"))
+    placeholderValues = ", ".join(["?" for _ in range(Values - 1)])
 
     # Return list with placeholders
     return placeholderValues

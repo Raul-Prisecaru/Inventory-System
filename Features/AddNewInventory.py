@@ -16,7 +16,7 @@ def getAllColumns(Table):
     # List
     columnList = []
 
-    # Connect To Database
+    # Connect to Database
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
     selectQuery = cursor.execute(f"SELECT * FROM {Table}")
@@ -24,28 +24,30 @@ def getAllColumns(Table):
     # Get all information from Table and store to list
     for row in selectQuery.description:
         columnList.append(row[0])
-    # return list with columns
+
+    # Remove the first column (ID column) with pop(0)
+    columnList.pop(0)
     return columnList
 
 
 def getPlaceholders(Table):
-    # List
-    # placeholderValues = []
 
-    # Connect To Database
+    # Connect to Database
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
 
-    # Get number of columns from Table
-    Values = len(getAllColumns(Table))
+    # Get all results from table and use fetchall to store each row as a tuple
+    cursor.execute(f"SELECT * FROM {Table}")
+    columns = cursor.fetchall()
 
-    # print(f"Function getPlaceHolders Values: {Values}")
+    # Get number of columns from Table then subtract -1 to not include ID
+    Values = len(columns[0])
 
     # Used to format all the Placeholders in a list to be later used in the SQL query
+    placeholderValues = ", ".join(["?" for _ in range(Values - 1)])
 
-    placeholder = ', '.join(['?' for _ in range(Values)])
-    return placeholder
-
+    # Return list with placeholders
+    return placeholderValues
 
 def addToSystem(Table, values):
     # Connect to Database
@@ -57,27 +59,13 @@ def addToSystem(Table, values):
     placeholders = getPlaceholders(Table)
 
     # INSERT INTO {Table that user provides} ({All of the columns available in the table}) VALUES ({add placeholders per column})
-    select_query = f"INSERT INTO {Table} ({','.join(columns)}) VALUES ({placeholders})"
-
-    # Execute SQLQuery and values that user provides
-    cursor.execute(select_query, values)
+    cursor.execute(f"INSERT INTO {Table} ({','.join(columns)}) VALUES ({placeholders})", (values))
 
     # Commit and Close Connection
     connection.commit()
     connection.close()
 
     addToLogs(session.logUser, f'{session.logUser} has added {values} to {Table}')
-
-
-# def addToStocks(value):
-#     connection = sqlite3.connect(database_path)
-#     cursor = connection.cursor()
-#
-#     cursor.execute(f"SELECT * FROM 'Inventory' LIKE 'Stock%'")
-#     rows = cursor.fetchall()
-#
-#     for row in rows:
-#         print(row)
 
 def GenerateAlert(LowStockLevel=10):
     connection = sqlite3.connect(database_path)

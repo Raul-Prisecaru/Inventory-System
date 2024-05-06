@@ -3,6 +3,7 @@ from Features.AddNewInventory import *
 from Features.Login import *
 import os
 import Features.session
+from Features.ModifyInventory import getAllColumnsNoID
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
@@ -61,7 +62,7 @@ def run():
                     Ensure the following:
                     [1] - follow the following format
                     -----------------
-                    {getAllColumns(userTable)}
+                    {getAllColumnsNoID(userTable)}
                     -----------------
                     [2] - After each column, ensure you have a space between the comma such as:
                     123, Name1, Name2, 123
