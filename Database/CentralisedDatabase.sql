@@ -108,6 +108,7 @@ CREATE TABLE IF NOT EXISTS OutgoingTransportationSchedules(
 CREATE TABLE IF NOT EXISTS IncomingTransportationSchedules(
     IncomingScheduleID INTEGER PRIMARY KEY AUTOINCREMENT,
     ExpectedArrivalDate DATE DEFAULT (date('now', '+1 day')),
+    IncomingStock INTEGER,
     IsItOnTheWay INTEGER,
     InventoryID INTEGER REFERENCES Inventory(InventoryID),
     ExternalCompanyID INTEGER,

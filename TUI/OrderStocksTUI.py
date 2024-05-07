@@ -43,7 +43,9 @@ def displayOrder(lowStock=300):
         ''')
     InventoryID = int(input(f'''Enter the ID to order more Stocks
         :: '''))
-    orderStocks(InventoryID)
+    StockOrder = int(input(f'''How many stocks to order?
+        :: '''))
+    orderStocks(InventoryID, StockOrder)
 
 
 def run():

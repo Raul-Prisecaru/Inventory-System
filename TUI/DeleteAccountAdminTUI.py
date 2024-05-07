@@ -17,7 +17,7 @@ current_directory = os.path.dirname(__file__)
 database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
 
 
-def displayDeleteAcc():
+def displayDeleteAdmin():
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
     cursor.execute(f'SELECT CustomerID, Username, Permission FROM LoginInformation WHERE Permission != "Admin"')
