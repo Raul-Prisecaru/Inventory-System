@@ -76,10 +76,19 @@ def run():
                 inputSplit = userInput.split(',')
                 for answers in inputSplit:
                     userAnswer.append(answers)
-                print(f'userAnswer: {userAnswer}')
+                print('Successfully Added to the System')
                 addToSystem(userTable, userAnswer)
-                addToLogs('Has Added Inventory', 'Inventory')
-                break
+                # addToLogs('Has Added Inventory', 'Inventory')
+                # break
+
+                con = int(input('''Do you want to continue?
+                [1] - Yes
+                [2] - No'''))
+
+                if con == 1:
+                    print('')
+                else:
+                    break
 
         else:
             retryCounter += 1
