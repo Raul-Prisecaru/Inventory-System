@@ -17,7 +17,7 @@ def run():
     userAnswer = []
     while True:
         print(f'''Available for purchase:
-            {displayCustomerInventory()}''')
+            {displayInventory()}''')
 
         userInput = str(input(f"""\nPurchasing Guide:
                 Ensure the following:

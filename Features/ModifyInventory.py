@@ -30,7 +30,6 @@ def getAllColumnsByID(Table):
 
     return columnID[0]
 
-
 def getAllColumnsNoID(Table):
     # List
     columnList = []
