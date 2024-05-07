@@ -44,6 +44,7 @@ def run():
         print('Authentication Required: ')
         password = str(input('Enter Your Password: '))
         if Login(Features.session.logUser, password):
+            addToLogs('Has Successfully Validated', 'Account')
             userTable = str(input(f'''What Table do you want to Modify to? 
             All Tables Available
             -------------------
@@ -55,8 +56,8 @@ def run():
             entryID = str(input(f'''Enter ID to the entry you want to modify?
                 :: '''))
 
-            userInput = str(input(f"""\nInserting new Inventory Guide:
-            To Ensure that data is properly inserted into Database,
+            userInput = str(input(f"""\nModifying Inventory Guide:
+            To Ensure that data is properly Modified,
             Ensure the following:
             [1] - follow the following format
             -----------------
@@ -74,11 +75,14 @@ def run():
                 userAnswer.append(answers)
             print(f'userAnswer: {userAnswer}')
             modifyAllInventory(userTable, userAnswer, entryID)
+            addToLogs('Has Modified Inventory', 'Inventory')
 
         else:
             retryCounter += 1
-            print('Try Again')
+            addToLogs('Has Failed to Validated', 'Account')
+            print('Incorrect Password')
 
         if retryCounter == 3:
             print('''[❌ ATTENTION NEEDED!] Account Locked for Security Purposes
                 Contact Admin to Unlock Account''')
+            addToLogs('Has Locked Their Accounts', 'Account')

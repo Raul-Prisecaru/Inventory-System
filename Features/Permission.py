@@ -1,6 +1,7 @@
 import sqlite3
 import os
 
+from Features.UpdateAccount import updateAccount
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)

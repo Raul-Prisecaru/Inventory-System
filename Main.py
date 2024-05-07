@@ -1,7 +1,8 @@
+from Features.AccountStatus import AccountStatus
 from Features.AddNewInventory import GenerateAlert, getAllColumns
 from Features.TermsOfService import termsService
-from Features.UpdateAccount import updateAccount
 from TUI.AddInventoryTUI import run as AddInventoryRun
+from TUI.AdminTUI import run as AdminTUIRun
 from TUI.PurchaseInventoryTUI import run as PurchaseInventoryRun
 from TUI.ModifyInventoryTUI import run as ModifyInventoryRun
 from Features.Login import *
@@ -9,10 +10,10 @@ from Features.GenerateLogs import displayLogs
 from Features.TrackShipment import getAllShipments
 from Features.DeveloperMode import run as GenerateDatabase
 import Features.session as session
-from Features.PermissionCheck import PermissionCheck
+from Features.Permission import PermissionCheck
 import os
 
-from Features.displayProfile import displayProfile
+from Features.displayProfile import displayProfile, displayUsername
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
@@ -31,7 +32,6 @@ def setup_database():
             sql_script = sql_file.read()
 
         cursor.executescript(sql_script)
-        print("Database Successfully Created")
 
         connection.commit()
         connection.close()
@@ -104,7 +104,10 @@ if __name__ == '__main__':
 
                     case 4:
                         print('You have selected: Track Shipment')
-                        getAllShipments()
+                        Inout = int(input('''Do you want to see Incoming or Outgoing Schedules?
+                                                [1] - Incoming
+                                                [2] - Outgoing'''))
+                        getAllShipments(Inout)
 
                     case 5:
                         print('You have selected: Display Inventory')
@@ -125,33 +128,30 @@ if __name__ == '__main__':
                         ** Please Note that this will DELETE EVERYTHING and generate NEW RECORDS. Proceed with caution.
                                 :: '''))
 
-                        # connection = sqlite3.connect(database_path)
-                        # cursor = connection.cursor()
-                        # cursor.execute('SELECT LoginID, Username, Permission, AccountStatus FROM LoginInformation;')
-                        # userInfo = cursor.fetchall()
                         match AdminOption:
                             case 1:
                                 print('Resetting Database in progress...')
                                 setup_database()
                                 print('Database successfully reset...')
+                                addToLogs('Purged The Database', 'Database')
                             case 2:
                                 print('Resetting Database in progress...')
                                 setup_database()
                                 print('Database successfully reset...')
+                                addToLogs('Generated new Database', 'Database')
 
                                 print('Generating New Database...')
                                 GenerateDatabase(10)
-                            # case 3:
-                            #     AccountLoginID = int(input(f'''Select Account to Unlock by LoginID?
-                            #     Accounts Available {userInfo}
-                            #         :: '''))
-                            #     updateAccount('Account', 'Unlocked', AccountLoginID)
+                            case 3:
+                                print('You have selected: Lock or Unlock Account')
+                                AdminTUIRun()
                             #
                             # case 4:
                             #     AccountLoginID = int(input(f'''Select Account to sign up to STAFF By LoginID?
                             #         Accounts Available {userInfo}
                             #             :: '''))
                             #     updateAccount('Permission', 'Customer', AccountLoginID)
+                            #     addToLogs('Has Made Account Staff', 'Account')
 
                     case _:
                         print('Invalid Option')
@@ -203,21 +203,5 @@ if __name__ == '__main__':
                CustomerCreditCard)
     elif userLoginSignup == 3:
         print('Exiting...')
-
-# if userLoginSignup == 1:
-#     print('resetting Database...')
-#     setup_database()
-#         # Insert Closing Logic
-
-# -- OutgoingTransportationSchedules
-# OutGoingScheduleID
-# ExpectedArrivalDate
-# IsItOnTheWay
-# CustomerID
-# PurchaseID
-#
-# -- Customer
-# CustomerName
-# CustomerAddress
 
 

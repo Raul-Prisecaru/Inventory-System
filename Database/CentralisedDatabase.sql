@@ -112,9 +112,12 @@ CREATE TABLE IF NOT EXISTS ExternalCompanies(
 );
 
 CREATE TABLE IF NOT EXISTS logs(
---     LogID INTEGER PRIMARY KEY,
+    LogID INTEGER PRIMARY KEY AUTOINCREMENT,
     Username TEXT,
-    Description TEXT
+    Description TEXT,
+    Type TEXT,
+    LogCreated DATE DEFAULT (date('now')),
+    LoginID INTEGER REFERENCES LoginInformation(LoginID)
 );
 
 
@@ -139,6 +142,11 @@ CREATE VIEW viewInventory AS
         InventoryName,
         StockLevel
     FROM Inventory;
+
+-- CREATE VIEW viewLog AS
+--     SELECT logs.*, LoginInformation.Username, LoginInformation.Permission
+--     FROM logs
+--     INNER JOIN LoginInformation;
 
 CREATE VIEW viewDisplayIncomingSchedules AS
     SELECT IncomingTransportationSchedules.*, E.*
