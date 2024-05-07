@@ -1,8 +1,9 @@
 from Features.AccountStatus import AccountStatus
 from Features.AddNewInventory import GenerateAlert, getAllColumns
 from Features.TermsOfService import termsService
+from Features.UpdateAccount import updateAccount
 from TUI.AddInventoryTUI import run as AddInventoryRun
-from TUI.AdminTUI import run as AdminTUIRun
+from TUI.AccountStatusTUI import run as AdminTUIRun
 from TUI.PurchaseInventoryTUI import run as PurchaseInventoryRun
 from TUI.ModifyInventoryTUI import run as ModifyInventoryRun
 from Features.Login import *
@@ -14,6 +15,7 @@ from Features.Permission import PermissionCheck
 import os
 
 from Features.displayProfile import displayProfile, displayUsername
+from TUI.StaffSignUpTUI import run as StaffSignUpRun
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
@@ -146,12 +148,12 @@ if __name__ == '__main__':
                                 print('You have selected: Lock or Unlock Account')
                                 AdminTUIRun()
                             #
-                            # case 4:
-                            #     AccountLoginID = int(input(f'''Select Account to sign up to STAFF By LoginID?
-                            #         Accounts Available {userInfo}
-                            #             :: '''))
-                            #     updateAccount('Permission', 'Customer', AccountLoginID)
-                            #     addToLogs('Has Made Account Staff', 'Account')
+                            case 4:
+                                print('You have selected: Staff Sign Up')
+                                StaffSignUpRun()
+
+                            case 5:
+                                print('You have selected: Delete Accounts')
 
                     case _:
                         print('Invalid Option')
