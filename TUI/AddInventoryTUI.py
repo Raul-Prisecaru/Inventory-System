@@ -41,7 +41,6 @@ def getAllTables():
 
 
 def run():
-    print(Features.session.logUser)
     retryCounter = 0
     while retryCounter < 3:
         print('Authentication Required: ')
