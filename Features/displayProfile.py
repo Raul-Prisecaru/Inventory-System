@@ -10,6 +10,23 @@ current_directory = os.path.dirname(__file__)
 databasePath = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
 
 
+def displayUsername():
+    connection = sqlite3.connect(databasePath)
+    cursor = connection.cursor()
+
+    cursor.execute(f'SELECT Username, AccountStatus FROM LoginInformation;')
+    CustomerUsername = cursor.fetchall()
+
+    for row in CustomerUsername:
+        return print(f''' User Accounts
+        Username: {row[0]}
+        AccountStatus: {row[1]}
+        ''')
+
+    connection.close()  # Close the database connection
+
+
+
 def displayProfile(username):
     connection = sqlite3.connect(databasePath)
     cursor = connection.cursor()
@@ -43,5 +60,3 @@ def displayProfile(username):
             Delivery Date: {item[3]}
             Quantity Purchased: {item[4]}
             -----------Next Item---------''')
-
-
