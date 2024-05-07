@@ -4,6 +4,7 @@ import os
 from Features.GenerateLogs import addToLogs
 from Features.Login import *
 import Features.session as session
+from Features.ModifyInventory import getAllColumnsByID
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
@@ -31,7 +32,6 @@ def getAllColumns(Table):
 
 
 def getPlaceholders(Table):
-
     # Connect to Database
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
@@ -48,6 +48,7 @@ def getPlaceholders(Table):
 
     # Return list with placeholders
     return placeholderValues
+
 
 def addToSystem(Table, values):
     # Connect to Database
@@ -67,6 +68,7 @@ def addToSystem(Table, values):
 
     addToLogs(session.logUser, f'{session.logUser} has added {values} to {Table}')
 
+
 def GenerateAlert(LowStockLevel=10):
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
@@ -75,7 +77,7 @@ def GenerateAlert(LowStockLevel=10):
     rows = cursor.fetchall()
 
     if not rows:
-            print('[✔️] No Items is Currently Running Low On Stock!')
+        print('[✔️] No Items is Currently Running Low On Stock!')
     else:
         for row in rows:
             print(f'''[❌ ATTENTION NEEDED!] The Following Stocks are Running Low
@@ -84,7 +86,7 @@ def GenerateAlert(LowStockLevel=10):
             {row[0]} | {row[1]} | {row[2]}''')
 
 
-def displayCustomerInventory():
+def displayInventory():
     # Connect to Database
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
@@ -95,3 +97,21 @@ def displayCustomerInventory():
 
     for row in rows:
         print(row)
+
+
+def deleteRecords(ID, Table='Inventory'):
+    # Connect to Database
+    connection = sqlite3.connect(database_path)
+    cursor = connection.cursor()
+
+    # Store columns and placeholders functions in appropriate variables.
+    columns = getAllColumns(Table)
+    IDRecord = getAllColumnsByID(Table)
+
+    # INSERT INTO {Table that user provides} ({All of the columns available in the table}) VALUES ({add placeholders per column})
+    cursor.execute(f"DELETE FROM {Table} WHERE {IDRecord} = ?", (ID,))
+
+    # Commit and Close Connection
+    connection.commit()
+    connection.close()
+

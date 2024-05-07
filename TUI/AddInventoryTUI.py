@@ -47,38 +47,39 @@ def run():
         print('Authentication Required: ')
         password = str(input('Enter Your Password: '))
         if Login(Features.session.logUser, password):
-            print('Login Successful')
-            addToLogs('Has Successfully Validated', 'Account')
-            userTable = str(input(f'''What Table do you want to add to?
-                    All Tables Available
-                    -------------------
-                    {getAllTables()}
-                    -------------------
-                        :: '''))
+            # print('Login Successful')
+            # addToLogs('Has Successfully Validated', 'Account')
+            while True:
+                userTable = str(input(f'''What Table do you want to add to?
+                        All Tables Available
+                        -------------------
+                        {getAllTables()}
+                        -------------------
+                            :: '''))
 
-            userAnswer = []
+                userAnswer = []
 
-            userInput = str(input(f"""\nInserting new Inventory Guide:
-                    To Ensure that data is properly inserted into Database,
-                    Ensure the following:
-                    [1] - follow the following format
-                    -----------------
-                    {getAllColumnsNoID(userTable)}
-                    -----------------
-                    [2] - After each column, ensure you have a space between the comma such as:
-                    123, Name1, Name2, 123
+                userInput = str(input(f"""\nInserting new Inventory Guide:
+                        To Ensure that data is properly inserted into Database,
+                        Ensure the following:
+                        [1] - follow the following format
+                        -----------------
+                        {getAllColumnsNoID(userTable)}
+                        -----------------
+                        [2] - After each column, ensure you have a space between the comma such as:
+                        123, Name1, Name2, 123
+    
+                        [3] - Do not enter quotations marks when entering string
+                        -----You May Enter-----------
+                        """))
 
-                    [3] - Do not enter quotations marks when entering string
-                    -----You May Enter-----------
-                    """))
-
-            inputSplit = userInput.split(',')
-            for answers in inputSplit:
-                userAnswer.append(answers)
-            print(f'userAnswer: {userAnswer}')
-            addToSystem(userTable, userAnswer)
-            addToLogs('Has Added Inventory', 'Inventory')
-            break
+                inputSplit = userInput.split(',')
+                for answers in inputSplit:
+                    userAnswer.append(answers)
+                print(f'userAnswer: {userAnswer}')
+                addToSystem(userTable, userAnswer)
+                addToLogs('Has Added Inventory', 'Inventory')
+                break
 
         else:
             retryCounter += 1

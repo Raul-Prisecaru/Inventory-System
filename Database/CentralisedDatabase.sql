@@ -1,7 +1,6 @@
--- Drop Tables
 DROP TABLE IF EXISTS LoginInformation;
-DROP TABLE IF EXISTS Customer;
 DROP TABLE IF EXISTS Purchase;
+DROP TABLE IF EXISTS Customer;
 DROP TABLE IF EXISTS PurchaseHistory;
 DROP TABLE IF EXISTS Orders;
 DROP TABLE IF EXISTS Inventory;
@@ -20,6 +19,8 @@ DROP VIEW IF EXISTS masked_Customer;
 DROP VIEW IF EXISTS viewCustomerProfile;
 DROP VIEW IF EXISTS viewCustomerLogin;
 DROP VIEW IF EXISTS viewPurchase;
+DROP VIEW IF EXISTS viewDisplayIncomingSchedules;
+DROP VIEW IF EXISTS viewDisplayOutgoingSchedules;
 
 
 CREATE TABLE IF NOT EXISTS LoginInformation(
@@ -28,7 +29,8 @@ CREATE TABLE IF NOT EXISTS LoginInformation(
     Password TEXT,
     Permission TEXT DEFAULT 'Customer', -- Can Be Changed By Admin
     AccountStatus TEXT DEFAULT 'Unlocked',
-    CustomerID INTEGER REFERENCES Customer(CustomerID)
+    CustomerID INTEGER,
+    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
 );
 
 CREATE TABLE IF NOT EXISTS Customer(
@@ -46,7 +48,8 @@ CREATE TABLE IF NOT EXISTS Purchase(
     PurchaseName TEXT,
     PurchaseDeliveryDate DATE DEFAULT (date('now', '+1 day')),
     PurchaseStock TEXT,
-    CustomerID INTEGER REFERENCES Customer(CustomerID)
+    CustomerID INTEGER,
+    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
 --     OrderID INTEGER REFERENCES Orders(OrderID)
 );
 
@@ -54,8 +57,10 @@ CREATE TABLE IF NOT EXISTS Orders (
     OrderID INTEGER PRIMARY KEY AUTOINCREMENT,
     OrderName TEXT,
     DeliveryDate DATE,
-    CustomerID INTEGER REFERENCES Customer(CustomerID),
-    PurchaseID INTEGER REFERENCES Purchase(PurchaseID)
+    CustomerID INTEGER,
+	PurchaseID INTEGER,
+    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID),
+    FOREIGN KEY (PurchaseID) REFERENCES Purchase(PurchaseID)
 );
 
 CREATE TABLE IF NOT EXISTS Inventory(
@@ -64,7 +69,8 @@ CREATE TABLE IF NOT EXISTS Inventory(
     StockLevel INTEGER,
     InventoryPrice INTEGER,
     LocationBuilding TEXT,
-    IncomingScheduleID INTEGER REFERENCES IncomingTransportationSchedules(IncomingScheduleID)
+    IncomingScheduleID INTEGER,
+    FOREIGN KEY (IncomingScheduleID) REFERENCES IncomingTransportationSchedules(IncomingScheduleID)
 );
 
 CREATE TABLE IF NOT EXISTS Drivers(
@@ -80,7 +86,8 @@ CREATE TABLE IF NOT EXISTS Vehicles(
     VehicleType TEXT,
     VehicleBrand TEXT,
     VehicleLicensePlate TEXT,
-    DriverID INTEGER REFERENCES Drivers(DriverID)
+    DriverID INTEGER,
+    FOREIGN KEY (DriverID) REFERENCES Drivers(DriverID)
 );
 
 
@@ -91,8 +98,10 @@ CREATE TABLE IF NOT EXISTS OutgoingTransportationSchedules(
     IsItOnTheWay INTEGER,
 --     InventoryID INTEGER REFERENCES Inventory(InventoryID),
 --     DriverID INTEGER REFERENCES Drivers(DriverID),
-    CustomerID INTEGER REFERENCES Customer(CustomerID),
-    PurchaseID INTEGER REFERENCES Purchase(PurchaseID)
+    CustomerID INTEGER,
+	PurchaseID INTEGER,
+    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID),
+    FOREIGN KEY (PurchaseID) REFERENCES Purchase(PurchaseID)
 );
 
 
@@ -101,7 +110,8 @@ CREATE TABLE IF NOT EXISTS IncomingTransportationSchedules(
     ExpectedArrivalDate DATE,
     IsItOnTheWay INTEGER,
     InventoryID INTEGER REFERENCES Inventory(InventoryID),
-    ExternalCompanyID INTEGER REFERENCES ExternalCompanies(ExternalCompanyID)
+    ExternalCompanyID INTEGER,
+    FOREIGN KEY (ExternalCompanyID) REFERENCES ExternalCompanies(ExternalCompanyID)
 );
 
 
@@ -117,15 +127,12 @@ CREATE TABLE IF NOT EXISTS logs(
     Description TEXT,
     Type TEXT,
     LogCreated DATE DEFAULT (date('now')),
-    LoginID INTEGER REFERENCES LoginInformation(LoginID)
+    LoginID INTEGER,
+    FOREIGN KEY (LoginID) REFERENCES LoginInformation(LoginID)
 );
 
 
 -- Default LOGIN
-INSERT INTO LoginInformation (Username, Password, Permission, CustomerID) VALUES ('Admin', 'Admin', 'Admin', 1);
-INSERT INTO LoginInformation (Username, Password, Permission, CustomerID) VALUES ('Staff', 'Staff', 'Staff', 2);
-INSERT INTO LoginInformation (Username, Password, Permission, CustomerID) VALUES ('Customer', 'Customer', 'Customer', 3);
-INSERT INTO LoginInformation (Username, Password, Permission, CustomerID) VALUES ('zxc', 'zxc', 'Customer', 4);
 INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('Administrator', 'Admin@stmarys.com', 123123, 1234123412341234);
 INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('Jake', 'Staff@stmarys.com', 123123, 1234123412341234);
 INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('Raul', 'Raul@Prisecaru.com', 123123, 1234123412341234);
@@ -137,28 +144,18 @@ INSERT INTO Purchase (PurchaseName, PurchaseDeliveryDate, PurchaseStock, Custome
 INSERT INTO Purchase (PurchaseName, PurchaseDeliveryDate, PurchaseStock, CustomerID) VALUES ('CustomerTest', 2024-20-1, 10, 4);
 
 CREATE VIEW viewInventory AS
-    SELECT
-        InventoryID,
-        InventoryName,
-        StockLevel
+    SELECT InventoryID, InventoryName, StockLevel
     FROM Inventory;
 
--- CREATE VIEW viewLog AS
---     SELECT logs.*, LoginInformation.Username, LoginInformation.Permission
---     FROM logs
---     INNER JOIN LoginInformation;
-
 CREATE VIEW viewDisplayIncomingSchedules AS
-    SELECT IncomingTransportationSchedules.*, E.*
+    SELECT IncomingTransportationSchedules.*, ExternalCompanies.*
     FROM IncomingTransportationSchedules
-    INNER JOIN ExternalCompanies E on E.ExternalCompanyID = IncomingTransportationSchedules.ExternalCompanyID;
+    INNER JOIN ExternalCompanies on ExternalCompanies.ExternalCompanyID = IncomingTransportationSchedules.ExternalCompanyID;
 
 CREATE VIEW viewDisplayOutgoingSchedules AS
     SELECT OutgoingTransportationSchedules.*, C.CustomerName, C.CustomerAddress
     FROM OutgoingTransportationSchedules
     INNER JOIN Customer C on C.CustomerID = OutgoingTransportationSchedules.CustomerID;
-
-
 
 CREATE VIEW viewCustomerLogin AS
     SELECT Customer.CustomerID, LoginInformation.LoginID, LoginInformation.Username
@@ -193,9 +190,6 @@ CREATE VIEW masked_Customer AS
 
 
 -- -- Creating Views for Role: Customer
--- SELECT LoginInformation.LoginID, LoginInformation.Username, Customer.CustomerID, Customer.CustomerName
--- FROM LoginInformation
--- INNER JOIN Customer ON LoginInformation.LoginID = Customer.CustomerID;
 
 CREATE VIEW viewCustomerProfile AS
     SELECT masked_login_information.* ,masked_Customer.*, Purchase.*
