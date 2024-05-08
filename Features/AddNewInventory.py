@@ -66,7 +66,7 @@ def addToSystem(Table, values):
     connection.commit()
     connection.close()
 
-    addToLogs(session.logUser, f'{session.logUser} has added {values} to {Table}')
+    addToLogs(f'Has added {values} to {Table}', 'Inventory')
 
 
 def GenerateAlert(LowStockLevel=10):

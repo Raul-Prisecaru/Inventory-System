@@ -92,4 +92,4 @@ def modifyAllInventory(Table, values, ID):
     connection.commit()
     connection.close()
 
-    addToLogs('UsernameDemo', f'UsernameDemo has Modified {ID} and added {values}')
+    addToLogs(f'Has Modified {Table} and added {values}', 'ModifyInventory')
