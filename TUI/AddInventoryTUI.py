@@ -47,7 +47,7 @@ def run():
         password = str(input('Enter Your Password: '))
         if Login(Features.session.logUser, password):
             # print('Login Successful')
-            # addToLogs('Has Successfully Validated', 'Account')
+            addToLogs('Has Successfully Validated for Adding Inventory', 'AccountValidation')
             while True:
                 userTable = str(input(f'''What Table do you want to add to?
                         All Tables Available
@@ -77,7 +77,6 @@ def run():
                     userAnswer.append(answers)
                 print('Successfully Added to the System')
                 addToSystem(userTable, userAnswer)
-                # addToLogs('Has Added Inventory', 'Inventory')
                 # break
 
                 con = int(input('''Do you want to continue?
@@ -91,7 +90,7 @@ def run():
 
         else:
             retryCounter += 1
-            addToLogs('Has Failed to Validate', 'Account')
+            addToLogs('Has Failed to Validate', 'AccountValidation')
             print('Incorrect Password')
 
         if retryCounter == 3:
@@ -111,5 +110,5 @@ def run():
 
             print('''[❌ ATTENTION NEEDED!] Account Locked for Security Purposes
                 Contact Admin to Unlock Account''')
-            addToLogs('Has Locked Their Accounts', 'Account')
+            addToLogs('Has Locked Their Accounts by failing to validation Account Password', 'AccountLock')
 
