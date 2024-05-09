@@ -12,7 +12,7 @@ from TUI.ModifyInventoryTUI import run as ModifyInventoryRun
 from Features.Login import *
 from Features.GenerateLogs import displayLogs
 from Features.TrackShipment import getAllShipments
-from Features.DeveloperMode import run as GenerateDatabase
+from Features.GenerateDatabase import run as GenerateDatabase
 import Features.session as session
 from Features.Permission import PermissionCheck
 from TUI.OrderStocksTUI import run as OrderRun
