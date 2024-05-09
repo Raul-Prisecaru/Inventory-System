@@ -75,10 +75,36 @@ with open(externalCompaniesPath, "r") as file:
         print("Error Caught: ExternalCompanies.txt not found")
 
 
+def EmailGenerator():
+    EndEmail = ['.com', '.ac.uk', '.edu', '.uk', '.co']
+    EmailProviders = ['Outlook', 'Yahoo', 'Protonmail', 'Gmail', 'Zoho']
+    firstnameRandom = random.choice(nameList)
+    lastnameRandom = random.choice(nameList)
+    EmailProvidersRandom = random.choice(EmailProviders)
+    EndEmailRandom = random.choice(EndEmail)
+
+    return f'{firstnameRandom}.{lastnameRandom}@{EmailProvidersRandom}{EndEmailRandom}'
+
+
+def AddressGenerator():
+    FirstPart = ['Caxton', 'Southlands', '.Carriers', 'Bootham', 'Grey']
+    LastPart = ['Place', 'Road', 'Crescent', 'Street', 'St']
+    FirstPartRandom = random.choice(nameList)
+    LastPartRandom = random.choice(nameList)
+    AddressNumber = "".join(str(random.randint(1, 9)) for _ in range(3))
+
+    return f'{AddressNumber} {FirstPartRandom} {LastPartRandom}'
+
+
 def numberGenerator(maxDigits):
     phoneNumber = "".join(str(random.randint(1, 9)) for _ in range(maxDigits))
 
     return "07" + phoneNumber
+
+
+def creditcardGenerator():
+    creditcard = "".join(str(random.randint(1, 9)) for _ in range(16))
+    return creditcard
 
 
 def licenseGenerator(maxLimit):
@@ -99,6 +125,45 @@ def randomTime(startHour=1, endHour=12, startMinute=1, endMinute=59):
     Minute = random.randint(startMinute, endMinute)
 
     return f"{Hour}:{Minute}"
+
+
+def randomiseLoginAndCustomer():
+    try:
+        connection = sqlite3.connect(databasePath)
+        cursor = connection.cursor()
+
+        Customer_query = """
+            INSERT INTO Customer(CustomerName, CustomerEmail, CustomerAddress, CustomerPhoneNumber, CustomerCreditCard)
+            VALUES (?,?,?,?,?)
+            """
+        # Generate values for Customer table
+        customer_values = (
+        random.choice(nameList), EmailGenerator(), AddressGenerator(), numberGenerator(11), creditcardGenerator())
+
+        cursor.execute(Customer_query, customer_values)
+
+        # Retrieve the last inserted CustomerID
+        CustomerID = cursor.lastrowid
+
+        Login_query = """
+            INSERT INTO LoginInformation(Username, Password, Permission, AccountStatus, CustomerID)
+            VALUES (?,?,?,?,?)
+            """
+
+        # Generate values for LoginInformation table
+        login_values = (licenseGenerator(6), licenseGenerator(6), random.choice(('Staff', 'Customer')),
+                        random.choice(('Unlocked', 'Locked')), CustomerID)
+
+        cursor.execute(Login_query, login_values)
+        connection.commit()
+        rows = cursor.fetchall()
+        for row in rows:
+            print(row)
+
+        connection.close()
+
+    except Exception as e:
+        print("Something Else Went Wrong In LoginAndCustomer: " + str(e))
 
 
 def randomiseInventory():
@@ -130,6 +195,7 @@ def randomiseInventory():
 
     except Exception as e:
         print("Something Else Went Wrong In Inventory: " + str(e))
+
 
 def randomisePurchases():
     try:
@@ -165,7 +231,7 @@ def randomisePurchases():
         randomFloatRounded = round(randomFloat, 2)
 
         cursor.execute(select_query, (
-            Inventoryrand[0], randomDate(), random.randint(1,999), Customerrand[0]))
+            Inventoryrand[0], randomDate(), random.randint(1, 999), Customerrand[0]))
 
         cursor.execute(showcase_query)
 
@@ -177,7 +243,8 @@ def randomisePurchases():
         connection.close()
 
     except Exception as e:
-        print("Something Else Went Wrong In Inventory: " + str(e))
+        print("Something Else Went Wrong In Purchase: " + str(e))
+
 
 def randomiseDrivers():
     try:
@@ -328,7 +395,7 @@ def randomiseIncomingTransportationSchedules():
         showcase_query = "SELECT * FROM IncomingTransportationSchedules;"
 
         cursor.execute(select_query, (
-        randomDate(), random.randint(1, 1000), random.randint(0, 1), Inventoryrand[0], ExternalCompanyrand[0]))
+            randomDate(), random.randint(1, 1000), random.randint(0, 1), Inventoryrand[0], ExternalCompanyrand[0]))
 
         cursor.execute(showcase_query)
 
@@ -408,6 +475,7 @@ def run(repeat=1):
 
     for row in range(repeat):
         randomiseInventory()
+        randomiseLoginAndCustomer()
         randomisePurchases()
         randomiseDrivers()
         randomiseVehicles()
