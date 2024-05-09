@@ -47,7 +47,7 @@ def displayDelete():
 def run():
     while True:
         displayDelete()
-        con = int(input('''Do you want to continue?
+        con = int(input('''Do you want to delete another record?
         [1] - Yes
         [2] - No'''))
 

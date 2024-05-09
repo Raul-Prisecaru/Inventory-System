@@ -233,14 +233,14 @@ def randomiseIncomingTransportationSchedules():
         cursor = connection.cursor()
 
         select_query = """
-            INSERT INTO IncomingTransportationSchedules(ExpectedArrivalDate, ExpectedArrivalTime, IsItOnTheWay)
+            INSERT INTO IncomingTransportationSchedules(ExpectedArrivalDate, IsItOnTheWay)
             VALUES (?,?,?)
             """
 
         showcase_query = "SELECT * FROM IncomingTransportationSchedules;"
 
 
-        cursor.execute(select_query, (randomDate(), randomTime(), random.randint(0, 1)))
+        cursor.execute(select_query, (randomDate(), random.randint(0, 1)))
 
         cursor.execute(showcase_query)
 

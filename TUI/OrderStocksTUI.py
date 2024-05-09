@@ -13,7 +13,7 @@ current_directory = os.path.dirname(__file__)
 database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
 
 
-def displayOrder(lowStock=300):
+def displayOrder(lowStock=150):
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
 
@@ -53,7 +53,7 @@ def run():
         # lowStockNumber = int(input('''Input a number to display all records that have below that stock amount
         #     :: '''))
         displayOrder()
-        con = int(input('''Do you want to continue?
+        con = int(input('''Do you want to place another order?
         [1] - Yes
         [2] - No'''))
 
@@ -61,6 +61,3 @@ def run():
             print('')
         else:
             break
-
-
-run()
