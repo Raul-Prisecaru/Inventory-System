@@ -13,7 +13,6 @@ current_directory = os.path.dirname(__file__)
 database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
 
 def run():
-    print(Features.session.logUser)
     userAnswer = []
     while True:
         print(f'''Available for purchase:
@@ -35,6 +34,7 @@ def run():
         inputSplit = userInput.split(',')
         for answers in inputSplit:
             userAnswer.append(answers)
+        print(userAnswer)
 
         if confirmationPurchase(userAnswer[0], userAnswer[1], session.logUser):
             print('Purchase Successful')

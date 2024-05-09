@@ -15,6 +15,7 @@ from Features.TrackShipment import getAllShipments
 from Features.DeveloperMode import run as GenerateDatabase
 import Features.session as session
 from Features.Permission import PermissionCheck
+from TUI.OrderStocksTUI import run as OrderRun
 import os
 
 from Features.displayProfile import displayProfile, displayUsername
@@ -106,6 +107,8 @@ if __name__ == '__main__':
                             [1] - Add to Database
                             [2] - Check for Low Stocks
                             [3] - Delete record off Database
+                            [4] - Order New Inventory
+                            
                              
                              :: '''))
 
@@ -118,6 +121,12 @@ if __name__ == '__main__':
 
                                 case 3:
                                     deleteRecordsRun()
+
+                                case 4:
+                                    OrderRun()
+
+                                case _:
+                                    print('Invalid Option')
 
                         case 2:
                             print('You have selected: Modify System')
@@ -182,6 +191,7 @@ if __name__ == '__main__':
                             [1] - Add to Inventory
                             [2] - Check for Low Stocks
                             [3] - Delete Item off system
+                            [4] - Order New Inventory
 
                              :: '''))
 
@@ -194,6 +204,12 @@ if __name__ == '__main__':
 
                                 case 3:
                                     deleteRecordsRun()
+
+                                case 4:
+                                    OrderRun()
+
+                                case _:
+                                    print('Invalid Option')
 
                         case 2:
                             print('You have selected: Modify System')

@@ -36,6 +36,6 @@ def displayDeleteAdmin():
         ---------Next User---------
         ''')
     AccountID = int(input(f''' :: '''))
-    deleleAccount(AccountID)
+    deleleAccount(AccountID, True)
     print(f'{AccountID} has been deleted from the system')
     connection.close()

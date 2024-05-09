@@ -23,6 +23,7 @@ DROP VIEW IF EXISTS viewDisplayIncomingSchedules;
 DROP VIEW IF EXISTS viewDisplayOutgoingSchedules;
 
 
+
 CREATE TABLE IF NOT EXISTS LoginInformation(
     LoginID INTEGER PRIMARY KEY AUTOINCREMENT,
     Username TEXT UNIQUE,
@@ -32,6 +33,8 @@ CREATE TABLE IF NOT EXISTS LoginInformation(
     CustomerID INTEGER,
     FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
 );
+-- CREATE INDEX idxLoginInformation
+-- ON LoginInformation (LoginID, Username, Permission);
 
 CREATE TABLE IF NOT EXISTS Customer(
     CustomerID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -132,17 +135,10 @@ CREATE TABLE IF NOT EXISTS logs(
     FOREIGN KEY (LoginID) REFERENCES LoginInformation(LoginID)
 );
 
-
--- Default LOGIN
 INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('Administrator', 'Admin@stmarys.com', 123123, 1234123412341234);
 INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('Jake', 'Staff@stmarys.com', 123123, 1234123412341234);
 INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('Raul', 'Raul@Prisecaru.com', 123123, 1234123412341234);
 INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('user4', 'user4', 423243234, 243342324342);
-
--- Testing Purposes
-INSERT INTO Inventory (InventoryName, StockLevel, InventoryPrice) VALUES ('Empty Stock', 0, '10');
-INSERT INTO Purchase (PurchaseName, PurchaseDeliveryDate, PurchaseStock, CustomerID) VALUES ('CustomerTest', 2024-20-1, 10, 3);
-INSERT INTO Purchase (PurchaseName, PurchaseDeliveryDate, PurchaseStock, CustomerID) VALUES ('CustomerTest', 2024-20-1, 10, 4);
 
 CREATE VIEW viewInventory AS
     SELECT InventoryID, InventoryName, StockLevel
@@ -197,6 +193,11 @@ CREATE VIEW viewCustomerProfile AS
     FROM masked_login_information
     INNER JOIN masked_Customer ON masked_Customer.CustomerID = masked_login_information.CustomerID
     INNER JOIN Purchase ON Purchase.CustomerID = masked_Customer.CustomerID;
+
+CREATE VIEW viewDrivers AS
+    SELECT Drivers.*, Vehicles.VehicleType, Vehicles.VehicleBrand, Vehicles.VehicleLicensePlate
+    FROM Drivers
+    INNER JOIN Vehicles on Drivers.DriverID = Vehicles.DriverID
 
 
 
