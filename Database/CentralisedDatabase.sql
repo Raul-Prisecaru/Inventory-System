@@ -2,7 +2,6 @@ DROP TABLE IF EXISTS LoginInformation;
 DROP TABLE IF EXISTS Purchase;
 DROP TABLE IF EXISTS Customer;
 DROP TABLE IF EXISTS PurchaseHistory;
-DROP TABLE IF EXISTS Orders;
 DROP TABLE IF EXISTS Inventory;
 DROP TABLE IF EXISTS Drivers;
 DROP TABLE IF EXISTS Vehicles;
@@ -54,18 +53,8 @@ CREATE TABLE IF NOT EXISTS Purchase(
     PurchaseStock TEXT,
     CustomerID INTEGER,
     FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
---     OrderID INTEGER REFERENCES Orders(OrderID)
 );
 
-CREATE TABLE IF NOT EXISTS Orders (
-    OrderID INTEGER PRIMARY KEY AUTOINCREMENT,
-    OrderName TEXT,
-    DeliveryDate DATE,
-    CustomerID INTEGER,
-	PurchaseID INTEGER,
-    FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID),
-    FOREIGN KEY (PurchaseID) REFERENCES Purchase(PurchaseID)
-);
 
 CREATE TABLE IF NOT EXISTS Inventory(
     InventoryID INTEGER PRIMARY KEY AUTOINCREMENT,
