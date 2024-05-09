@@ -1,3 +1,4 @@
+import random
 import sqlite3
 import os
 
@@ -71,14 +72,23 @@ def confirmationPurchase(ID, Stock, Username):
         :: '''))
 
         if userConfirmation == 1:
+            DriversList = []
+            cursor.execute('SELECT DriverID FROM Drivers;')
+            Driver = cursor.fetchall()
+
+            for row in Driver:
+                DriversList.append(row)
+
+            randomDriver = random.choice(DriversList)
+
             cursor.execute("INSERT INTO Purchase (PurchaseName, PurchaseStock, CustomerID) VALUES (?,?,?)",
                            (inventory_name, Stock, getCustomerID()))
 
 
             PurchaseID = cursor.lastrowid
 
-            cursor.execute("INSERT INTO OutgoingTransportationSchedules (IsItOnTheWay, CustomerID, PurchaseID) VALUES (?,?,?)",
-                           (0, getCustomerID(), PurchaseID))
+            cursor.execute("INSERT INTO OutgoingTransportationSchedules (IsItOnTheWay, CustomerID, PurchaseID, DriverID) VALUES (?,?,?,?)",
+                           (0, getCustomerID(), PurchaseID, randomDriver[0]))
 
 
             connection.commit()

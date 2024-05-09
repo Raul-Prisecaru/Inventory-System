@@ -42,14 +42,18 @@ def getAllShipments(number):
         rows = cursor.fetchall()
 
         for row in rows:
+            print(row)
             print(f'''
             Schedule ID: {row[0]}
             Schedule Date: {row[1]}
             Is it on the way?: {'Yes' if row[2] == 1 else 'No'}
             CustomerID: {row[3]}
             PurchaseID: {row[4]}
-            Customer Name: {row[5]}
-            Delivery Address: {row[6]}
+            DriverID: {row[5]}
+            DriverName: {row[7]}
+            Customer Name: {row[8]}
+            Delivery Address: {row[9]}
+            Contact Number: {row[10]}
             ---------Next Item----------''')
 
         connection.commit()

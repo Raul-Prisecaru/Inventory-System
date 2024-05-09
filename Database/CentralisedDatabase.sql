@@ -21,6 +21,7 @@ DROP VIEW IF EXISTS viewCustomerLogin;
 DROP VIEW IF EXISTS viewPurchase;
 DROP VIEW IF EXISTS viewDisplayIncomingSchedules;
 DROP VIEW IF EXISTS viewDisplayOutgoingSchedules;
+DROP VIEW IF EXISTS viewDrivers;
 
 
 
@@ -103,8 +104,10 @@ CREATE TABLE IF NOT EXISTS OutgoingTransportationSchedules(
 --     DriverID INTEGER REFERENCES Drivers(DriverID),
     CustomerID INTEGER,
 	PurchaseID INTEGER,
+	DriverID INTEGER,
     FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID),
-    FOREIGN KEY (PurchaseID) REFERENCES Purchase(PurchaseID)
+    FOREIGN KEY (PurchaseID) REFERENCES Purchase(PurchaseID),
+    FOREIGN KEY (DriverID) REFERENCES Drivers(DriverID)
 );
 
 
@@ -150,9 +153,10 @@ CREATE VIEW viewDisplayIncomingSchedules AS
     INNER JOIN ExternalCompanies on ExternalCompanies.ExternalCompanyID = IncomingTransportationSchedules.ExternalCompanyID;
 
 CREATE VIEW viewDisplayOutgoingSchedules AS
-    SELECT OutgoingTransportationSchedules.*, C.CustomerName, C.CustomerAddress
+    SELECT OutgoingTransportationSchedules.*, D.DriverID, D.DriverName,C.CustomerName, C.CustomerAddress, C.CustomerPhoneNumber
     FROM OutgoingTransportationSchedules
-    INNER JOIN Customer C on C.CustomerID = OutgoingTransportationSchedules.CustomerID;
+    INNER JOIN Customer C on C.CustomerID = OutgoingTransportationSchedules.CustomerID
+    INNER JOIN Drivers D on D.DriverID = OutgoingTransportationSchedules.DriverID;
 
 CREATE VIEW viewCustomerLogin AS
     SELECT Customer.CustomerID, LoginInformation.LoginID, LoginInformation.Username
