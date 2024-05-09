@@ -36,7 +36,6 @@ def setup_database():
 
         with open('Database/CentralisedDatabase.sql', "r") as sql_file:
             sql_script = sql_file.read()
-        print(sql_script)
         cursor.executescript(sql_script)
 
         cursor.execute(
@@ -50,7 +49,6 @@ def setup_database():
 
     except Exception as e:
         print("Error Caught: " + str(e))
-
 
 def displayOptions():
     if PermissionCheck(session.logUser) == 'Admin':
