@@ -2,6 +2,7 @@ import sqlite3
 import random
 import timeit
 import os
+
 numbersNcharacters = [1, 2, 3, 4, 5, 6, 7, 8, 9, "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
                       "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 
@@ -36,8 +37,6 @@ with open(InventoryPath, "r") as file:
             line.strip()
     except IOError:
         print("Error Caught: File not found")
-
-
 
 with open(locationBuildingPath, "r") as file:
     locationList = []
@@ -114,11 +113,11 @@ def randomiseInventory():
 
         showcase_query = "SELECT * FROM Inventory;"
 
-        randomFloat = random.uniform(1,1000)
+        randomFloat = random.uniform(1, 1000)
         randomFloatRounded = round(randomFloat, 2)
 
         cursor.execute(select_query, (
-        random.choice(inventoryList), random.randint(30, 400), randomFloatRounded, random.choice(locationList)))
+            random.choice(inventoryList), random.randint(30, 400), randomFloatRounded, random.choice(locationList)))
 
         cursor.execute(showcase_query)
 
@@ -130,8 +129,55 @@ def randomiseInventory():
         connection.close()
 
     except Exception as e:
-        print("Something Else Went Wrong: " + str(e))
+        print("Something Else Went Wrong In Inventory: " + str(e))
 
+def randomisePurchases():
+    try:
+        connection = sqlite3.connect(databasePath)
+        cursor = connection.cursor()
+
+        # Randomise Customer Foreign
+        cursor.execute('SELECT CustomerID FROM Customer')
+        CustomerList = []
+        CustomerCursor = cursor.fetchall()
+
+        for row in CustomerCursor:
+            CustomerList.append(row)
+        Customerrand = random.choice(CustomerList)
+
+        # Randomise Inventory Names
+        cursor.execute('SELECT InventoryName FROM Inventory')
+        InventoryList = []
+        InventoryCursor = cursor.fetchall()
+
+        for row in InventoryCursor:
+            InventoryList.append(row)
+        Inventoryrand = random.choice(InventoryList)
+
+        select_query = """
+            INSERT INTO Purchase(PurchaseName, PurchaseDeliveryDate, PurchaseStock, CustomerID)
+            VALUES (?,?,?,?)
+            """
+
+        showcase_query = "SELECT * FROM Purchase;"
+
+        randomFloat = random.uniform(1, 1000)
+        randomFloatRounded = round(randomFloat, 2)
+
+        cursor.execute(select_query, (
+            Inventoryrand[0], randomDate(), random.randint(1,999), Customerrand[0]))
+
+        cursor.execute(showcase_query)
+
+        connection.commit()
+        rows = cursor.fetchall()
+        for row in rows:
+            print(row)
+
+        connection.close()
+
+    except Exception as e:
+        print("Something Else Went Wrong In Inventory: " + str(e))
 
 def randomiseDrivers():
     try:
@@ -145,7 +191,6 @@ def randomiseDrivers():
 
         showcase_query = "SELECT * FROM Drivers;"
 
-
         cursor.execute(select_query, (random.choice(nameList), numberGenerator(10), licenseGenerator(16)))
 
         cursor.execute(showcase_query)
@@ -158,7 +203,7 @@ def randomiseDrivers():
         connection.close()
 
     except Exception as e:
-        print("Something Else Went Wrong: " + str(e))
+        print("Something Else Went Wrong In Drivers: " + str(e))
 
 
 def randomiseVehicles():
@@ -172,7 +217,6 @@ def randomiseVehicles():
         for row in DriverCursor:
             DriversList.append(row)
 
-
         Driverrand = random.choice(DriversList)
 
         select_query = """
@@ -182,9 +226,9 @@ def randomiseVehicles():
 
         showcase_query = "SELECT * FROM Vehicles;"
 
-
         cursor.execute(select_query,
-                           (random.choice(VehicleTypeList), random.choice(VehicleBrandList), licenseGenerator(7), Driverrand[0]))
+                       (random.choice(VehicleTypeList), random.choice(VehicleBrandList), licenseGenerator(7),
+                        Driverrand[0]))
 
         cursor.execute(showcase_query)
 
@@ -196,7 +240,7 @@ def randomiseVehicles():
         connection.close()
 
     except Exception as e:
-        print("Something Else Went Wrong: " + str(e))
+        print("Something Else Went Wrong In Vehicles: " + str(e))
 
 
 def randomiseOutgoingTransportationSchedules():
@@ -237,8 +281,8 @@ def randomiseOutgoingTransportationSchedules():
 
         showcase_query = "SELECT * FROM OutgoingTransportationSchedules;"
 
-
-        cursor.execute(select_query, (randomDate(), random.randint(0, 1), Customerrand[0], Purchaserand[0], Driverrand[0]))
+        cursor.execute(select_query,
+                       (randomDate(), random.randint(0, 1), Customerrand[0], Purchaserand[0], Driverrand[0]))
 
         cursor.execute(showcase_query)
 
@@ -249,10 +293,8 @@ def randomiseOutgoingTransportationSchedules():
         cursor.close()
         connection.close()
 
-    except NameError:
-        print("Error Caught: File Not Found.")
     except Exception as e:
-        print("Something Else Went Wrong: " + str(e))
+        print("Something Else Went Wrong In Outgoing Schedules: " + str(e))
 
 
 def randomiseIncomingTransportationSchedules():
@@ -278,7 +320,6 @@ def randomiseIncomingTransportationSchedules():
             ExternalCompanyList.append(row)
         ExternalCompanyrand = random.choice(ExternalCompanyList)
 
-
         select_query = """
             INSERT INTO IncomingTransportationSchedules(ExpectedArrivalDate, IncomingStock, IsItOnTheWay, InventoryID, ExternalCompanyID)
             VALUES (?,?,?,?,?)
@@ -286,8 +327,8 @@ def randomiseIncomingTransportationSchedules():
 
         showcase_query = "SELECT * FROM IncomingTransportationSchedules;"
 
-
-        cursor.execute(select_query, (randomDate(), random.randint(1,1000) ,random.randint(0, 1), Inventoryrand[0], ExternalCompanyrand[0]))
+        cursor.execute(select_query, (
+        randomDate(), random.randint(1, 1000), random.randint(0, 1), Inventoryrand[0], ExternalCompanyrand[0]))
 
         cursor.execute(showcase_query)
 
@@ -299,7 +340,7 @@ def randomiseIncomingTransportationSchedules():
         connection.close()
 
     except Exception as e:
-        print("Something Else Went Wrong: " + str(e))
+        print("Something Else Went Wrong In Incoming Schedules: " + str(e))
 
 
 def randomiseExternalCompanies():
@@ -324,7 +365,6 @@ def randomiseExternalCompanies():
                 locationList.append(line)
                 line.strip()
 
-
         cursor.execute(select_query, (random.choice(ExternalCompaniesList), randomDate(1990, 2024)))
 
         cursor.execute(showcase_query)
@@ -336,10 +376,8 @@ def randomiseExternalCompanies():
         cursor.close()
         connection.close()
 
-    except NameError:
-        print("Error Caught: File Not Found.")
     except Exception as e:
-        print("Something Else Went Wrong: " + str(e))
+        print("Something Else Went Wrong In ExternalCompanies: " + str(e))
 
 
 def countDatabase(column):
@@ -365,11 +403,12 @@ def countDatabase(column):
         print("Something Else Went Wrong: " + str(e))
 
 
-def run(repeat=10):
+def run(repeat=1):
     # start_time = timeit.default_timer()
 
     for row in range(repeat):
         randomiseInventory()
+        randomisePurchases()
         randomiseDrivers()
         randomiseVehicles()
         randomiseIncomingTransportationSchedules()
