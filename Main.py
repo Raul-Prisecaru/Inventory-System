@@ -1,6 +1,5 @@
 from Features.AccountStatus import AccountStatus
 from Features.AddNewInventory import GenerateAlert, getAllColumns
-from Features.TermsOfService import termsService
 from Features.UpdateAccount import updateAccount
 from TUI.AddInventoryTUI import run as AddInventoryRun
 from TUI.AccountStatusTUI import run as AdminTUIRun
@@ -18,7 +17,7 @@ from Features.Permission import PermissionCheck
 from TUI.OrderStocksTUI import run as OrderRun
 import os
 
-from Features.displayProfile import displayProfile, displayUsername
+from Features.displayProfile import displayProfile, displayUsername, getAllTables, displayTable
 from TUI.StaffSignUpTUI import run as StaffSignUpRun
 
 # Get the directory of the current script file
@@ -94,7 +93,6 @@ if __name__ == '__main__':
     if userLoginSignup == 1:
         if Login(username, password):
             session.logUser = username
-            print(f'logUser: {session.logUser}')
             print('Login Successful')
             while True:
                 if PermissionCheck(session.logUser) == 'Admin':
@@ -138,8 +136,16 @@ if __name__ == '__main__':
                             getAllShipments(Inout)
 
                         case 4:
-                            print('You have selected: Display Inventory')
-                            getAllColumns('Inventory')
+                            AdminTable = str(input(f'''
+                            Select Which Table To Display:
+                            {getAllTables()}
+                             :: '''))
+                            if AdminTable in getAllTables():
+                                displayTable(AdminTable)
+
+                            else:
+                                print('Invalid Option, Check your captials, Its Case-Sensitive')
+
 
                         case 5:
                             print('You have selected: View Logs')
@@ -222,7 +228,7 @@ if __name__ == '__main__':
 
                         case 4:
                             print('You have selected: View Inventory')
-                            getAllColumns('Inventory')
+                            displayTable('Inventory')
                         case _:
                             print('Invalid Option')
 

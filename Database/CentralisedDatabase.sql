@@ -72,9 +72,7 @@ CREATE TABLE IF NOT EXISTS Inventory(
     InventoryName TEXT,
     StockLevel INTEGER,
     InventoryPrice INTEGER,
-    LocationBuilding TEXT,
-    IncomingScheduleID INTEGER,
-    FOREIGN KEY (IncomingScheduleID) REFERENCES IncomingTransportationSchedules(IncomingScheduleID)
+    LocationBuilding TEXT
 );
 
 CREATE TABLE IF NOT EXISTS Drivers(
