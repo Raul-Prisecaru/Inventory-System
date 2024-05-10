@@ -1,7 +1,8 @@
 import sqlite3
 import os
 
-from Features.GenerateLogs import addToLogs
+
+# from Features.GenerateLogs import addToLogs
 import Features.session as session
 
 # Get the directory of the current script file
@@ -29,7 +30,7 @@ def Login(username, password):
         if loginInfo and loginInfo[0] == password:
             print("Login Successful...")
             session.setlogUser(username)
-            addToLogs(f'Has successfully logged in', 'Login')
+            # addToLogs(f'Has successfully logged in', 'Login')
             return True
         else:
             print("Incorrect Username or Password...")
@@ -55,12 +56,12 @@ def SignUp(username, password, Name, Email, Address, PhoneNumber, CreditCard):
 
         connection.commit()
         connection.close()
-        addToLogs(f'Has successfully Signed Up', 'SignUp')
+        # addToLogs(f'Has successfully Signed Up', 'SignUp')
         return True
 
     except Exception as e:
         print(f"Unable to Sign up: {e}")
-        addToLogs(f'Has failed to Sign Up due to: {e}', 'Error')
+        # addToLogs(f'Has failed to Sign Up due to: {e}', 'Error')
         return False
 
 

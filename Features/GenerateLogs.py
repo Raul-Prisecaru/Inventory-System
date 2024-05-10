@@ -26,12 +26,14 @@ def addToLogs(Description, Type):
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
     cursor.execute(f'SELECT LoginID FROM LoginInformation WHERE Username = ?', (loggedInUser, ))
-    LoginID = cursor.fetchone()[0]
+    LoginID = cursor.fetchall()[0]
+
+
 
 
     # # INSERT INTO {Table that user provides} ({All of the columns available in the table}) VALUES ({add placeholders per column})
     cursor.execute(f'''INSERT INTO logs (Username, Description, Type, LoginID)
-                VALUES (?,?,?,?)''', (loggedInUser, Description, Type, LoginID))
+                VALUES (?,?,?,?)''', (loggedInUser, Description, Type, LoginID[0]))
 
     # Commit and Close Connection
     connection.commit()

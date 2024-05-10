@@ -24,7 +24,7 @@ def orderStocks(ID, Stock):
         ''')
 
     while True:
-        ExternalCompID = int(input('Select An ID you wish to book more Stocks From'))
+        ExternalCompID = int(input('''Select An ID you wish to book more Stocks From: '''))
         if ExternalCompID not in ECList:
             print('External Company Not Found')
 

@@ -18,12 +18,12 @@ def AccountStatus(AccountID):
     accStatus = cursor.fetchone()
     if accStatus[0] == 'Unlocked':
         cursor.execute(f"UPDATE LoginInformation SET AccountStatus = 'Locked' WHERE LoginID = ?", (AccountID,))
-        print(f'{AccountID} is now Locked')
-        addToLogs(f'Has been Locked By Admin', 'AccountStatus')
+        print(f'Account is now Locked')
+        # addToLogs(f'Has been Locked By Admin', 'AccountStatus')
         connection.commit()
     elif accStatus[0] == 'Locked':
         cursor.execute(f"UPDATE LoginInformation SET AccountStatus = 'Unlocked' WHERE LoginID = ?", (AccountID,))
-        print(f'{AccountID} is now Unlocked')
-        addToLogs(f'{AccountID} has been Unlocked By Admin', 'AccountStatus')
+        print(f'Account is now Unlocked')
+        # addToLogs(f'{AccountID} has been Unlocked By Admin', 'AccountStatus')
         connection.commit()
 

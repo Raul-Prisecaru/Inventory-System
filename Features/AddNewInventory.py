@@ -66,24 +66,28 @@ def addToSystem(Table, values):
     connection.commit()
     connection.close()
 
-    addToLogs(f'Has added {values} to {Table}', 'Inventory')
+    # addToLogs(f'Has added {values} to {Table}', 'Inventory')
 
 
-def GenerateAlert(LowStockLevel=10):
+def GenerateAlert(LowStockLevel=150):
+    # Connect to Database
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
 
+    # Get ID, Name, and Stock Level From Inventory Where StockLevel is lower than 150 (Default Value)
     cursor.execute(f'SELECT InventoryID, InventoryName, StockLevel FROM Inventory WHERE StockLevel <= {LowStockLevel}')
     rows = cursor.fetchall()
 
+    # If nothing is found then display no items is on low stock
     if not rows:
         print('[✔️] No Items is Currently Running Low On Stock!')
+    # If something is found then display the ID, Name, and Stocks of those Low Stocks Inventory
     else:
         for row in rows:
             print(f'''[❌ ATTENTION NEEDED!] The Following Stocks are Running Low
-            ID | Name | Stock
-            ------------------------------------
-            {row[0]} | {row[1]} | {row[2]}''')
+            ID: {row[0]}
+            Name: {row[1]}
+            Stock: {row[2]}''')
 
 
 def displayInventory():

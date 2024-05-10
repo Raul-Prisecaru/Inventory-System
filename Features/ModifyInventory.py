@@ -1,6 +1,6 @@
 import sqlite3
 import os
-from Features.GenerateLogs import addToLogs
+# from Features.GenerateLogs import addToLogs
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
@@ -45,6 +45,7 @@ def getAllColumnsNoID(Table):
 
     # Remove the first column (ID column) with pop(0)
     columnList.pop(0)
+    print(columnList)
     return columnList
 
 
@@ -92,4 +93,4 @@ def modifyAllInventory(Table, values, ID):
     connection.commit()
     connection.close()
 
-    addToLogs(f'Has Modified {Table} and added {values}', 'ModifyInventory')
+    # addToLogs(f'Has Modified {Table} and added {values}', 'ModifyInventory')

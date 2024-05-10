@@ -24,8 +24,8 @@ with open(nameRecordPath, "r") as file:
     nameList = []
     try:
         for line in file:
-            nameList.append(line)
             line.strip()
+            nameList.append(line)
     except IOError:
         print("Error Caught: NameRecords.txt not found")
 
@@ -33,8 +33,8 @@ with open(InventoryPath, "r") as file:
     inventoryList = []
     try:
         for line in file:
-            inventoryList.append(line)
             line.strip()
+            inventoryList.append(line)
     except IOError:
         print("Error Caught: File not found")
 
@@ -42,8 +42,8 @@ with open(locationBuildingPath, "r") as file:
     locationList = []
     try:
         for line in file:
-            locationList.append(line)
             line.strip()
+            locationList.append(line)
     except IOError:
         print("Error Caught: LocationBuilding.txt not found")
 
@@ -51,8 +51,8 @@ with open(vehicleTypePath, "r") as file:
     VehicleTypeList = []
     try:
         for line in file:
-            VehicleTypeList.append(line)
             line.strip()
+            VehicleTypeList.append(line)
     except IOError:
         print("Error Caught: VehicleType.txt not found")
 
@@ -60,8 +60,8 @@ with open(vehicleBrandPath, "r") as file:
     VehicleBrandList = []
     try:
         for line in file:
-            VehicleBrandList.append(line)
             line.strip()
+            VehicleBrandList.append(line)
     except IOError:
         print("Error Caught: VehicleBrand.txt not found")
 
@@ -69,8 +69,8 @@ with open(externalCompaniesPath, "r") as file:
     ExternalCompaniesList = []
     try:
         for line in file:
-            ExternalCompaniesList.append(line)
             line.strip()
+            ExternalCompaniesList.append(line)
     except IOError:
         print("Error Caught: ExternalCompanies.txt not found")
 
@@ -83,48 +83,47 @@ def EmailGenerator():
     EmailProvidersRandom = random.choice(EmailProviders)
     EndEmailRandom = random.choice(EndEmail)
 
-    return f'{firstnameRandom}.{lastnameRandom}@{EmailProvidersRandom}{EndEmailRandom}'
+    return f'{firstnameRandom}.{lastnameRandom}@{EmailProvidersRandom}{EndEmailRandom}'.strip()
 
 
 def AddressGenerator():
     FirstPart = ['Caxton', 'Southlands', '.Carriers', 'Bootham', 'Grey']
-    LastPart = ['Place', 'Road', 'Crescent', 'Street', 'St']
+    # LastPart = ['Place', 'Road', 'Crescent', 'Street', 'St']
     FirstPartRandom = random.choice(nameList)
-    LastPartRandom = random.choice(nameList)
+    # LastPartRandom = random.choice(nameList)
     AddressNumber = "".join(str(random.randint(1, 9)) for _ in range(3))
-
-    return f'{AddressNumber} {FirstPartRandom} {LastPartRandom}'
+    return f'{AddressNumber} {FirstPartRandom}'.strip()
 
 
 def numberGenerator(maxDigits):
     phoneNumber = "".join(str(random.randint(1, 9)) for _ in range(maxDigits))
 
-    return "07" + phoneNumber
+    return "07" + phoneNumber.strip()
 
 
 def creditcardGenerator():
     creditcard = "".join(str(random.randint(1, 9)) for _ in range(16))
-    return creditcard
+    return creditcard.strip()
 
 
 def licenseGenerator(maxLimit):
     license = "".join(str(random.choice(numbersNcharacters)) for _ in range(maxLimit))
 
-    return license
+    return license.strip()
 
 
 def randomDate(startYear=2024, endYear=2025, startMonth=1, endMonth=12, startDay=1, endDate=30):
     Year = random.randint(startYear, endYear)
     Month = random.randint(startMonth, endMonth)
     Day = random.randint(startDay, endDate)
-    return f"{Year}-{Month}-{Day}"
+    return f"{Year}-{Month}-{Day}".strip()
 
 
 def randomTime(startHour=1, endHour=12, startMinute=1, endMinute=59):
     Hour = random.randint(startHour, endHour)
     Minute = random.randint(startMinute, endMinute)
 
-    return f"{Hour}:{Minute}"
+    return f"{Hour}:{Minute}".strip()
 
 
 def randomiseLoginAndCustomer():

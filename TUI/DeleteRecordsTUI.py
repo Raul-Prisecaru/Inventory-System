@@ -12,46 +12,97 @@ current_directory = os.path.dirname(__file__)
 database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
 
 def displayDelete():
-    connection = sqlite3.connect(database_path)
-    cursor = connection.cursor()
+        # Connect to Database
+        connection = sqlite3.connect(database_path)
+        cursor = connection.cursor()
+        InventoryList = []
 
-    # INSERT INTO {Table that user provides} ({All of the columns available in the table}) VALUES ({add placeholders per column})
-    cursor.execute("SELECT InventoryID, InventoryName, StockLevel FROM Inventory")
-    inventory = cursor.fetchall()
+        # Select all Records from Inventory and only display the ID, Name, Stock Level
+        cursor.execute("SELECT InventoryID FROM Inventory")
+        inventoryID = cursor.fetchall()
 
-    print(f'''\nDeleting Records Guide:
-        To Ensure that data is properly deleted from Database,
-        Ensure the following:
-        [1] - follow the following format
-        -----------------
-        [ID]
-        -----------------
-        [2] - Select the ID of the Inventory you wish to delete from the System
-        -----------------    
-        [3] - Select from the List Below
-        
-    ''')
+        for row in inventoryID:
+            print(row)
+            InventoryList.append(row[0])
 
-    for row in inventory:
-        print(f''' User Accounts
-        LoginID: {row[0]}
-        Username: {row[1]}
-        Permission: {row[2]}
-        ---------Next Item---------
-        ''')
-    InventoryID = int(input(f'''Enter the ID to DELETE
-        :: '''))
-    deleteRecords(InventoryID)
+        # Select all Records from Inventory and only display the ID, Name, Stock Level
+        cursor.execute("SELECT InventoryID, InventoryName, StockLevel FROM Inventory")
+        inventory = cursor.fetchall()
 
+        for row in inventory:
+            print(f''' Inventory Item
+            InventoryID: {row[0]}
+            Inventory Name: {row[1]}
+            Stock Level: {row[2]}
+            ---------Next Item---------
+            ''')
+        while True:
+            UserOption = int(input(f'''
+            \nDeleting Records Guide:
+                To Ensure that data is properly deleted from Database,
+                Ensure the following:
+                [1] - follow the following format
+                -----------------
+                [ID]
+                -----------------
+                [2] - Select the ID of the Inventory you wish to delete from the System
+                -----------------    
+                [3] - Select from the List Below
+            
+            Enter the ID to DELETE
+                :: '''))
 
+            if UserOption in InventoryList:
+                print('Record Successfully Deleted')
+                deleteRecords(UserOption)
+                break
+            elif UserOption not in InventoryList:
+                print('Inventory Unavailable')
+
+# Function Responsible for running the Main Logic
 def run():
-    while True:
-        displayDelete()
-        con = int(input('''Do you want to delete another record?
-        [1] - Yes
-        [2] - No'''))
+    # Counter for all the incorrect Authentication
+    retryCounter = 0
+    while retryCounter < 3:
+        print('Authentication Required: ')
+        password = str(input('Enter Your Password: '))
 
-        if con == 1:
-            print('')
+        # True if the user input correct password
+        if Login(Features.session.logUser, password):
+            # addToLogs('Has Successfully Validated for Modifying Inventory', 'AccountValidation')
+            while True:
+                displayDelete()
+                con = int(input('''Do you want to delete another record?
+                [1] - Yes
+                [2] - No'''))
+
+                if con == 1:
+                    print('')
+                else:
+                    quit()
+
+        # Add to Counter and display Incorrect Password if the user didn't out correct password
         else:
-            break
+            retryCounter += 1
+            # addToLogs('Has Failed to Validate', 'AccountValidation')
+            print('Incorrect Password')
+
+        # Lock the Account if the user fail the validate within 3 tries
+        if retryCounter == 3:
+            # Connect to Database
+            connection = sqlite3.connect(database_path)
+            cursor = connection.cursor()
+            # Store the session (Currently Logged on) to 'username'
+            username = Features.session.logUser
+
+            # Update the AccountStatus to be locked
+            sql_query = "UPDATE LoginInformation SET AccountStatus = 'Locked' WHERE Username = ?"
+            cursor.execute(sql_query, (username,))
+
+            connection.commit()
+            connection.close()
+
+            # Display the message that the Account is locked
+            print('''[❌ ATTENTION NEEDED!] Account Locked for Security Purposes
+                    Contact Admin to Unlock Account''')
+            # addToLogs('Has Locked Their Accounts by failing to validation Account Password', 'AccountLock')

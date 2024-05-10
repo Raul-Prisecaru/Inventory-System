@@ -7,43 +7,39 @@ current_directory = os.path.dirname(__file__)
 # Construct the path to the database file relative to the current directory
 database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
 
-
+# Function Responsible for Getting all Shipment Information
 def getAllShipments(number):
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
-    # cursor.execute(f'''SELECT IncomingTransportationSchedules.IncomingScheduleID,
-    #                     IncomingTransportationSchedules.ExpectedArrivalDate,
-    #                     IncomingTransportationSchedules.ExpectedArrivalTime,
-    #                     OutgoingTransportationSchedules.OutgoingScheduleID,
-    #                     OutgoingTransportationSchedules.ExpectedArrivalDate,
-    #                     OutgoingTransportationSchedules.ExpectedArrivalTime
-    #                     FROM IncomingTransportationSchedules
-    #                     CROSS JOIN OutgoingTransportationSchedules''')
+
+    # If user picked 1 as argument then display Incoming Transportation Information
     if number == 1:
+        # Get all Information from view
         cursor.execute('SELECT * FROM viewDisplayIncomingSchedules;')
         rows = cursor.fetchall()
 
+        # Display and format the information into user-readable
         for row in rows:
-            print(row)
             print(f''' INCOMING SCHEDULES:
                     Schedule ID: {row[0]}
                     Schedule Date: {row[1]}
-                    Is it on the way?: {'Yes' if row[2] == 1 else 'No'}
-                    InventoryID: {row[3]}
-                    ExternalCompanyID: {row[4]}
-                    External Company Name: {row[5]}
-                    Relationship Date: {row[6]}
+                    Is it on the way?: {'Yes' if row[3] == 1 else 'No'}
+                    InventoryID: {row[4]}
+                    ExternalCompanyID: {row[5]}
+                    External Company Name: {row[7]}
                     ---------Next Item----------''')
 
-        connection.commit()
         connection.close()
+
+    # If user picked 2 as argument then display Outgoing Transportation Information
     elif number == 2:
+        # Get all Information from view
         cursor.execute('SELECT * FROM viewDisplayOutgoingSchedules;')
         rows = cursor.fetchall()
 
+        # Display and format the information into user-readable
         for row in rows:
-            print(row)
-            print(f'''
+            print(f'''OUTGOING SCHEDULES:
             Schedule ID: {row[0]}
             Schedule Date: {row[1]}
             Is it on the way?: {'Yes' if row[2] == 1 else 'No'}
@@ -55,9 +51,6 @@ def getAllShipments(number):
             Delivery Address: {row[9]}
             Contact Number: {row[10]}
             ---------Next Item----------''')
-
-        connection.commit()
         connection.close()
 
 
-# getAllShipments(1)

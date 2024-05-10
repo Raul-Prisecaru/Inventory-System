@@ -1,7 +1,7 @@
 import sqlite3
 import os
 
-from Features.GenerateLogs import addToLogs
+# from Features.GenerateLogs import addToLogs
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
@@ -17,7 +17,7 @@ def deleleAccount(CustomerID, confirmation):
         cursor.execute(f"DELETE FROM LoginInformation WHERE CustomerID = ?", (CustomerID,))
         cursor.execute(f"DELETE FROM Customer WHERE CustomerID = ?", (CustomerID,))
         cursor.execute(f"DELETE FROM Purchase WHERE CustomerID = ?", (CustomerID,))
-        addToLogs(f'Has successfully deleted their Account', 'Deletion')
+        # addToLogs(f'Has successfully deleted their Account', 'Deletion')
 
         connection.commit()
 

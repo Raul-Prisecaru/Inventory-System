@@ -1,3 +1,5 @@
+PRAGMA cache_size = 5000;
+
 DROP TABLE IF EXISTS LoginInformation;
 DROP TABLE IF EXISTS Purchase;
 DROP TABLE IF EXISTS Customer;
@@ -9,7 +11,7 @@ DROP TABLE IF EXISTS OutgoingTransportationSchedules;
 DROP TABLE IF EXISTS IncomingTransportationSchedules;
 DROP TABLE IF EXISTS ExternalCompanies;
 DROP TABLE IF EXISTS logs;
-DROP TABLE IF EXISTS userConsent;
+
 
 -- Drop Views
 DROP VIEW IF EXISTS masked_login_information;
@@ -22,7 +24,17 @@ DROP VIEW IF EXISTS viewDisplayIncomingSchedules;
 DROP VIEW IF EXISTS viewDisplayOutgoingSchedules;
 DROP VIEW IF EXISTS viewDrivers;
 
-
+-- Drop Indexes if not created
+DROP INDEX IF EXISTS idxLoginInformation;
+DROP INDEX IF EXISTS idxCustomer;
+DROP INDEX IF EXISTS idxPurchase;
+DROP INDEX IF EXISTS idxInventory;
+DROP INDEX IF EXISTS idxDrivers;
+DROP INDEX IF EXISTS idxVehicle;
+DROP INDEX IF EXISTS idxOutgoingTransportationSchedules;
+DROP INDEX IF EXISTS idxIncomingTransportationSchedules;
+DROP INDEX IF EXISTS idxExternalCompanies;
+DROP INDEX IF EXISTS idxLogs;
 
 CREATE TABLE IF NOT EXISTS LoginInformation(
     LoginID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -33,8 +45,6 @@ CREATE TABLE IF NOT EXISTS LoginInformation(
     CustomerID INTEGER,
     FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID)
 );
--- CREATE INDEX idxLoginInformation
--- ON LoginInformation (LoginID, Username, Permission);
 
 CREATE TABLE IF NOT EXISTS Customer(
     CustomerID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -125,11 +135,6 @@ CREATE TABLE IF NOT EXISTS logs(
     FOREIGN KEY (LoginID) REFERENCES LoginInformation(LoginID)
 );
 
-INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('Administrator', 'Admin@stmarys.com', 123123, 1234123412341234);
-INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('Jake', 'Staff@stmarys.com', 123123, 1234123412341234);
-INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('Raul', 'Raul@Prisecaru.com', 123123, 1234123412341234);
-INSERT INTO Customer(CustomerName, CustomerEmail, CustomerPhoneNumber, CustomerCreditCard) VALUES ('user4', 'user4', 423243234, 243342324342);
-
 CREATE VIEW viewInventory AS
     SELECT InventoryID, InventoryName, StockLevel
     FROM Inventory;
@@ -188,7 +193,39 @@ CREATE VIEW viewCustomerProfile AS
 CREATE VIEW viewDrivers AS
     SELECT Drivers.*, Vehicles.VehicleType, Vehicles.VehicleBrand, Vehicles.VehicleLicensePlate
     FROM Drivers
-    INNER JOIN Vehicles on Drivers.DriverID = Vehicles.DriverID
+    INNER JOIN Vehicles on Drivers.DriverID = Vehicles.DriverID;
+
+CREATE INDEX IF NOT EXISTS idxLoginInformation
+ON LoginInformation (LoginID, Username, CustomerID);
+
+CREATE INDEX IF NOT EXISTS idxCustomer
+ON Customer (CustomerID);
+
+CREATE INDEX IF NOT EXISTS idxPurchase
+ON Purchase (PurchaseID, CustomerID);
+
+CREATE INDEX IF NOT EXISTS idxInventory
+ON Inventory (InventoryID, InventoryName, StockLevel);
+
+CREATE INDEX IF NOT EXISTS idxDrivers
+ON Drivers (DriverID);
+
+CREATE INDEX IF NOT EXISTS idxVehicle
+ON Vehicles (VehicleID, DriverID);
+
+CREATE INDEX IF NOT EXISTS idxOutgoingTransportationSchedules
+ON OutgoingTransportationSchedules (OutgoingScheduleID, CustomerID, PurchaseID, DriverID);
+
+CREATE INDEX IF NOT EXISTS idxIncomingTransportationSchedules
+ON IncomingTransportationSchedules (IncomingScheduleID, ExternalCompanyID);
+
+CREATE INDEX IF NOT EXISTS idxExternalCompanies
+ON ExternalCompanies (ExternalCompanyID);
+
+CREATE INDEX IF NOT EXISTS idxLogs
+ON logs (LogID, LoginID);
+
+
 
 
 

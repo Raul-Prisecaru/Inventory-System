@@ -5,6 +5,7 @@ import os
 import Features.session
 
 from Features.ModifyInventory import modifyAllInventory, getAllColumnsNoID
+from Features.displayProfile import displayTable
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
@@ -44,45 +45,63 @@ def run():
         print('Authentication Required: ')
         password = str(input('Enter Your Password: '))
         if Login(Features.session.logUser, password):
-            addToLogs('Has Successfully Validated to Modify Inventory', 'AccountValidation')
-            userTable = str(input(f'''What Table do you want to Modify to? 
-            All Tables Available
-            -------------------
-            {getAllTables()}
-            -------------------
-                :: '''))
+            connection = sqlite3.connect(database_path)
+            cursor = connection.cursor()
+            InventoryList = []
 
-            userAnswer = []
-            entryID = str(input(f'''Enter ID to the entry you want to modify?
-                :: '''))
+            # addToLogs('Has Successfully Validated to Modify Inventory', 'AccountValidation')
+            while True:
+                userTable = str(input(f'''What Table do you want to Modify to? 
+                All Tables Available
+                -------------------
+                {getAllTables()}
+                -------------------
+                    :: '''))
 
-            userInput = str(input(f"""\nModifying Inventory Guide:
-            To Ensure that data is properly Modified,
-            Ensure the following:
-            [1] - follow the following format
-            -----------------
-            {getAllColumnsNoID(userTable)}
-            -----------------
-            [2] - After each column, ensure you have a space between the comma such as:
-            123, Name1, Name2, 123
-        
-            [3] - Do not enter quotations marks when entering string
-            -----You May Enter-----------
-            """))
+                if userTable in getAllTables():
+                    displayTable(userTable)
 
-            inputSplit = userInput.split(',')
-            for answers in inputSplit:
-                userAnswer.append(answers)
-            print(f'userAnswer: {userAnswer}')
-            modifyAllInventory(userTable, userAnswer, entryID)
+                    entryID = int(input(f'''Enter ID to the entry you want to modify?
+                        :: '''))
 
+                    userInput = str(input(f"""\nModifying Inventory Guide:
+                    To Ensure that data is properly Modified,
+                    Ensure the following:
+                    [1] - follow the following format
+                    -----------------
+                    {getAllColumnsNoID(userTable)}
+                    -----------------
+                    [2] - After each column, ensure you have a space between the comma such as:
+                    123, Name1, Name2, 123
+                
+                    [3] - Do not enter quotations marks when entering string
+                    -----You May Enter-----------
+                    """))
+                    userAnswer = []
+
+                    inputSplit = userInput.split(',')
+                    for answers in inputSplit:
+                        userAnswer.append(answers)
+                    modifyAllInventory(userTable, userAnswer, entryID)
+                    print('Item has been Modified')
+                    con = int(input('''Do you want to place another order?
+                            [1] - Yes
+                            [2] - No'''))
+
+                    if con == 1:
+                        print('')
+                    else:
+                        quit()
+
+                else:
+                    print('Invalid Table')
 
         else:
             retryCounter += 1
-            addToLogs('Has Failed to Validated', 'Account')
+            # addToLogs('Has Failed to Validated', 'Account')
             print('Incorrect Password')
 
         if retryCounter == 3:
             print('''[❌ ATTENTION NEEDED!] Account Locked for Security Purposes
                 Contact Admin to Unlock Account''')
-            addToLogs('Has Locked Their Accounts by Validation Account Password', 'AccountLock')
+            # addToLogs('Has Locked Their Accounts by Validation Account Password', 'AccountLock')

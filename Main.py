@@ -2,7 +2,7 @@ from Features.AccountStatus import AccountStatus
 from Features.AddNewInventory import GenerateAlert, getAllColumns
 from Features.UpdateAccount import updateAccount
 from TUI.AddInventoryTUI import run as AddInventoryRun
-from TUI.AccountStatusTUI import run as AdminTUIRun
+from TUI.AccountStatusTUI import run as AccountStatusRun
 from TUI.DeleteAccountAdminTUI import displayDeleteAdmin
 from TUI.DeleteAccountCustomerTUI import displayDeleteCustomer
 from TUI.DeleteRecordsTUI import run as deleteRecordsRun
@@ -30,7 +30,7 @@ sql_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabas
 
 def setup_database():
     try:
-        connection = sqlite3.connect('Database/CentralisedDatabase.db')
+        connection = sqlite3.connect('Database/CentralisedDatabase.db', cached_statements=70)
         cursor = connection.cursor()
 
         with open('Database/CentralisedDatabase.sql', "r") as sql_file:
@@ -49,27 +49,30 @@ def setup_database():
     except Exception as e:
         print("Error Caught: " + str(e))
 
+
 def displayOptions():
     if PermissionCheck(session.logUser) == 'Admin':
-        userInput = int(input("""Welcome to St Mary's Inventory System
+        userInput = int(input("""Welcome to St Mary's Inventory Table
             What would you like to do?
-                [1] - Add/Check System
-                [2] - Modify System
+                [1] - Add/Check Table
+                [2] - Modify Table
                 [3] - Track All Shipments
-                [4] - View System
+                [4] - View Table
                 [5] - View Logs
                 [6] - Admin
+                [7] - View Account Information
                     :: """))
     elif PermissionCheck(session.logUser) == 'Staff':
-        userInput = int(input("""Welcome to St Mary's Inventory System
+        userInput = int(input("""Welcome to St Mary's Inventory Table
             What would you like to do?
-                [1] - Add/Check System
+                [1] - Add/Check Table
                 [2] - Modify Inventory
                 [3] - Track All Shipments
                 [4] - View Inventory
+                [5] - View Account Information
                     :: """))
     elif PermissionCheck(session.logUser) == 'Customer':
-        userInput = int(input("""Welcome to St Mary's Inventory System
+        userInput = int(input("""Welcome to St Mary's Inventory Table
             What would you like to do?
                 [1] - Purchase Items
                 [2] - View Your information
@@ -88,191 +91,202 @@ if __name__ == '__main__':
     [2] - Signup
     [3] - Exit
         :: '''))
-    username = str(input('Enter Your Username: '))
-    password = str(input('Enter Your Password: '))
-    if userLoginSignup == 1:
-        if Login(username, password):
-            session.logUser = username
-            print('Login Successful')
+    while True:
+        username = str(input('Enter Your Username: '))
+        password = str(input('Enter Your Password: '))
+        if userLoginSignup == 1:
+            if Login(username, password):
+                session.logUser = username
+                while True:
+                    if PermissionCheck(session.logUser) == 'Admin':
+                        match displayOptions():
+                            case 1:
+                                print('You have selected: Add/Check Table')
+                                InventoryOption = int(input('''What would you like to do?
+                                [1] - Add to Database
+                                [2] - Check for Low Stocks
+                                [3] - Delete record of Database
+                                [4] - Order New Inventory
+                                
+                                 
+                                 :: '''))
+
+                                match InventoryOption:
+                                    case 1:
+                                        print('You have selected: Add to Database')
+                                        AddInventoryRun()
+
+                                    case 2:
+                                        print('You have selected: Check for Low Stocks')
+                                        GenerateAlert()
+
+                                    case 3:
+                                        print('You have selected: Delete Record of Database')
+                                        deleteRecordsRun()
+
+                                    case 4:
+                                        OrderRun()
+
+                                    case _:
+                                        print('Invalid Option')
+
+                            case 2:
+                                print('You have selected: Modify Tables')
+                                ModifyInventoryRun()
+
+                            case 3:
+                                print('You have selected: Track Shipment')
+                                Inout = int(input('''Do you want to see Incoming or Outgoing Schedules?
+                                                        [1] - Incoming
+                                                        [2] - Outgoing'''))
+                                getAllShipments(Inout)
+
+                            case 4:
+                                AdminTable = str(input(f'''
+                                Select Which Table To Display:
+                                {getAllTables()}
+                                 :: '''))
+                                if AdminTable in getAllTables():
+                                    displayTable(AdminTable)
+
+                                else:
+                                    print('Invalid Option, Check your Captials, Its Case-Sensitive')
+
+                            case 5:
+                                print('You have selected: View Logs')
+                                displayLogs()
+
+                            case 6:
+                                AdminOption = int(input('''What would you like to do?
+                                [1] - Delete Database*
+                                [2] - Generate Database**
+                                [3] - Lock/Unlock Account
+                                [4] - Sign Up Staff
+                                [5] - Delete Accounts
+                                
+                                * Please Note that this will delete EVERYTHING. Proceed with caution
+                                ** Please Note that this will ADD ON TOP of already EXISTING RECORDS. Proceed with caution.
+                                        :: '''))
+
+                                match AdminOption:
+                                    case 1:
+                                        print('Resetting Database in progress...')
+                                        setup_database()
+                                        print('Database successfully reset...')
+                                        # addToLogs('Purged The Database', 'Database')
+                                    case 2:
+                                        quantity = int(input('''How many records to generate?
+                                         :: '''))
+                                        GenerateDatabase(quantity)
+                                    case 3:
+                                        print('You have selected: Lock or Unlock Account')
+                                        AccountStatusRun()
+
+                                    case 4:
+                                        print('You have selected: Staff Sign Up')
+                                        StaffSignUpRun()
+
+                                    case 5:
+                                        print('You have selected: Delete Accounts')
+                                        displayDeleteAdmin()
+
+                            case 7:
+                                print('You have selected: Display Account')
+                                displayProfile(session.logUser)
+
+                            case _:
+                                print('Invalid Option')
+                    if PermissionCheck(session.logUser) == 'Staff':
+                        match displayOptions():
+                            case 1:
+                                print('You have selected: Add/Check Table')
+                                InventoryOption = int(input('''What would you like to do?
+                                [1] - Add to Inventory
+                                [2] - Check for Low Stocks
+                                [3] - Delete Item off Table
+                                [4] - Order New Inventory
+    
+                                 :: '''))
+
+                                match InventoryOption:
+                                    case 1:
+                                        AddInventoryRun()
+
+                                    case 2:
+                                        GenerateAlert()
+
+                                    case 3:
+                                        deleteRecordsRun()
+
+                                    case 4:
+                                        OrderRun()
+
+                                    case _:
+                                        print('Invalid Option')
+
+                            case 2:
+                                print('You have selected: Modify table')
+                                ModifyInventoryRun()
+
+                            case 3:
+                                print('You have selected: Track Shipment')
+                                Inout = int(input('''Do you want to see Incoming or Outgoing Schedules?
+                                [1] - Incoming
+                                [2] - Outgoing'''))
+                                getAllShipments(Inout)
+
+                            case 4:
+                                print('You have selected: View Inventory')
+                                displayTable('viewInventory')
+
+                            case 5:
+                                print('You have selected: Display Account')
+                                displayProfile(session.logUser)
+
+                            case _:
+                                print('Invalid Option')
+
+                    if PermissionCheck(session.logUser) == 'Customer':
+                        match displayOptions():
+                            case 1:
+                                print('You have selected: Purchase Inventory')
+                                PurchaseInventoryRun()
+
+                            case 2:
+                                print('You have selected: Display Account')
+                                displayProfile(session.logUser)
+
+                            case 3:
+                                print('You have selected: Delete your account')
+                                displayDeleteCustomer()
+
+                            case _:
+                                print('Invalid Option')
+
+        elif userLoginSignup == 2:
+            CustomerName = str(input('Enter Your Name: '))
             while True:
-                if PermissionCheck(session.logUser) == 'Admin':
-                    match displayOptions():
-                        case 1:
-                            print('You have selected: Add/Check System')
-                            InventoryOption = int(input('''What would you like to do?
-                            [1] - Add to Database
-                            [2] - Check for Low Stocks
-                            [3] - Delete record off Database
-                            [4] - Order New Inventory
-                            
-                             
-                             :: '''))
+                CustomerEmail = str(input('Enter Your Email: '))
+                if '@' in CustomerEmail:
+                    break
+                else:
+                    print('Invalid Email, cannot find @')
 
-                            match InventoryOption:
-                                case 1:
-                                    AddInventoryRun()
+            CustomerAddress = str(input('Enter Your Address: '))
+            while True:
+                CustomerPhoneNumber = input('Enter Your Phone Number: ')
+                if len(CustomerPhoneNumber) == 11:
+                    break
+                else:
+                    print('Phone Number must be 11 digits')
 
-                                case 2:
-                                    GenerateAlert()
-
-                                case 3:
-                                    deleteRecordsRun()
-
-                                case 4:
-                                    OrderRun()
-
-                                case _:
-                                    print('Invalid Option')
-
-                        case 2:
-                            print('You have selected: Modify System')
-                            ModifyInventoryRun()
-
-                        case 3:
-                            print('You have selected: Track Shipment')
-                            Inout = int(input('''Do you want to see Incoming or Outgoing Schedules?
-                                                    [1] - Incoming
-                                                    [2] - Outgoing'''))
-                            getAllShipments(Inout)
-
-                        case 4:
-                            AdminTable = str(input(f'''
-                            Select Which Table To Display:
-                            {getAllTables()}
-                             :: '''))
-                            if AdminTable in getAllTables():
-                                displayTable(AdminTable)
-
-                            else:
-                                print('Invalid Option, Check your captials, Its Case-Sensitive')
-
-
-                        case 5:
-                            print('You have selected: View Logs')
-                            displayLogs()
-
-                        case 6:
-                            AdminOption = int(input('''What would you like to do?
-                            [1] - Delete Database*
-                            [2] - Generate Database**
-                            [3] - Lock/Unlock Account
-                            [4] - Sign Up Staff
-                            [5] - Delete Accounts
-                            
-                            * Please Note that this will delete EVERYTHING. Proceed with caution
-                            ** Please Note that this will ADD ON TOP of already EXISTING RECORDS. Proceed with caution.
-                                    :: '''))
-
-                            match AdminOption:
-                                case 1:
-                                    print('Resetting Database in progress...')
-                                    setup_database()
-                                    print('Database successfully reset...')
-                                    addToLogs('Purged The Database', 'Database')
-                                case 2:
-                                    quantity = int(input('''How many records to generate?
-                                     :: '''))
-                                    GenerateDatabase(quantity)
-                                case 3:
-                                    print('You have selected: Lock or Unlock Account')
-                                    AdminTUIRun()
-                                #
-                                case 4:
-                                    print('You have selected: Staff Sign Up')
-                                    StaffSignUpRun()
-
-                                case 5:
-                                    print('You have selected: Delete Accounts')
-                                    displayDeleteAdmin()
-
-                        case _:
-                            print('Invalid Option')
-                if PermissionCheck(session.logUser) == 'Staff':
-                    match displayOptions():
-                        case 1:
-                            print('You have selected: Add/Check System')
-                            InventoryOption = int(input('''What would you like to do?
-                            [1] - Add to Inventory
-                            [2] - Check for Low Stocks
-                            [3] - Delete Item off system
-                            [4] - Order New Inventory
-
-                             :: '''))
-
-                            match InventoryOption:
-                                case 1:
-                                    AddInventoryRun()
-
-                                case 2:
-                                    GenerateAlert()
-
-                                case 3:
-                                    deleteRecordsRun()
-
-                                case 4:
-                                    OrderRun()
-
-                                case _:
-                                    print('Invalid Option')
-
-                        case 2:
-                            print('You have selected: Modify System')
-                            ModifyInventoryRun()
-
-                        case 3:
-                            print('You have selected: Track Shipment')
-                            Inout = int(input('''Do you want to see Incoming or Outgoing Schedules?
-                            [1] - Incoming
-                            [2] - Outgoing'''))
-                            getAllShipments(Inout)
-
-                        case 4:
-                            print('You have selected: View Inventory')
-                            displayTable('Inventory')
-                        case _:
-                            print('Invalid Option')
-
-                if PermissionCheck(session.logUser) == 'Customer':
-                    match displayOptions():
-                        case 1:
-                            print('You have selected: Purchase Inventory')
-                            PurchaseInventoryRun()
-
-                        case 2:
-                            print('Option 2')
-                            displayProfile(session.logUser)
-
-                        case 3:
-                            print('You have selected: Delete your account')
-                            displayDeleteCustomer()
-
-                        case _:
-                            print('Invalid Option')
-
-    elif userLoginSignup == 2:
-        CustomerName = str(input('Enter Your Name: '))
-        while True:
-            CustomerEmail = str(input('Enter Your Email: '))
-            if '@' in CustomerEmail:
-                break
-            else:
-                print('Invalid Email, cannot find @')
-
-        CustomerAddress = str(input('Enter Your Address: '))
-        while True:
-            CustomerPhoneNumber = input('Enter Your Phone Number: ')
-            if len(CustomerPhoneNumber) == 11:
-                break
-            else:
-                print('Phone Number must be 11 digits')
-
-        while True:
-            CustomerCreditCard = input('Enter Your Long Credit Card: ')
-            if len(CustomerCreditCard) == 16:
-                break
-            else:
-                print('Credit Card Number must be 16 digits')
-        SignUp(username, password, CustomerName, CustomerEmail, CustomerAddress, CustomerPhoneNumber,
-               CustomerCreditCard)
-    elif userLoginSignup == 3:
-        print('Exiting...')
+            while True:
+                CustomerCreditCard = input('Enter Your Long Credit Card: ')
+                if len(CustomerCreditCard) == 16:
+                    break
+                else:
+                    print('Credit Card Number must be 16 digits')
+            SignUp(username, password, CustomerName, CustomerEmail, CustomerAddress, CustomerPhoneNumber,
+                   CustomerCreditCard)
+        elif userLoginSignup == 3:
+            print('Exiting...')

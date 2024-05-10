@@ -50,7 +50,7 @@ def displayDeleteCustomer():
 
         else:
             retryCounter += 1
-            addToLogs('Has Failed to Validate', 'AccountValidation')
+            # addToLogs('Has Failed to Validate', 'AccountValidation')
             print('Incorrect Password')
 
     connection = sqlite3.connect(database_path)
@@ -64,5 +64,5 @@ def displayDeleteCustomer():
     connection.close()
     print('''[❌ ATTENTION NEEDED!] Account Locked for Security Purposes
         Contact Admin to Unlock Account''')
-    addToLogs('Has Locked Their Accounts by failing to validation Account Password', 'AccountLock')
+    # addToLogs('Has Locked Their Accounts by failing to validation Account Password', 'AccountLock')
     return False

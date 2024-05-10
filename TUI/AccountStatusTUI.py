@@ -22,25 +22,42 @@ def display():
     cursor.execute(f'SELECT LoginID, Username, AccountStatus FROM LoginInformation;')
     CustomerUsername = cursor.fetchall()
 
-    return CustomerUsername
+    CustomerList = []
+
+    for row in CustomerUsername:
+        CustomerList.append(row[0])
+        print(f'''
+            LoginID: {row[0]}
+            Username: {row[1]}
+            AccountStatus: {row[2]}
+            ---Next Account----''')
+    while True:
+        AccStatus = int(input(f'''
+        Locking/Unlocking Accounts
+        When needing to Lock or Unlock accounts, you can use this system to do so
+        This will swap the Account Status so:
+        Lock Account --> Unlocked Account
+        Unlocked Account --> Lock Account
+    
+        Select the Account ID you want to deal with
+    
+         :: '''))
+
+        if AccStatus in CustomerList:
+            AccountStatus(AccStatus)
+            break
+        else:
+            print('Invalid ID')
 
 
 def run():
-    displayUser = display()
+    while True:
+        display()
+        con = int(input('''Do you want to do Lock/Unlock another account?
+        [1] - Yes
+        [2] - No'''))
 
-    AccStatus = int(input(f'''
-    Locking/Unlocking Accounts
-    When needing to Lock or Unlock accounts, you can use this system to do so
-    This will swap the Account Status so:
-    Lock Account --> Unlocked Account
-    Unlocked Account --> Lock Account
-    
-    Select the Account ID you want to deal with
-    
-    LoginID: {displayUser[0]}
-    Username: {displayUser[1]}
-    AccountStatus: {displayUser[2]}
-     :: '''))
-
-    AccountStatus(AccStatus)
-
+        if con == 1:
+            print('')
+        else:
+            quit()
