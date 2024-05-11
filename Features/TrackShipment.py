@@ -1,6 +1,9 @@
 import sqlite3
 import os
 
+from Features import session
+from Features.DisplayLogs import addToLogs
+
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
 
@@ -17,7 +20,7 @@ def getAllShipments(number):
         # Get all Information from view
         cursor.execute('SELECT * FROM viewDisplayIncomingSchedules;')
         rows = cursor.fetchall()
-
+        addToLogs(f'{session.logUser} has checked for incoming Shipment')
         # Display and format the information into user-readable
         for row in rows:
             print(f''' INCOMING SCHEDULES:
@@ -36,7 +39,7 @@ def getAllShipments(number):
         # Get all Information from view
         cursor.execute('SELECT * FROM viewDisplayOutgoingSchedules;')
         rows = cursor.fetchall()
-
+        addToLogs(f'{session.logUser} has checked for outgoing shipment')
         # Display and format the information into user-readable
         for row in rows:
             print(f'''OUTGOING SCHEDULES:

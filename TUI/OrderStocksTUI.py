@@ -117,6 +117,6 @@ def run():
         [2] - No'''))
 
         if con == 1:
-            print('')
+            continue
         else:
             quit()

@@ -5,7 +5,8 @@ import os
 current_directory = os.path.dirname(__file__)
 # Construct the path to the database file relative to the current directory
 log_path = os.path.join(current_directory, '..', 'logs', 'app.log')
-logging.basicConfig(filename=log_path, format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
+logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S', filename=log_path, level=logging.INFO)
+# logging.basicConfig(filename=log_path, level=logging.INFO)
 
 
 def addToLogs(message):

@@ -1,5 +1,6 @@
 import sqlite3
 from Features.AddNewInventory import *
+from Features.DisplayLogs import addToLogs
 from Features.purchaseInventory import CustomerPurchase, confirmationPurchase
 from Features.Login import *
 import os
@@ -38,6 +39,7 @@ def run():
 
         if confirmationPurchase(userAnswer[0], userAnswer[1]):
             print('Purchase Successful')
+            addToLogs(f'{session.logUser} has successfully made a purchase. InventoryID:{userAnswer[0]}, Stock:{userAnswer[1]} ')
             CustomerPurchase(userAnswer[0], userAnswer[1])
             break
         else:

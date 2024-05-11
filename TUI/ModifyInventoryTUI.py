@@ -1,5 +1,6 @@
 import sqlite3
 from Features.AddNewInventory import *
+from Features.DisplayLogs import addToLogs
 from Features.Login import *
 import os
 import Features.session
@@ -44,6 +45,7 @@ def run():
         print('Authentication Required: ')
         password = str(input('Enter Your Password: '))
         if Login(Features.session.logUser, password):
+            addToLogs(f'{session.logUser} has successfully authenticated')
             InventoryList = []
 
             while True:
@@ -94,9 +96,10 @@ def run():
 
         else:
             retryCounter += 1
-
+            addToLogs(f'{session.logUser} has failed to authenticate: {retryCounter}')
             print('Incorrect Password')
 
         if retryCounter == 3:
+            addToLogs(f'{session.logUser} has been locked out of their account due to failure to authenticate')
             print('''[❌ ATTENTION NEEDED!] Account Locked for Security Purposes
                 Contact Admin to Unlock Account''')

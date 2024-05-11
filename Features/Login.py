@@ -2,6 +2,7 @@ import sqlite3
 import os
 
 import Features.session as session
+from Features.DisplayLogs import addToLogs
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
@@ -23,6 +24,7 @@ def Login(username, password):
 
         if LockedAccounts:
             print(f'{username} is Locked')
+            addToLogs(f'f{username} has attempted to login while being locked')
             return False
 
         if loginInfo and loginInfo[0] == password:

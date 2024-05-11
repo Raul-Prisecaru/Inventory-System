@@ -1,6 +1,9 @@
 import sqlite3
 import os
 
+from Features import session
+from Features.DisplayLogs import addToLogs
+
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
 
@@ -38,7 +41,7 @@ def orderStocks(ID, Stock):
             print(IncomingID)
             cursor.execute('SELECT * FROM viewDisplayIncomingSchedules WHERE IncomingScheduleID = ?', (IncomingID, ))
             order = cursor.fetchall()
-
+            addToLogs(f'{session.logUser} has ordered more stocks: {order} ')
             for row in order:
                 print(f'''Your order has been successful:
                 Incoming Schedule ID: {row[0]}

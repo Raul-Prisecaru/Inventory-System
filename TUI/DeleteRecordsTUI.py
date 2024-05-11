@@ -1,5 +1,6 @@
 import sqlite3
 from Features.AddNewInventory import *
+from Features.DisplayLogs import addToLogs
 from Features.Login import *
 import os
 import Features.session
@@ -11,33 +12,34 @@ current_directory = os.path.dirname(__file__)
 # Construct the path to the database file relative to the current directory
 database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
 
+
 def displayDelete():
-        # Connect to Database
-        connection = sqlite3.connect(database_path)
-        cursor = connection.cursor()
-        InventoryList = []
+    # Connect to Database
+    connection = sqlite3.connect(database_path)
+    cursor = connection.cursor()
+    InventoryList = []
 
-        # Select all Records from Inventory and only display the ID, Name, Stock Level
-        cursor.execute("SELECT InventoryID FROM Inventory")
-        inventoryID = cursor.fetchall()
+    # Select all Records from Inventory and only display the ID, Name, Stock Level
+    cursor.execute("SELECT InventoryID FROM Inventory")
+    inventoryID = cursor.fetchall()
 
-        for row in inventoryID:
-            print(row)
-            InventoryList.append(row[0])
+    for row in inventoryID:
+        print(row)
+        InventoryList.append(row[0])
 
-        # Select all Records from Inventory and only display the ID, Name, Stock Level
-        cursor.execute("SELECT InventoryID, InventoryName, StockLevel FROM Inventory")
-        inventory = cursor.fetchall()
+    # Select all Records from Inventory and only display the ID, Name, Stock Level
+    cursor.execute("SELECT InventoryID, InventoryName, StockLevel FROM Inventory")
+    inventory = cursor.fetchall()
 
-        for row in inventory:
-            print(f''' Inventory Item
+    for row in inventory:
+        print(f''' Inventory Item
             InventoryID: {row[0]}
             Inventory Name: {row[1]}
             Stock Level: {row[2]}
             ---------Next Item---------
             ''')
-        while True:
-            UserOption = int(input(f'''
+    while True:
+        UserOption = int(input(f'''
             \nDeleting Records Guide:
                 To Ensure that data is properly deleted from Database,
                 Ensure the following:
@@ -52,12 +54,14 @@ def displayDelete():
             Enter the ID to DELETE
                 :: '''))
 
-            if UserOption in InventoryList:
-                print('Record Successfully Deleted')
-                deleteRecords(UserOption)
-                break
-            elif UserOption not in InventoryList:
-                print('Inventory Unavailable')
+        if UserOption in InventoryList:
+            print('Record Successfully Deleted')
+            addToLogs(f'{Features.session.logUser} has added has deleted InventoryID: {UserOption}')
+            deleteRecords(UserOption)
+            break
+        elif UserOption not in InventoryList:
+            print('Inventory Unavailable')
+
 
 # Function Responsible for running the Main Logic
 def run():
@@ -69,6 +73,7 @@ def run():
 
         # True if the user input correct password
         if Login(Features.session.logUser, password):
+            addToLogs(f'{Features.session.logUser} has successfully authenticated')
 
             while True:
                 displayDelete()
@@ -77,14 +82,14 @@ def run():
                 [2] - No'''))
 
                 if con == 1:
-                    print('')
+                    continue
                 else:
                     quit()
 
         # Add to Counter and display Incorrect Password if the user didn't out correct password
         else:
             retryCounter += 1
-
+            addToLogs(f'{Features.session.logUser} has failed to authenticate: {retryCounter}')
             print('Incorrect Password')
 
         # Lock the Account if the user fail the validate within 3 tries
@@ -94,7 +99,7 @@ def run():
             cursor = connection.cursor()
             # Store the session (Currently Logged on) to 'username'
             username = Features.session.logUser
-
+            addToLogs(f'{Features.session.logUser} has been locked out of the account due to failure to authenticate')
             # Update the AccountStatus to be locked
             sql_query = "UPDATE LoginInformation SET AccountStatus = 'Locked' WHERE Username = ? AND Username NOT LIKE 'Admin' "
             cursor.execute(sql_query, (username,))

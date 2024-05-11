@@ -2,6 +2,7 @@ import sqlite3
 
 from Features.AccountStatus import AccountStatus
 from Features.AddNewInventory import *
+from Features.DisplayLogs import addToLogs
 from Features.Login import *
 import os
 import Features.session
@@ -36,6 +37,7 @@ def displayUpgrade():
         ''')
     AccountID = int(input(f''' :: '''))
     updateAccount('Permission', 'Staff', AccountID)
+    addToLogs(f'{session.logUser} has upgraded {AccountID} from Customer to Staff')
     print(f'{AccountID} has been Upgraded to Staff')
     connection.close()
 
@@ -60,6 +62,7 @@ def displayDowngrade():
         ''')
     AccountID = int(input(f''' :: '''))
     updateAccount('Permission', 'Customer', AccountID)
+    addToLogs(f'{session.logUser} has downgraded {AccountID} from Staff to Customer')
     print(f'{AccountID} has been Downgraded to Customer')
 
     connection.close()

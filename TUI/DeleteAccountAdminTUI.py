@@ -4,6 +4,7 @@ import sqlite3
 from Features.AccountStatus import AccountStatus
 from Features.AddNewInventory import *
 from Features.DeleteAccount import deleleAccount
+from Features.DisplayLogs import addToLogs
 from Features.Login import *
 import os
 import Features.session
@@ -24,6 +25,7 @@ def displayDeleteAdmin():
         print('Authentication Required: ')
         password = input('Enter Your Password: ')
         if Login(session.logUser, password):
+            addToLogs(f'{session.logUser} has successfully authenticated')
             confirmRandom = random.randint(1000, 9999)
             connection = sqlite3.connect(database_path)
             cursor = connection.cursor()
@@ -57,22 +59,25 @@ def displayDeleteAdmin():
                     if confirmDelete == confirmRandom:
                         deleleAccount(AccountID, True)
                         print(f'{AccountID} has been deleted from the system')
+                        addToLogs(f'{session.logUser} has successfully deleted CustomerID: {AccountID} from System')
                         break
                     else:
                         print('Invalid Code')
+                        addToLogs(f'{session.logUser} has failed to enter correct code to delete account')
                 break
             break
 
         else:
             retryCounter += 1
             print('Incorrect Password')
+            addToLogs(f'{session.logUser} has failed to authenticate: {retryCounter}')
         if retryCounter == 3:
             connection = sqlite3.connect(database_path)
             cursor = connection.cursor()
             username = session.logUser
             sql_query = "UPDATE LoginInformation SET AccountStatus = 'Locked' WHERE Username = ? AND Username NOT LIKE 'Admin' "
             cursor.execute(sql_query, (username,))
-
+            addToLogs(f'{session.logUser} has been locked due to failure to authenticate')
             connection.commit()
             connection.close()
 

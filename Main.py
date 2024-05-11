@@ -122,6 +122,7 @@ if __name__ == '__main__':
                                     case 2:
                                         print('You have selected: Check for Low Stocks')
                                         GenerateAlert()
+                                        addToLogs(f'{username} has checked for low Stock ')
 
                                     case 3:
                                         print('You have selected: Delete Record of Database')
@@ -162,6 +163,7 @@ if __name__ == '__main__':
                                  :: '''))
                                 if AdminTable in getAllTables():
                                     displayTable(AdminTable)
+                                    addToLogs(f'{session.logUser} has viewed all records from {AdminTable}')
 
                                 else:
                                     print('Invalid Option, Check your Captials, Its Case-Sensitive')
@@ -216,6 +218,7 @@ if __name__ == '__main__':
                             case 7:
                                 print('You have selected: Display Account')
                                 displayProfile(session.logUser)
+                                addToLogs(f'{session.logUser} has viewed their profile')
 
                             case _:
                                 print('Invalid Option')
@@ -276,10 +279,12 @@ if __name__ == '__main__':
                             case 4:
                                 print('You have selected: View Inventory')
                                 displayTable('viewInventory')
+                                addToLogs(f'{session.logUser} has viewed Inventory')
 
                             case 5:
                                 print('You have selected: Display Account')
                                 displayProfile(session.logUser)
+                                addToLogs(f'{session.logUser} has viewed their profile')
 
                             case _:
                                 print('Invalid Option')
@@ -328,6 +333,7 @@ if __name__ == '__main__':
                     print('Credit Card Number must be 16 digits')
             SignUp(username, password, CustomerName, CustomerEmail, CustomerAddress, CustomerPhoneNumber,
                    CustomerCreditCard)
+            addToLogs(f'{username} has successfully signed up ')
             print('Signed Up Successfully')
             break
         elif userLoginSignup == 3:

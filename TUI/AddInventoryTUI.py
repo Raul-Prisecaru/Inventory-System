@@ -1,5 +1,6 @@
 import sqlite3
 from Features.AddNewInventory import *
+from Features.DisplayLogs import addToLogs
 from Features.Login import *
 import os
 import Features.session
@@ -48,7 +49,7 @@ def run():
         password = str(input('Enter Your Password: '))
         # True if the user input correct password
         if Login(Features.session.logUser, password):
-
+            addToLogs(f'{Features.session.logUser} has successfully authenticated')
             while True:
                 userTable = str(input(f'''What Table do you want to add to?
                         All Tables Available
@@ -78,6 +79,7 @@ def run():
                     for answers in inputSplit:
                         userAnswer.append(answers)
                     print('Successfully Added to the System')
+                    addToLogs(f'{Features.session.logUser} has added {userAnswer} to {userTable} ')
                     addToSystem(userTable, userAnswer)
 
                     con = int(input('''Do you want to add another record?
@@ -94,7 +96,7 @@ def run():
         # Add to Counter and display Incorrect Password if the user didn't out correct password
         else:
             retryCounter += 1
-
+            addToLogs(f'{Features.session.logUser} has failed to authenticate: {retryCounter} ')
             print('Incorrect Password')
 
         # Lock the Account if the user fail the validate within 3 tries
@@ -111,6 +113,7 @@ def run():
 
             connection.commit()
             connection.close()
+            addToLogs(f'{Features.session.logUser} has been locked out of the account due to failure to authenticate')
 
             # Display the message that the Account is locked
             print('''[❌ ATTENTION NEEDED!] Account Locked for Security Purposes
