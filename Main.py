@@ -92,6 +92,7 @@ if __name__ == '__main__':
         [1] - Login
         [2] - Signup
         [3] - Exit
+        [1234] - Emergency Database Reset
             :: '''))
         if userLoginSignup == 1:
             username = str(input('Enter Your Username: '))
@@ -298,6 +299,7 @@ if __name__ == '__main__':
                             case 2:
                                 print('You have selected: Display Account')
                                 displayProfile(session.logUser)
+                                addToLogs(f'{session.logUser} has viewed their profile')
 
                             case 3:
                                 print('You have selected: Delete your account')
@@ -339,5 +341,10 @@ if __name__ == '__main__':
         elif userLoginSignup == 3:
             print('Exiting...')
             quit()
+
+        elif userLoginSignup == 1234:
+            setup_database()
+            GenerateDatabase(100)
+            print('Emergency Reset Database completed')
         else:
             print('Invalid Option')
