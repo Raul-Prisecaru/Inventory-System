@@ -1,15 +1,16 @@
 from Features.AccountStatus import AccountStatus
-from Features.AddNewInventory import GenerateAlert, getAllColumns
+from Features.AddNewInventory import getAllColumns
+from Features.DisplayLogs import displayLogs, addToLogs
+from Features.GenerateAlerts import GenerateAlert
 from Features.UpdateAccount import updateAccount
 from TUI.AddInventoryTUI import run as AddInventoryRun
 from TUI.AccountStatusTUI import run as AccountStatusRun
-from TUI.DeleteAccountAdminTUI import displayDeleteAdmin
+from TUI.DeleteAccountAdminTUI import run as displayDeleteAdminRun
 from TUI.DeleteAccountCustomerTUI import displayDeleteCustomer
 from TUI.DeleteRecordsTUI import run as deleteRecordsRun
 from TUI.PurchaseInventoryTUI import run as PurchaseInventoryRun
 from TUI.ModifyInventoryTUI import run as ModifyInventoryRun
 from Features.Login import *
-from Features.GenerateLogs import displayLogs
 from Features.TrackShipment import getAllShipments
 from Features.GenerateDatabase import run as GenerateDatabase
 import Features.session as session
@@ -57,7 +58,7 @@ def displayOptions():
                 [1] - Add/Check Table
                 [2] - Modify Table
                 [3] - Track All Shipments
-                [4] - View Table
+                [4] - View Records from Table
                 [5] - View Logs
                 [6] - Admin
                 [7] - View Account Information
@@ -86,17 +87,18 @@ def displayOptions():
 
 
 if __name__ == '__main__':
-    userLoginSignup = int(input('''Do you want to:
-    [1] - Login
-    [2] - Signup
-    [3] - Exit
-        :: '''))
     while True:
-        username = str(input('Enter Your Username: '))
-        password = str(input('Enter Your Password: '))
+        userLoginSignup = int(input('''Do you want to:
+        [1] - Login
+        [2] - Signup
+        [3] - Exit
+            :: '''))
         if userLoginSignup == 1:
+            username = str(input('Enter Your Username: '))
+            password = str(input('Enter Your Password: '))
             if Login(username, password):
                 session.logUser = username
+                addToLogs(f'{username} has logged onto the system')
                 while True:
                     if PermissionCheck(session.logUser) == 'Admin':
                         match displayOptions():
@@ -107,6 +109,7 @@ if __name__ == '__main__':
                                 [2] - Check for Low Stocks
                                 [3] - Delete record of Database
                                 [4] - Order New Inventory
+                                [5] - Back
                                 
                                  
                                  :: '''))
@@ -125,7 +128,11 @@ if __name__ == '__main__':
                                         deleteRecordsRun()
 
                                     case 4:
+                                        print('You have selected: Order New Inventory')
                                         OrderRun()
+
+                                    case 5:
+                                        continue
 
                                     case _:
                                         print('Invalid Option')
@@ -138,10 +145,17 @@ if __name__ == '__main__':
                                 print('You have selected: Track Shipment')
                                 Inout = int(input('''Do you want to see Incoming or Outgoing Schedules?
                                                         [1] - Incoming
-                                                        [2] - Outgoing'''))
-                                getAllShipments(Inout)
-
+                                                        [2] - Outgoing
+                                                        [3] - Back
+                                                            ::'''))
+                                if Inout != 3:
+                                    getAllShipments(Inout)
+                                elif Inout == 3:
+                                    continue
+                                else:
+                                    print('Invalid Option')
                             case 4:
+                                print('You have Selected: View Records from Table')
                                 AdminTable = str(input(f'''
                                 Select Which Table To Display:
                                 {getAllTables()}
@@ -163,6 +177,7 @@ if __name__ == '__main__':
                                 [3] - Lock/Unlock Account
                                 [4] - Sign Up Staff
                                 [5] - Delete Accounts
+                                [6] - Back
                                 
                                 * Please Note that this will delete EVERYTHING. Proceed with caution
                                 ** Please Note that this will ADD ON TOP of already EXISTING RECORDS. Proceed with caution.
@@ -173,11 +188,13 @@ if __name__ == '__main__':
                                         print('Resetting Database in progress...')
                                         setup_database()
                                         print('Database successfully reset...')
-                                        # addToLogs('Purged The Database', 'Database')
+                                        addToLogs(f'{username} has deleted the database')
+
                                     case 2:
                                         quantity = int(input('''How many records to generate?
                                          :: '''))
                                         GenerateDatabase(quantity)
+                                        addToLogs(f'{username} has added {quantity} of new records to database')
                                     case 3:
                                         print('You have selected: Lock or Unlock Account')
                                         AccountStatusRun()
@@ -188,7 +205,13 @@ if __name__ == '__main__':
 
                                     case 5:
                                         print('You have selected: Delete Accounts')
-                                        displayDeleteAdmin()
+                                        displayDeleteAdminRun()
+
+                                    case 6:
+                                        continue
+
+                                    case _:
+                                        print('Invalid Option')
 
                             case 7:
                                 print('You have selected: Display Account')
@@ -203,23 +226,31 @@ if __name__ == '__main__':
                                 InventoryOption = int(input('''What would you like to do?
                                 [1] - Add to Inventory
                                 [2] - Check for Low Stocks
-                                [3] - Delete Item off Table
-                                [4] - Order New Inventory
+                                [3] - Delete Record off Table
+                                [4] - Order New Inventory Item
+                                [5] - Back
     
                                  :: '''))
 
                                 match InventoryOption:
                                     case 1:
+                                        print('You have selected: Add to Inventory')
                                         AddInventoryRun()
 
                                     case 2:
+                                        print('You have selected: Check for Low Stocks')
                                         GenerateAlert()
 
                                     case 3:
+                                        print('You have selected: Delete Record off Table')
                                         deleteRecordsRun()
 
                                     case 4:
+                                        print('You have selected: Order New Inventory Item')
                                         OrderRun()
+
+                                    case 5:
+                                        continue
 
                                     case _:
                                         print('Invalid Option')
@@ -231,9 +262,16 @@ if __name__ == '__main__':
                             case 3:
                                 print('You have selected: Track Shipment')
                                 Inout = int(input('''Do you want to see Incoming or Outgoing Schedules?
-                                [1] - Incoming
-                                [2] - Outgoing'''))
-                                getAllShipments(Inout)
+                                                        [1] - Incoming
+                                                        [2] - Outgoing
+                                                        [3] - Back
+                                                            ::'''))
+                                if Inout != 3:
+                                    getAllShipments(Inout)
+                                elif Inout == 3:
+                                    continue
+                                else:
+                                    print('Invalid Option')
 
                             case 4:
                                 print('You have selected: View Inventory')
@@ -264,6 +302,8 @@ if __name__ == '__main__':
                                 print('Invalid Option')
 
         elif userLoginSignup == 2:
+            username = str(input('Enter Your Username: '))
+            password = str(input('Enter Your Password: '))
             CustomerName = str(input('Enter Your Name: '))
             while True:
                 CustomerEmail = str(input('Enter Your Email: '))
@@ -288,5 +328,10 @@ if __name__ == '__main__':
                     print('Credit Card Number must be 16 digits')
             SignUp(username, password, CustomerName, CustomerEmail, CustomerAddress, CustomerPhoneNumber,
                    CustomerCreditCard)
+            print('Signed Up Successfully')
+            break
         elif userLoginSignup == 3:
             print('Exiting...')
+            quit()
+        else:
+            print('Invalid Option')

@@ -10,8 +10,6 @@ DROP TABLE IF EXISTS Vehicles;
 DROP TABLE IF EXISTS OutgoingTransportationSchedules;
 DROP TABLE IF EXISTS IncomingTransportationSchedules;
 DROP TABLE IF EXISTS ExternalCompanies;
-DROP TABLE IF EXISTS logs;
-
 
 -- Drop Views
 DROP VIEW IF EXISTS masked_login_information;
@@ -34,7 +32,6 @@ DROP INDEX IF EXISTS idxVehicle;
 DROP INDEX IF EXISTS idxOutgoingTransportationSchedules;
 DROP INDEX IF EXISTS idxIncomingTransportationSchedules;
 DROP INDEX IF EXISTS idxExternalCompanies;
-DROP INDEX IF EXISTS idxLogs;
 
 CREATE TABLE IF NOT EXISTS LoginInformation(
     LoginID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -95,10 +92,7 @@ CREATE TABLE IF NOT EXISTS Vehicles(
 CREATE TABLE IF NOT EXISTS OutgoingTransportationSchedules(
     OutgoingScheduleID INTEGER PRIMARY KEY AUTOINCREMENT,
     ExpectedArrivalDate DATE DEFAULT (date('now', '+1 day')),
---     ExpectedArrivalTime INTEGER,
     IsItOnTheWay INTEGER,
---     InventoryID INTEGER REFERENCES Inventory(InventoryID),
---     DriverID INTEGER REFERENCES Drivers(DriverID),
     CustomerID INTEGER,
 	PurchaseID INTEGER,
 	DriverID INTEGER,
@@ -125,40 +119,33 @@ CREATE TABLE IF NOT EXISTS ExternalCompanies(
     ExternalCompanyRelationship DATE
 );
 
-CREATE TABLE IF NOT EXISTS logs(
-    LogID INTEGER PRIMARY KEY AUTOINCREMENT,
-    Username TEXT,
-    Description TEXT,
-    Type TEXT,
-    LogCreated DATE DEFAULT (date('now')),
-    LoginID INTEGER,
-    FOREIGN KEY (LoginID) REFERENCES LoginInformation(LoginID)
-);
 
 CREATE VIEW viewInventory AS
-    SELECT InventoryID, InventoryName, StockLevel
+    SELECT InventoryID,
+           InventoryName,
+           StockLevel
     FROM Inventory;
 
 CREATE VIEW viewDisplayIncomingSchedules AS
-    SELECT IncomingTransportationSchedules.*, ExternalCompanies.*
-    FROM IncomingTransportationSchedules
-    INNER JOIN ExternalCompanies on ExternalCompanies.ExternalCompanyID = IncomingTransportationSchedules.ExternalCompanyID;
+    SELECT ITS.*, EC.*
+    FROM IncomingTransportationSchedules ITS
+    INNER JOIN ExternalCompanies EC on EC.ExternalCompanyID = ITS.ExternalCompanyID;
 
 CREATE VIEW viewDisplayOutgoingSchedules AS
-    SELECT OutgoingTransportationSchedules.*, D.DriverID, D.DriverName,C.CustomerName, C.CustomerAddress, C.CustomerPhoneNumber
-    FROM OutgoingTransportationSchedules
-    INNER JOIN Customer C on C.CustomerID = OutgoingTransportationSchedules.CustomerID
-    INNER JOIN Drivers D on D.DriverID = OutgoingTransportationSchedules.DriverID;
+    SELECT OTS.*, D.DriverID, D.DriverName,C.CustomerName, C.CustomerAddress, C.CustomerPhoneNumber
+    FROM OutgoingTransportationSchedules OTS
+    INNER JOIN Customer C on C.CustomerID = OTS.CustomerID
+    INNER JOIN Drivers D on D.DriverID = OTS.DriverID;
 
 CREATE VIEW viewCustomerLogin AS
-    SELECT Customer.CustomerID, LoginInformation.LoginID, LoginInformation.Username
-    FROM Customer
-    INNER JOIN LoginInformation on Customer.CustomerID = LoginInformation.CustomerID;
+    SELECT C.CustomerID, LoginInformation.LoginID, LoginInformation.Username
+    FROM Customer C
+    INNER JOIN LoginInformation on C.CustomerID = LoginInformation.CustomerID;
 
 CREATE VIEW viewPurchase AS
-    SELECT Customer.CustomerID, Purchase.PurchaseID, Purchase.PurchaseName, Purchase.PurchaseDeliveryDate, Purchase.PurchaseStock
-    FROM Customer
-    INNER JOIN Purchase ON Customer.CustomerID = Purchase.CustomerID;
+    SELECT C.CustomerID, P.PurchaseID, P.PurchaseName, P.PurchaseDeliveryDate, P.PurchaseStock
+    FROM Customer C
+    INNER JOIN Purchase P ON C.CustomerID = P.CustomerID;
 
 -- Masking Sensitive Views
 
@@ -185,15 +172,15 @@ CREATE VIEW masked_Customer AS
 -- -- Creating Views for Role: Customer
 
 CREATE VIEW viewCustomerProfile AS
-    SELECT masked_login_information.* ,masked_Customer.*, Purchase.*
-    FROM masked_login_information
-    INNER JOIN masked_Customer ON masked_Customer.CustomerID = masked_login_information.CustomerID
-    INNER JOIN Purchase ON Purchase.CustomerID = masked_Customer.CustomerID;
+    SELECT MLI.* ,MC.*, P.*
+    FROM masked_login_information MLI
+    INNER JOIN masked_Customer MC ON MC.CustomerID = MLI.CustomerID
+    INNER JOIN Purchase P ON P.CustomerID = MC.CustomerID;
 
 CREATE VIEW viewDrivers AS
-    SELECT Drivers.*, Vehicles.VehicleType, Vehicles.VehicleBrand, Vehicles.VehicleLicensePlate
-    FROM Drivers
-    INNER JOIN Vehicles on Drivers.DriverID = Vehicles.DriverID;
+    SELECT D.*, V.VehicleType, V.VehicleBrand, V.VehicleLicensePlate
+    FROM Drivers D
+    INNER JOIN Vehicles V on D.DriverID = V.DriverID;
 
 CREATE INDEX IF NOT EXISTS idxLoginInformation
 ON LoginInformation (LoginID, Username, CustomerID);
@@ -222,8 +209,6 @@ ON IncomingTransportationSchedules (IncomingScheduleID, ExternalCompanyID);
 CREATE INDEX IF NOT EXISTS idxExternalCompanies
 ON ExternalCompanies (ExternalCompanyID);
 
-CREATE INDEX IF NOT EXISTS idxLogs
-ON logs (LogID, LoginID);
 
 
 

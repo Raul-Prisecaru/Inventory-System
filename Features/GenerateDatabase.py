@@ -445,33 +445,7 @@ def randomiseExternalCompanies():
     except Exception as e:
         print("Something Else Went Wrong In ExternalCompanies: " + str(e))
 
-
-def countDatabase(column):
-    numberRows = 0
-    try:
-        connection = sqlite3.connect(databasePath)
-        cursor = connection.cursor()
-
-        showcase_query = f"SELECT * FROM {column};"
-        cursor.execute(showcase_query)
-
-        connection.commit()
-        rows = cursor.fetchall()
-        for row in rows:
-            numberRows += 1
-
-        cursor.close()
-        connection.close()
-        return numberRows
-    except NameError:
-        print(f"Error Caught: {column} not found")
-    except Exception as e:
-        print("Something Else Went Wrong: " + str(e))
-
-
 def run(repeat=1):
-    # start_time = timeit.default_timer()
-
     for row in range(repeat):
         randomiseInventory()
         randomiseLoginAndCustomer()
@@ -482,8 +456,3 @@ def run(repeat=1):
         randomiseOutgoingTransportationSchedules()
         randomiseExternalCompanies()
 
-    # end_time = timeit.default_timer()
-    # return end_time - start_time
-
-# time_taken = timeit.timeit(stmt="run(10)", setup="from __main__ import run", number=1)
-# print("Time taken:", time_taken)

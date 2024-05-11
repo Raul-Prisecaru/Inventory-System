@@ -33,7 +33,6 @@ def getAllTables():
     # Remove the irrelevant tables
     tableinfo.remove("sqlite_sequence")
     tableinfo.remove("LoginInformation")
-    tableinfo.remove("logs")
 
     # Return List to display the tables to the user later on
     return tableinfo
@@ -45,11 +44,8 @@ def run():
         print('Authentication Required: ')
         password = str(input('Enter Your Password: '))
         if Login(Features.session.logUser, password):
-            connection = sqlite3.connect(database_path)
-            cursor = connection.cursor()
             InventoryList = []
 
-            # addToLogs('Has Successfully Validated to Modify Inventory', 'AccountValidation')
             while True:
                 userTable = str(input(f'''What Table do you want to Modify to? 
                 All Tables Available
@@ -89,7 +85,7 @@ def run():
                             [2] - No'''))
 
                     if con == 1:
-                        print('')
+                        continue
                     else:
                         quit()
 
@@ -98,10 +94,9 @@ def run():
 
         else:
             retryCounter += 1
-            # addToLogs('Has Failed to Validated', 'Account')
+
             print('Incorrect Password')
 
         if retryCounter == 3:
             print('''[❌ ATTENTION NEEDED!] Account Locked for Security Purposes
                 Contact Admin to Unlock Account''')
-            # addToLogs('Has Locked Their Accounts by Validation Account Password', 'AccountLock')

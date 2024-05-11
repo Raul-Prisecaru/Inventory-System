@@ -26,15 +26,17 @@ def CustomerPurchase(ID, Stock):
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
 
-    # INSERT INTO {Table that user provides} ({All of the columns available in the table}) VALUES ({add placeholders per column})
-    cursor.execute(f"""UPDATE Inventory SET StockLevel = StockLevel - {Stock} WHERE InventoryID = {ID}""")
+    # Update StocksLevel from Inventory Table with the amount of stocks chosen by user.
+    cursor.execute(f"""UPDATE Inventory 
+        SET StockLevel = StockLevel - {Stock} 
+        WHERE InventoryID = {ID}""")
 
     # Commit and Close Connection
     connection.commit()
     connection.close()
 
 
-def confirmationPurchase(ID, Stock, Username):
+def confirmationPurchase(ID, Stock):
     # Connect to Database
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
@@ -84,12 +86,11 @@ def confirmationPurchase(ID, Stock, Username):
             cursor.execute("INSERT INTO Purchase (PurchaseName, PurchaseStock, CustomerID) VALUES (?,?,?)",
                            (inventory_name, Stock, getCustomerID()))
 
-
             PurchaseID = cursor.lastrowid
 
-            cursor.execute("INSERT INTO OutgoingTransportationSchedules (IsItOnTheWay, CustomerID, PurchaseID, DriverID) VALUES (?,?,?,?)",
-                           (0, getCustomerID(), PurchaseID, randomDriver[0]))
-
+            cursor.execute("""INSERT INTO OutgoingTransportationSchedules (IsItOnTheWay, CustomerID, PurchaseID, DriverID) 
+                                    VALUES (?,?,?,?)""",
+                        (0, getCustomerID(), PurchaseID, randomDriver[0]))
 
             connection.commit()
             connection.close()

@@ -1,6 +1,5 @@
 import sqlite3
 import os
-# from Features.GenerateLogs import addToLogs
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
@@ -93,4 +92,3 @@ def modifyAllInventory(Table, values, ID):
     connection.commit()
     connection.close()
 
-    # addToLogs(f'Has Modified {Table} and added {values}', 'ModifyInventory')

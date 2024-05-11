@@ -2,7 +2,6 @@ import sqlite3
 import os
 
 import Features.session as session
-from Features.GenerateLogs import addToLogs
 
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
@@ -19,11 +18,9 @@ def AccountStatus(AccountID):
     if accStatus[0] == 'Unlocked':
         cursor.execute(f"UPDATE LoginInformation SET AccountStatus = 'Locked' WHERE LoginID = ?", (AccountID,))
         print(f'Account is now Locked')
-        # addToLogs(f'Has been Locked By Admin', 'AccountStatus')
         connection.commit()
     elif accStatus[0] == 'Locked':
         cursor.execute(f"UPDATE LoginInformation SET AccountStatus = 'Unlocked' WHERE LoginID = ?", (AccountID,))
         print(f'Account is now Unlocked')
-        # addToLogs(f'{AccountID} has been Unlocked By Admin', 'AccountStatus')
         connection.commit()
 

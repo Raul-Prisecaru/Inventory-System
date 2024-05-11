@@ -50,19 +50,20 @@ def displayDeleteCustomer():
 
         else:
             retryCounter += 1
-            # addToLogs('Has Failed to Validate', 'AccountValidation')
+
             print('Incorrect Password')
 
-    connection = sqlite3.connect(database_path)
-    cursor = connection.cursor()
-    username = session.logUser
-    print(username)
-    sql_query = "UPDATE LoginInformation SET AccountStatus = 'Locked' WHERE Username = ?"
-    cursor.execute(sql_query, (username,))
+    if retryCounter == 3:
+        connection = sqlite3.connect(database_path)
+        cursor = connection.cursor()
+        username = session.logUser
+        print(username)
+        sql_query = "UPDATE LoginInformation SET AccountStatus = 'Locked' WHERE Username = ? AND Username NOT LIKE 'Admin' "
+        cursor.execute(sql_query, (username,))
 
-    connection.commit()
-    connection.close()
-    print('''[❌ ATTENTION NEEDED!] Account Locked for Security Purposes
-        Contact Admin to Unlock Account''')
-    # addToLogs('Has Locked Their Accounts by failing to validation Account Password', 'AccountLock')
-    return False
+        connection.commit()
+        connection.close()
+        print('''[❌ ATTENTION NEEDED!] Account Locked for Security Purposes
+            Contact Admin to Unlock Account''')
+
+        return False

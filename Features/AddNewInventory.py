@@ -1,9 +1,4 @@
-import sqlite3
-import os
-
-from Features.GenerateLogs import addToLogs
 from Features.Login import *
-import Features.session as session
 from Features.ModifyInventory import getAllColumnsByID
 
 # Get the directory of the current script file
@@ -66,29 +61,6 @@ def addToSystem(Table, values):
     connection.commit()
     connection.close()
 
-    # addToLogs(f'Has added {values} to {Table}', 'Inventory')
-
-
-def GenerateAlert(LowStockLevel=150):
-    # Connect to Database
-    connection = sqlite3.connect(database_path)
-    cursor = connection.cursor()
-
-    # Get ID, Name, and Stock Level From Inventory Where StockLevel is lower than 150 (Default Value)
-    cursor.execute(f'SELECT InventoryID, InventoryName, StockLevel FROM Inventory WHERE StockLevel <= {LowStockLevel}')
-    rows = cursor.fetchall()
-
-    # If nothing is found then display no items is on low stock
-    if not rows:
-        print('[✔️] No Items is Currently Running Low On Stock!')
-    # If something is found then display the ID, Name, and Stocks of those Low Stocks Inventory
-    else:
-        for row in rows:
-            print(f'''[❌ ATTENTION NEEDED!] The Following Stocks are Running Low
-            ID: {row[0]}
-            Name: {row[1]}
-            Stock: {row[2]}''')
-
 
 def displayInventory():
     # Connect to Database
@@ -118,4 +90,3 @@ def deleteRecords(ID, Table='Inventory'):
     # Commit and Close Connection
     connection.commit()
     connection.close()
-

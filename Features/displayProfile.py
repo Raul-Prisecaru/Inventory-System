@@ -28,7 +28,6 @@ def getAllTables():
     # Remove the irrelevant tables
     tableinfo.remove("sqlite_sequence")
     tableinfo.remove("LoginInformation")
-    tableinfo.remove("logs")
 
     # Return List to display the tables to the user later on
     return tableinfo

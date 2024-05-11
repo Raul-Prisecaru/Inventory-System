@@ -69,7 +69,7 @@ def run():
 
         # True if the user input correct password
         if Login(Features.session.logUser, password):
-            # addToLogs('Has Successfully Validated for Modifying Inventory', 'AccountValidation')
+
             while True:
                 displayDelete()
                 con = int(input('''Do you want to delete another record?
@@ -84,7 +84,7 @@ def run():
         # Add to Counter and display Incorrect Password if the user didn't out correct password
         else:
             retryCounter += 1
-            # addToLogs('Has Failed to Validate', 'AccountValidation')
+
             print('Incorrect Password')
 
         # Lock the Account if the user fail the validate within 3 tries
@@ -96,7 +96,7 @@ def run():
             username = Features.session.logUser
 
             # Update the AccountStatus to be locked
-            sql_query = "UPDATE LoginInformation SET AccountStatus = 'Locked' WHERE Username = ?"
+            sql_query = "UPDATE LoginInformation SET AccountStatus = 'Locked' WHERE Username = ? AND Username NOT LIKE 'Admin' "
             cursor.execute(sql_query, (username,))
 
             connection.commit()
@@ -105,4 +105,3 @@ def run():
             # Display the message that the Account is locked
             print('''[❌ ATTENTION NEEDED!] Account Locked for Security Purposes
                     Contact Admin to Unlock Account''')
-            # addToLogs('Has Locked Their Accounts by failing to validation Account Password', 'AccountLock')

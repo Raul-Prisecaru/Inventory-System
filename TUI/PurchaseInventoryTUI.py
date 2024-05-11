@@ -36,10 +36,9 @@ def run():
             userAnswer.append(answers)
         print(userAnswer)
 
-        if confirmationPurchase(userAnswer[0], userAnswer[1], session.logUser):
+        if confirmationPurchase(userAnswer[0], userAnswer[1]):
             print('Purchase Successful')
             CustomerPurchase(userAnswer[0], userAnswer[1])
-            # addToLogs('Has Purchased Inventory', 'Purchase')
             break
         else:
             print('Confirmation Cleared')

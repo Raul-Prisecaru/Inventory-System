@@ -12,7 +12,7 @@ def orderStocks(ID, Stock):
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
 
-    cursor.execute(f"SELECT * FROM ExternalCompanies")
+    cursor.execute(f"SELECT ExternalcompanyID, ExternalCompanyName FROM ExternalCompanies")
     EC = cursor.fetchall()
     ECList = []
     for row in EC:
