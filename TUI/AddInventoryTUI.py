@@ -40,8 +40,7 @@ def getAllTables():
     return tableinfo
 
 
-# Function Responsible for running the Main Logic of Adding Inventory
-def run():
+def addInventory():
     # Counter for all the incorrect Authentication
     retryCounter = 0
     while retryCounter < 3:
@@ -52,28 +51,27 @@ def run():
             addToLogs(f'{Features.session.logUser} has successfully authenticated')
             while True:
                 userTable = str(input(f'''What Table do you want to add to?
-                        All Tables Available
-                        -------------------
-                        {getAllTables()}
-                        -------------------
-                            :: '''))
+                            All Tables Available
+                            -------------------
+                            {getAllTables()}
+                            -------------------
+                                :: '''))
 
                 if userTable in getAllTables():
                     userAnswer = []
-
                     userInput = str(input(f"""\nInserting new Inventory Guide:
-                            To Ensure that data is properly inserted into Database,
-                            Ensure the following:
-                            [1] - follow the following format
-                            -----------------
-                            {getAllColumnsNoID(userTable)}
-                            -----------------
-                            [2] - After each column, ensure you have a space between the comma such as:
-                            123, Name1, Name2, 123
-        
-                            [3] - Do not enter quotations marks when entering string
-                            -----You May Enter-----------
-                            """))
+                                To Ensure that data is properly inserted into Database,
+                                Ensure the following:
+                                [1] - follow the following format
+                                -----------------
+                                {getAllColumnsNoID(userTable)}
+                                -----------------
+                                [2] - After each column, ensure you have a space between the comma such as:
+                                123, Name1, Name2, 123
+
+                                [3] - Do not enter quotations marks when entering string
+                                -----You May Enter-----------
+                                     :: """))
 
                     inputSplit = userInput.split(',')
                     for answers in inputSplit:
@@ -81,41 +79,26 @@ def run():
                     print('Successfully Added to the System')
                     addToLogs(f'{Features.session.logUser} has added {userAnswer} to {userTable} ')
                     addToSystem(userTable, userAnswer)
-
-                    con = int(input('''Do you want to add another record?
-                    [1] - Yes
-                    [2] - No'''))
-
-                    if con == 1:
-                        continue
-                    else:
-                        quit()
+                    break
                 else:
                     print('invalid table')
+            break
 
-        # Add to Counter and display Incorrect Password if the user didn't out correct password
-        else:
-            retryCounter += 1
-            addToLogs(f'{Features.session.logUser} has failed to authenticate: {retryCounter} ')
-            print('Incorrect Password')
 
-        # Lock the Account if the user fail the validate within 3 tries
-        if retryCounter == 3:
-            # Connect to Database
-            connection = sqlite3.connect(database_path)
-            cursor = connection.cursor()
-            # Store the session (Currently Logged on) to 'username'
-            username = Features.session.logUser
+# Function Responsible for running the Main Logic of Adding Inventory
+def run():
+    while True:
+        addInventory()
+        try:
+            con = int(input('''Do you want to delete another record?
+            [1] - Yes
+            [2] - No
+                :: '''))
 
-            # Update the AccountStatus to be locked
-            sql_query = "UPDATE LoginInformation SET AccountStatus = 'Locked' WHERE Username = ? AND Username NOT LIKE 'Admin' "
-            cursor.execute(sql_query, (username,))
-
-            connection.commit()
-            connection.close()
-            addToLogs(f'{Features.session.logUser} has been locked out of the account due to failure to authenticate')
-
-            # Display the message that the Account is locked
-            print('''[❌ ATTENTION NEEDED!] Account Locked for Security Purposes
-                Contact Admin to Unlock Account''')
-            quit()
+            if con == 1:
+                continue
+            else:
+                break
+        except ValueError as VE:
+            print(f'Only Values Allowed: {str(VE)}')
+            break

@@ -13,7 +13,7 @@ current_directory = os.path.dirname(__file__)
 # Construct the path to the database file relative to the current directory
 database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
 
-def run():
+def purchaseInventory():
     # Counter for all the incorrect Authentication
     retryCounter = 0
     while retryCounter < 3:
@@ -22,35 +22,41 @@ def run():
         # True if the user input correct password
         if Login(Features.session.logUser, password):
             userAnswer = []
+            print(f'''Available for purchase:
+                   {displayInventory()}''')
             while True:
-                print(f'''Available for purchase:
-                    {displayInventory()}''')
+                try:
+                    userAnswer.clear()
+                    userInput = str(input(f"""\nPurchasing Guide:
+                               Ensure the following:
+                               [1] - follow the following format
+                               -----------------
+                               [InventoryID, Quantity] 
+                               -----------------
+                               [2] - After each column, ensure you have a space between the comma such as:
+                               13, 123
+    
+                               [3] - Do not enter quotations marks when entering string
+                               -----You May Enter-----------
+                                :: """))
 
-                userInput = str(input(f"""\nPurchasing Guide:
-                        Ensure the following:
-                        [1] - follow the following format
-                        -----------------
-                        [InventoryID, Quantity] 
-                        -----------------
-                        [2] - After each column, ensure you have a space between the comma such as:
-                        13, 123
-            
-                        [3] - Do not enter quotations marks when entering string
-                        -----You May Enter-----------
-                        """))
+                    inputSplit = userInput.split(',')
+                    for answers in inputSplit:
+                        userAnswer.append(answers)
+                    print(userAnswer)
 
-                inputSplit = userInput.split(',')
-                for answers in inputSplit:
-                    userAnswer.append(answers)
-                print(userAnswer)
-
-                if confirmationPurchase(userAnswer[0], userAnswer[1]):
-                    print('Purchase Successful')
-                    addToLogs(f'{session.logUser} has successfully made a purchase. InventoryID:{userAnswer[0]}, Stock:{userAnswer[1]} ')
-                    CustomerPurchase(userAnswer[0], userAnswer[1])
-                    break
-                else:
-                    print('Confirmation Cleared')
+                    if confirmationPurchase(userAnswer[0], userAnswer[1]):
+                        print('Purchase Successful')
+                        addToLogs(
+                            f'{session.logUser} has successfully made a purchase. InventoryID:{userAnswer[0]}, Stock:{userAnswer[1]} ')
+                        CustomerPurchase(userAnswer[0], userAnswer[1])
+                        break
+                except Exception as e:
+                    print(f'''
+                    Error due to most likely not selecting appropriate selections. 
+                    Please Review your options and try again
+                    Error: {str(e)}''')
+            break
 
         # Add to Counter and display Incorrect Password if the user didn't out correct password
         else:
@@ -77,6 +83,21 @@ def run():
 
             # Display the message that the Account is locked
             print('''[❌ ATTENTION NEEDED!] Account Locked for Security Purposes
-                    Contact Admin to Unlock Account''')
+                       Contact Admin to Unlock Account''')
             quit()
 
+
+def run():
+    while True:
+        purchaseInventory()
+        try:
+            con = int(input('''Do you want to do purchase another Item?
+            [1] - Yes
+            [2] - No'''))
+
+            if con == 1:
+                continue
+            else:
+                break
+        except ValueError:
+            break

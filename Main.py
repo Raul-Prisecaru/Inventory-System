@@ -8,7 +8,7 @@ from Features.UpdateAccount import updateAccount
 from TUI.AddInventoryTUI import run as AddInventoryRun
 from TUI.AccountStatusTUI import run as AccountStatusRun
 from TUI.DeleteAccountAdminTUI import run as displayDeleteAdminRun
-from TUI.DeleteAccountCustomerTUI import displayDeleteCustomer
+from TUI.DeleteAccountCustomerTUI import run as displayDeleteCustomerRun
 from TUI.DeleteRecordsTUI import run as deleteRecordsRun
 from TUI.PurchaseInventoryTUI import run as PurchaseInventoryRun
 from TUI.ModifyInventoryTUI import run as ModifyInventoryRun
@@ -57,24 +57,22 @@ def displayOptions():
     if PermissionCheck(session.logUser) == 'Admin':
         userInput = int(input("""Welcome to St Mary's Inventory Table
             What would you like to do?
-                [1] - Add/Check Table
-                [2] - Modify Table
-                [3] - Track All Shipments
-                [4] - View Records from Table
-                [5] - View Logs
-                [6] - Admin
-                [7] - View Account Information
-                [8] - Quit
+                [1] - Manage All Table
+                [2] - Track All Shipments
+                [3] - View Records from Table
+                [4] - View Logs
+                [5] - Admin Tools
+                [6] - View Account Information
+                [7] - Quit
                     :: """))
     elif PermissionCheck(session.logUser) == 'Staff':
         userInput = int(input("""Welcome to St Mary's Inventory Table
             What would you like to do?
                 [1] - Add/Check Table
-                [2] - Modify Inventory
-                [3] - Track All Shipments
-                [4] - View Inventory
-                [5] - View Account Information
-                [6] - Quit
+                [2] - Track All Shipments
+                [3] - View Inventory
+                [4] - View Account Information
+                [5] - Quit
                     :: """))
     elif PermissionCheck(session.logUser) == 'Customer':
         userInput = int(input("""Welcome to St Mary's Inventory Table
@@ -115,8 +113,7 @@ if __name__ == '__main__':
                                 [2] - Check for Low Stocks
                                 [3] - Delete record of Database
                                 [4] - Order New Inventory
-                                [5] - Back
-                                
+                                [5] - Modify Inventory
                                  
                                  :: '''))
 
@@ -128,7 +125,6 @@ if __name__ == '__main__':
                                     case 2:
                                         print('You have selected: Check for Low Stocks')
                                         GenerateAlert()
-                                        addToLogs(f'{username} has checked for low Stock ')
 
                                     case 3:
                                         print('You have selected: Delete Record of Database')
@@ -139,29 +135,29 @@ if __name__ == '__main__':
                                         OrderRun()
 
                                     case 5:
-                                        continue
+                                        print('You have selected: Modify Tables')
+                                        ModifyInventoryRun()
 
                                     case _:
                                         print('Invalid Option')
 
                             case 2:
-                                print('You have selected: Modify Tables')
-                                ModifyInventoryRun()
-
+                                try:
+                                    print('You have selected: Track Shipment')
+                                    Inout = int(input('''Do you want to see Incoming or Outgoing Schedules?
+                                                            [1] - Incoming
+                                                            [2] - Outgoing
+                                                            [3] - Back
+                                                                ::'''))
+                                    if Inout != 3:
+                                        getAllShipments(Inout)
+                                    elif Inout == 3:
+                                        continue
+                                    else:
+                                        print('Invalid Option')
+                                except ValueError as VE:
+                                    print(f'Only Values Allowed: {str(VE)}')
                             case 3:
-                                print('You have selected: Track Shipment')
-                                Inout = int(input('''Do you want to see Incoming or Outgoing Schedules?
-                                                        [1] - Incoming
-                                                        [2] - Outgoing
-                                                        [3] - Back
-                                                            ::'''))
-                                if Inout != 3:
-                                    getAllShipments(Inout)
-                                elif Inout == 3:
-                                    continue
-                                else:
-                                    print('Invalid Option')
-                            case 4:
                                 print('You have Selected: View Records from Table')
                                 AdminTable = str(input(f'''
                                 Select Which Table To Display:
@@ -174,11 +170,11 @@ if __name__ == '__main__':
                                 else:
                                     print('Invalid Option, Check your Captials, Its Case-Sensitive')
 
-                            case 5:
+                            case 4:
                                 print('You have selected: View Logs')
                                 displayLogs()
 
-                            case 6:
+                            case 5:
                                 AdminOption = int(input('''What would you like to do?
                                 [1] - Delete Database*
                                 [2] - Generate Database**
@@ -220,12 +216,12 @@ if __name__ == '__main__':
                                     case _:
                                         print('Invalid Option')
 
-                            case 7:
+                            case 6:
                                 print('You have selected: Display Account')
                                 displayProfile(session.logUser)
                                 addToLogs(f'{session.logUser} has viewed their profile')
 
-                            case 8:
+                            case 7:
                                 quit()
 
                             case _:
@@ -267,34 +263,33 @@ if __name__ == '__main__':
                                         print('Invalid Option')
 
                             case 2:
-                                print('You have selected: Modify table')
-                                ModifyInventoryRun()
+                                try:
+                                    print('You have selected: Track Shipment')
+                                    Inout = int(input('''Do you want to see Incoming or Outgoing Schedules?
+                                                            [1] - Incoming
+                                                            [2] - Outgoing
+                                                            [3] - Back
+                                                                ::  '''))
+                                    if Inout != 3:
+                                        getAllShipments(Inout)
+                                    elif Inout == 3:
+                                        continue
+                                    else:
+                                        print('Invalid Option')
+                                except ValueError as VE:
+                                    print(f'Only Values Allowed: {str(VE)}')
 
                             case 3:
-                                print('You have selected: Track Shipment')
-                                Inout = int(input('''Do you want to see Incoming or Outgoing Schedules?
-                                                        [1] - Incoming
-                                                        [2] - Outgoing
-                                                        [3] - Back
-                                                            ::'''))
-                                if Inout != 3:
-                                    getAllShipments(Inout)
-                                elif Inout == 3:
-                                    continue
-                                else:
-                                    print('Invalid Option')
-
-                            case 4:
                                 print('You have selected: View Inventory')
                                 displayTable('viewInventory')
                                 addToLogs(f'{session.logUser} has viewed Inventory')
 
-                            case 5:
+                            case 4:
                                 print('You have selected: Display Account')
                                 displayProfile(session.logUser)
                                 addToLogs(f'{session.logUser} has viewed their profile')
 
-                            case 6:
+                            case 5:
                                 quit()
 
                             case _:
@@ -313,7 +308,7 @@ if __name__ == '__main__':
 
                             case 3:
                                 print('You have selected: Delete your account')
-                                displayDeleteCustomer()
+                                displayDeleteCustomerRun()
 
                             case 4:
                                 quit()

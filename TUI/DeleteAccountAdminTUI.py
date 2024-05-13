@@ -29,42 +29,40 @@ def displayDeleteAdmin():
             confirmRandom = random.randint(1000, 9999)
             connection = sqlite3.connect(database_path)
             cursor = connection.cursor()
-            while retryCounter < 3:
-                AccountList = []
-                cursor.execute(f'SELECT CustomerID, Username, Permission FROM LoginInformation WHERE Permission != "Admin"')
-                CustomerUsername = cursor.fetchall()
+            AccountList = []
+            cursor.execute(f'SELECT CustomerID, Username, Permission FROM LoginInformation WHERE Permission != "Admin"')
+            CustomerUsername = cursor.fetchall()
 
-                for row in CustomerUsername:
-                    AccountList.append(row[0])
-                    print(f''' User Accounts
-                    CustomerID: {row[0]}
-                    Username: {row[1]}
-                    Permission: {row[2]}
-                    ---------Next User---------
-                    ''')
-
-                print(f'''
-                Delete Account Created on the System
-                Select the Account ID you want to deal with
+            for row in CustomerUsername:
+                AccountList.append(row[0])
+                print(f''' User Accounts
+                CustomerID: {row[0]}
+                Username: {row[1]}
+                Permission: {row[2]}
+                ---------Next User---------
                 ''')
 
-                AccountID = int(input(f''' :: '''))
-                while True:
-                    confirmDelete = int(input(f'''Are you absolutely 100% you wish to DELETE the following account?
-                    Every Data that is associated with the account will be DELETED and NOT RECOVERABLE
-                    To Confirm you want to proceed with the process, enter the following code:
-                    Code: {confirmRandom}
-                        :: '''))
+            print(f'''
+            Delete Account Created on the System
+            Select the Account ID you want to deal with
+            ''')
 
-                    if confirmDelete == confirmRandom:
-                        deleleAccount(AccountID, True)
-                        print(f'{AccountID} has been deleted from the system')
-                        addToLogs(f'{session.logUser} has successfully deleted CustomerID: {AccountID} from System')
-                        break
-                    else:
-                        print('Invalid Code')
-                        addToLogs(f'{session.logUser} has failed to enter correct code to delete account')
-                break
+            AccountID = int(input(f''' :: '''))
+            while True:
+                confirmDelete = int(input(f'''Are you absolutely 100% you wish to DELETE the following account?
+                Every Data that is associated with the account will be DELETED and NOT RECOVERABLE
+                To Confirm you want to proceed with the process, enter the following code:
+                Code: {confirmRandom}
+                    :: '''))
+
+                if confirmDelete == confirmRandom:
+                    deleleAccount(AccountID, True)
+                    print(f'{AccountID} has been deleted from the system')
+                    addToLogs(f'{session.logUser} has successfully deleted CustomerID: {AccountID} from System')
+                    break
+                else:
+                    print('Invalid Code')
+                    addToLogs(f'{session.logUser} has failed to enter correct code to delete account')
             break
 
         else:
@@ -89,11 +87,16 @@ def displayDeleteAdmin():
 def run():
     while True:
         displayDeleteAdmin()
-        con = int(input('''Do you want to delete another record?
-        [1] - Yes
-        [2] - No'''))
+        try:
+            con = int(input('''Do you want to delete another record?
+            [1] - Yes
+            [2] - No
+                :: '''))
 
-        if con == 1:
-            continue
-        else:
-            quit()
+            if con == 1:
+                continue
+            else:
+                break
+        except ValueError as VE:
+            print(f'Only Values Allowed: {str(VE)}')
+            break

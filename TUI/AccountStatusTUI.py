@@ -32,32 +32,38 @@ def display():
             AccountStatus: {row[2]}
             ---Next Account----''')
     while True:
-        AccStatus = int(input(f'''
-        Locking/Unlocking Accounts
-        When needing to Lock or Unlock accounts, you can use this system to do so
-        This will swap the Account Status so:
-        Lock Account --> Unlocked Account
-        Unlocked Account --> Lock Account
-    
-        Select the Account ID you want to deal with
-    
-         :: '''))
+        try:
+            AccStatus = int(input(f'''
+            Locking/Unlocking Accounts
+            When needing to Lock or Unlock accounts, you can use this system to do so
+            This will swap the Account Status so:
+            Lock Account --> Unlocked Account
+            Unlocked Account --> Lock Account
+        
+            Select the Account ID you want to deal with
+        
+             :: '''))
 
-        if AccStatus in CustomerList:
-            AccountStatus(AccStatus)
-            break
-        else:
-            print('Invalid ID')
+            if AccStatus in CustomerList:
+                AccountStatus(AccStatus)
+                break
+            else:
+                print('Invalid ID')
+        except ValueError as VE:
+            print(f'Only Values Allowed: {str(VE)}')
 
 
 def run():
     while True:
         display()
-        con = int(input('''Do you want to do Lock/Unlock another account?
-        [1] - Yes
-        [2] - No'''))
+        try:
+            con = int(input('''Do you want to do Lock/Unlock another account?
+            [1] - Yes
+            [2] - No'''))
 
-        if con == 1:
-            continue
-        else:
-            quit()
+            if con == 1:
+                continue
+            else:
+                break
+        except ValueError:
+            break

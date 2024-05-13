@@ -1,6 +1,9 @@
 import os
 import sqlite3
 
+from Features import session
+from Features.DisplayLogs import addToLogs
+
 # Get the directory of the current script file
 current_directory = os.path.dirname(__file__)
 
@@ -18,7 +21,7 @@ def GenerateAlert(LowStockLevel=150):
         FROM Inventory 
         WHERE StockLevel <= {LowStockLevel}''')
     rows = cursor.fetchall()
-
+    addToLogs(f'{session.logUser} has checked for low Stock ')
     # If nothing is found then display no items is on low stock
     if not rows:
         print('[✔️] No Items is Currently Running Low On Stock!')

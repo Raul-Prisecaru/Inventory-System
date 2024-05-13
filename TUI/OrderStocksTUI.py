@@ -19,7 +19,8 @@ def displayOrder(lowStock=150):
     while True:
         userOption = int(input(f'''Do you want to display only low stocks (=<{lowStock}) or all Items?
         [1] - Only Low Stocks
-        [2] - All Items'''))
+        [2] - All Items
+            :: '''))
 
         if userOption == 1:
             InventoryList = []
@@ -54,15 +55,18 @@ def displayOrder(lowStock=150):
                 [3] - Select from the List Below
             ''')
             while True:
-                InventoryID = int(input(f'''Enter the ID to order more Stocks
-                    :: '''))
-                if InventoryID in InventoryList:
-                    StockOrder = int(input(f'''How many stocks to order?
+                try:
+                    InventoryID = int(input(f'''Enter the ID to order more Stocks
                         :: '''))
-                    orderStocks(InventoryID, StockOrder)
-                    break
-                else:
-                    print('Invalid ID')
+                    if InventoryID in InventoryList:
+                        StockOrder = int(input(f'''How many stocks to order?
+                            :: '''))
+                        orderStocks(InventoryID, StockOrder)
+                        break
+                    else:
+                        print('Invalid ID')
+                except ValueError:
+                    print('Only Values Allowed')
 
         if userOption == 2:
             InventoryList = []
@@ -93,30 +97,36 @@ def displayOrder(lowStock=150):
                 -----------------
                 [2] - Select the ID of the Inventory you wish to order more stocks for
                 -----------------    
-                [3] - Select from the List Below
-            ''')
+                [3] - Select from the List Above
+                ''')
             while True:
-                InventoryID = int(input(f'''Enter the ID to order more Stocks
-                    :: '''))
-                if InventoryID in InventoryList:
-                    StockOrder = int(input(f'''How many stocks to order?
+                try:
+                    InventoryID = int(input(f'''Enter the ID to order more Stocks
                         :: '''))
-                    orderStocks(InventoryID, StockOrder)
-                    break
-                else:
-                    print('Invalid ID')
-        else:
-            print('Invalid Option, Try Again')
+                    if InventoryID in InventoryList:
+                        StockOrder = int(input(f'''How many stocks to order?
+                            :: '''))
+                        orderStocks(InventoryID, StockOrder)
+                        break
+                    else:
+                        print('Invalid ID')
+                except ValueError:
+                    print('Only Values Allowed')
+        break
+
 
 
 def run():
     while True:
         displayOrder()
-        con = int(input('''Do you want to place another order?
-        [1] - Yes
-        [2] - No'''))
+        try:
+            con = int(input('''Do you want to do place another order
+            [1] - Yes
+            [2] - No'''))
 
-        if con == 1:
-            continue
-        else:
-            quit()
+            if con == 1:
+                continue
+            else:
+                break
+        except ValueError:
+            break

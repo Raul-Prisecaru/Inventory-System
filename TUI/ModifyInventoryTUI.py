@@ -38,8 +38,7 @@ def getAllTables():
     # Return List to display the tables to the user later on
     return tableinfo
 
-
-def run():
+def modifyTable():
     retryCounter = 0
     while retryCounter < 3:
         print('Authentication Required: ')
@@ -50,31 +49,31 @@ def run():
 
             while True:
                 userTable = str(input(f'''What Table do you want to Modify to? 
-                All Tables Available
-                -------------------
-                {getAllTables()}
-                -------------------
-                    :: '''))
+                    All Tables Available
+                    -------------------
+                    {getAllTables()}
+                    -------------------
+                        :: '''))
 
                 if userTable in getAllTables():
                     displayTable(userTable)
 
                     entryID = int(input(f'''Enter ID to the entry you want to modify?
-                        :: '''))
+                            :: '''))
 
                     userInput = str(input(f"""\nModifying Inventory Guide:
-                    To Ensure that data is properly Modified,
-                    Ensure the following:
-                    [1] - follow the following format
-                    -----------------
-                    {getAllColumnsNoID(userTable)}
-                    -----------------
-                    [2] - After each column, ensure you have a space between the comma such as:
-                    123, Name1, Name2, 123
-                
-                    [3] - Do not enter quotations marks when entering string
-                    -----You May Enter-----------
-                    """))
+                        To Ensure that data is properly Modified,
+                        Ensure the following:
+                        [1] - follow the following format
+                        -----------------
+                        {getAllColumnsNoID(userTable)}
+                        -----------------
+                        [2] - After each column, ensure you have a space between the comma such as:
+                        123, Name1, Name2, 123
+
+                        [3] - Do not enter quotations marks when entering string
+                        -----You May Enter-----------
+                        """))
                     userAnswer = []
 
                     inputSplit = userInput.split(',')
@@ -83,8 +82,8 @@ def run():
                     modifyAllInventory(userTable, userAnswer, entryID)
                     print('Item has been Modified')
                     con = int(input('''Do you want to place another order?
-                            [1] - Yes
-                            [2] - No'''))
+                                [1] - Yes
+                                [2] - No'''))
 
                     if con == 1:
                         continue
@@ -102,5 +101,21 @@ def run():
         if retryCounter == 3:
             addToLogs(f'{session.logUser} has been locked out of their account due to failure to authenticate')
             print('''[❌ ATTENTION NEEDED!] Account Locked for Security Purposes
-                Contact Admin to Unlock Account''')
+                    Contact Admin to Unlock Account''')
             quit()
+
+
+def run():
+    while True:
+        modifyTable()
+        try:
+            con = int(input('''Do you want to do Lock/Unlock another account?
+            [1] - Yes
+            [2] - No'''))
+
+            if con == 1:
+                continue
+            else:
+                break
+        except ValueError:
+            break

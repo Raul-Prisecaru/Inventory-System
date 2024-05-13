@@ -33,21 +33,26 @@ def displayDeleteCustomer():
     while retryCounter < 3:
         print('Authentication Required: ')
         password = input('Enter Your Password: ')
-        confirmRandom = random.randint(1000,9999)
+        confirmRandom = random.randint(1000, 9999)
         if Login(session.logUser, password):
             addToLogs(f'{session.logUser} has successfully authenticated')
-            confirmDelete = int(input(f'''Are you absolutely 100% you wish to DELETE your account?
-            Every Data that is associated with this account will be DELETED and NOT RECOVERABLE
-            To Confirm you want to proceed with the process, enter the following code:
-            Code: {confirmRandom}
-                :: '''))
+            while True:
+                try:
+                    confirmDelete = int(input(f'''Are you absolutely 100% you wish to DELETE your account?
+                    Every Data that is associated with this account will be DELETED and NOT RECOVERABLE
+                    To Confirm you want to proceed with the process, enter the following code:
+                    Code: {confirmRandom}
+                        :: '''))
 
-            if confirmDelete == confirmRandom:
-                deleleAccount(getCustomerID(), True)
-                print('Account Successfully Deleted')
-                quit()
-            else:
-                print('Invalid code')
+                    if confirmDelete == confirmRandom:
+                        deleleAccount(getCustomerID(), True)
+                        print('Account Successfully Deleted')
+                        quit()
+                    else:
+                        print('Invalid code')
+
+                except ValueError as VE:
+                    print(f'Only Values Allowed {str(VE)}')
 
         else:
             retryCounter += 1
@@ -58,6 +63,7 @@ def displayDeleteCustomer():
         connection = sqlite3.connect(database_path)
         cursor = connection.cursor()
         username = session.logUser
+
         sql_query = "UPDATE LoginInformation SET AccountStatus = 'Locked' WHERE Username = ? AND Username NOT LIKE 'Admin' "
         cursor.execute(sql_query, (username,))
         addToLogs(f'{session.logUser} has been locked out of their account due to failure to authenticate')
@@ -66,3 +72,7 @@ def displayDeleteCustomer():
         print('''[❌ ATTENTION NEEDED!] Account Locked for Security Purposes
             Contact Admin to Unlock Account''')
         quit()
+
+
+def run():
+    displayDeleteCustomer()

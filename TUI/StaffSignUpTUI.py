@@ -17,6 +17,37 @@ current_directory = os.path.dirname(__file__)
 database_path = os.path.join(current_directory, '..', 'Database', 'CentralisedDatabase.db')
 
 
+def displayRole():
+    retryCounter = 0
+    while retryCounter < 3:
+        print('Authentication Required: ')
+        password = str(input('Enter Your Password: '))
+        # True if the user input correct password
+        if Login(Features.session.logUser, password):
+            connection = sqlite3.connect(database_path)
+            cursor = connection.cursor()
+
+            print(f'''
+                Signing Up Staff
+                When needing to create Staff accounts, you can use this system to do so
+                The Account Needs to have already been Created using the Sign Up Option at the Main Menu
+                This System will Upgrade/Downgrade the account to Staff/Customer
+        
+                Select the Account ID you want to deal with''')
+
+            AccountPermission = int(input('''Do you want to:
+                [1] - Upgrade Account to Staff
+                [2] - Downgrade Account to Customer
+                    :: '''))
+
+            if AccountPermission == 1:
+                displayUpgrade()
+
+            elif AccountPermission == 2:
+                displayDowngrade()
+        break
+
+
 def displayUpgrade():
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
@@ -69,27 +100,16 @@ def displayDowngrade():
 
 
 def run():
-    connection = sqlite3.connect(database_path)
-    cursor = connection.cursor()
+    while True:
+        displayRole()
+        try:
+            con = int(input('''Do you want to manage another Account's Role
+            [1] - Yes
+            [2] - No'''))
 
-    print(f'''
-    Signing Up Staff
-    When needing to create Staff accounts, you can use this system to do so
-    The Account Needs to have already been Created using the Sign Up Option at the Main Menu
-    This System will Upgrade/Downgrade the account to Staff/Customer
-
-    Select the Account ID you want to deal with''')
-
-    AccountPermission = int(input('''Do you want to:
-    [1] - Upgrade Account to Staff
-    [2] - Downgrade Account to Customer
-        :: '''))
-
-    if AccountPermission == 1:
-        displayUpgrade()
-
-    elif AccountPermission == 2:
-        displayDowngrade()
-
-
-
+            if con == 1:
+                continue
+            else:
+                break
+        except ValueError:
+            break
