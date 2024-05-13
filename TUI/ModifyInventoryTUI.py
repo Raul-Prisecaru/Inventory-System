@@ -103,3 +103,4 @@ def run():
             addToLogs(f'{session.logUser} has been locked out of their account due to failure to authenticate')
             print('''[❌ ATTENTION NEEDED!] Account Locked for Security Purposes
                 Contact Admin to Unlock Account''')
+            quit()

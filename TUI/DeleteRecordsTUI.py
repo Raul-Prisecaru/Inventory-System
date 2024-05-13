@@ -110,3 +110,4 @@ def run():
             # Display the message that the Account is locked
             print('''[❌ ATTENTION NEEDED!] Account Locked for Security Purposes
                     Contact Admin to Unlock Account''')
+            quit()

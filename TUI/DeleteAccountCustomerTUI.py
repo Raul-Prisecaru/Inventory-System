@@ -65,5 +65,4 @@ def displayDeleteCustomer():
         connection.close()
         print('''[❌ ATTENTION NEEDED!] Account Locked for Security Purposes
             Contact Admin to Unlock Account''')
-
-        return False
+        quit()

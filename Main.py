@@ -1,3 +1,5 @@
+import random
+
 from Features.AccountStatus import AccountStatus
 from Features.AddNewInventory import getAllColumns
 from Features.DisplayLogs import displayLogs, addToLogs
@@ -46,7 +48,7 @@ def setup_database():
             "INSERT INTO LoginInformation (Username, Password, Permission, CustomerID) VALUES ('Customer', 'Customer', 'Customer', 3)")
         connection.commit()
 
-
+        print('DATABASE successfully created')
     except Exception as e:
         print("Error Caught: " + str(e))
 
@@ -62,6 +64,7 @@ def displayOptions():
                 [5] - View Logs
                 [6] - Admin
                 [7] - View Account Information
+                [8] - Quit
                     :: """))
     elif PermissionCheck(session.logUser) == 'Staff':
         userInput = int(input("""Welcome to St Mary's Inventory Table
@@ -71,6 +74,7 @@ def displayOptions():
                 [3] - Track All Shipments
                 [4] - View Inventory
                 [5] - View Account Information
+                [6] - Quit
                     :: """))
     elif PermissionCheck(session.logUser) == 'Customer':
         userInput = int(input("""Welcome to St Mary's Inventory Table
@@ -78,6 +82,7 @@ def displayOptions():
                 [1] - Purchase Items
                 [2] - View Your information
                 [3] - Delete Your Account
+                [4] - Quit
                     :: """))
 
     else:
@@ -190,7 +195,6 @@ if __name__ == '__main__':
                                     case 1:
                                         print('Resetting Database in progress...')
                                         setup_database()
-                                        print('Database successfully reset...')
                                         addToLogs(f'{username} has deleted the database')
 
                                     case 2:
@@ -220,6 +224,9 @@ if __name__ == '__main__':
                                 print('You have selected: Display Account')
                                 displayProfile(session.logUser)
                                 addToLogs(f'{session.logUser} has viewed their profile')
+
+                            case 8:
+                                quit()
 
                             case _:
                                 print('Invalid Option')
@@ -287,6 +294,9 @@ if __name__ == '__main__':
                                 displayProfile(session.logUser)
                                 addToLogs(f'{session.logUser} has viewed their profile')
 
+                            case 6:
+                                quit()
+
                             case _:
                                 print('Invalid Option')
 
@@ -304,6 +314,9 @@ if __name__ == '__main__':
                             case 3:
                                 print('You have selected: Delete your account')
                                 displayDeleteCustomer()
+
+                            case 4:
+                                quit()
 
                             case _:
                                 print('Invalid Option')
@@ -343,8 +356,18 @@ if __name__ == '__main__':
             quit()
 
         elif userLoginSignup == 1234:
-            setup_database()
-            GenerateDatabase(100)
-            print('Emergency Reset Database completed')
+            confirmRandom = random.randint(1000, 9999)
+            confirmDelete = int(input(f'''Are you absolutely 100% you wish to RESET the ENTIRE Database?
+                                Every Data that is located in the Database will be DELETED and NOT RECOVERABLE
+                                To Confirm you want to proceed with the process, enter the following code:
+                                Code: {confirmRandom}
+                                    :: '''))
+            if confirmDelete == confirmRandom:
+                setup_database()
+                GenerateDatabase(100)
+                print('Emergency Reset Database completed')
+                addToLogs(f'Emergency Reset Database used.')
+            else:
+                print('Request Cancelled')
         else:
             print('Invalid Option')
