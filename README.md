@@ -1,20 +1,42 @@
-# Inventory System
+# Logistics System
 
-## Techologies used:
-Python, SQLite
+    Terminal-Based Logistics System used for managing Inventory Data Locally
 
-## FeatureSet
-![image](https://github.com/user-attachments/assets/e9dfd292-b691-4346-bb94-c68d551e851e)
+## Technologies used:
+    Python, SQLite
 
-## Default Logins:
-### Admin
-Username: Admin </br>
-Password: Admin 
+## Features
+    Features include:
+        Database
+        - Creating entries for Inventory  
+        - Reading entries on Inventory
+        - Updating entries on Inventory
+        - Deleting entries on Inventory
+        - Ability to generate dataset
+    
+    
+        Security
+        - Login/SignUp with password Hashing security implementation (W.I.P)
+        - Role-Based Authorisation 
+        - Account Monitoring
+        - Account Deletion
+        - Account Lockdown based on fraudulent acitivies (Coming Soon)
+    
+        Others
+        - Lot's of Code Standard Improvements (Docstrings, TypeHints, UnitTesting)
 
-### Staff
-Username: Staff </br>
-Password: Staff 
+## Video Showcase (W.I.P)
+    Coming Soon
 
-### Customer
-Username: Customer </br>
-Password: Customer 
+
+## Screenshots (W.I.P)
+    Coming Soon
+
+## Installation (W.I.P)
+    CLI
+        1. git clone https://github.com/Raul-Prisecaru/Inventory-System.git
+
+    ZIP
+        1. on Green Code button, click on it and press "Download ZIP"
+        2. Unzip in
+        3. Run Main.py
