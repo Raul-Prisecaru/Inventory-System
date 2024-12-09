@@ -22,7 +22,7 @@
         - Account Deletion
         - Account Lockdown based on fraudulent acitivies (Coming Soon)
     
-        Others
+        Working on:
         - Lot's of Code Standard Improvements (Docstrings, TypeHints, UnitTesting)
 
 ## Video Showcase (W.I.P)
